@@ -6,9 +6,12 @@ const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin'
 
 let mode = 'development';
 let target = 'web';
+
 const plugins = [
   new CleanWebpackPlugin(),
-  new MiniCssExtractPlugin(),
+  new MiniCssExtractPlugin({
+    filename: 'styles/index.css',
+  }),
   new HtmlWebpackPlugin({
     template: path.resolve(__dirname, './src/index.html'),
   }),
@@ -20,7 +23,6 @@ if (process.env.NODE_ENV === 'producttion') {
 }
 
 if (process.env.SERVE) {
-  // We only want React Hot Reloading in serve mode
   plugins.push(new ReactRefreshWebpackPlugin());
 }
 
@@ -53,36 +55,17 @@ module.exports = {
         ],
       },
       {
-        test: /\.(s[ac]|c)ss$/i,
+        test: /\.(css|scss|sass)$/,
         use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: { publicPath: '' },
-          },
+          MiniCssExtractPlugin.loader,
           'css-loader',
           'sass-loader',
+          'postcss-loader',
         ],
       },
       {
         test: /\.(png|jpe?g|gif|svg)$/i,
-        /**
-         * The `type` setting replaces the need for "url-loader"
-         * and "file-loader" in Webpack 5.
-         *
-         * setting `type` to "asset" will automatically pick between
-         * outputing images to a file, or inlining them in the bundle as base64
-         * with a default max inline size of 8kb
-         */
         type: 'asset',
-        /**
-         * If want to inline larger images, you can set
-         * a custom `maxSize` for inline like so:
-         */
-        // parser: {
-        //   dataUrlCondition: {
-        //     maxSize: 30 * 1024,
-        //   },
-        // },
       },
     ],
   },

@@ -1,6 +1,19 @@
 const maxWidth = {
-  'poster-200': '200px',
-  'poster-300': '300px',
+  ss: '244px',
+  s: '300px',
 };
 
-module.exports = { maxWidth };
+const minWidth = {
+  '4s': '150px',
+};
+
+const backgroundPosition = {
+  'top-center': 'top center',
+};
+
+const minHeight = {
+  hs: '100px',
+  hl: '450px',
+};
+
+module.exports = { maxWidth, minWidth, minHeight, backgroundPosition };

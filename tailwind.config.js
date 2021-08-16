@@ -1,16 +1,18 @@
+const themes = require('./themes');
+const variants = require('./themes/variants');
+
 module.exports = {
   purge: ['./src/**/*.html', './src/**/*.jsx', './src/**/*.js'],
   darkMode: false,
   theme: {
     extend: {
-      maxWidth: {
-        'poster-200': '200px',
-        'poster-300': '300px',
-      },
+      ...themes,
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      ...variants,
+    },
   },
   plugins: [],
 };

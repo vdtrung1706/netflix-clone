@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    @apply max-w-screen-2xl;
+  }
   body {
     @apply bg-black text-white font-main;
   }

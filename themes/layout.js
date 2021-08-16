@@ -1,19 +1,12 @@
 const maxWidth = {
-  ss: '244px',
-  s: '300px',
-};
-
-const minWidth = {
-  '4s': '150px',
+  'poster-sp': '40vw',
+  'poster-sm': '28.57vw',
+  'poster-lg': '22.22vw',
+  'poster-xl': '18.18vw',
 };
 
 const backgroundPosition = {
   'top-center': 'top center',
 };
 
-const minHeight = {
-  hs: '100px',
-  hl: '450px',
-};
-
-module.exports = { maxWidth, minWidth, minHeight, backgroundPosition };
+module.exports = { maxWidth, backgroundPosition };

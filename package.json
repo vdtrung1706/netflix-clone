@@ -14,6 +14,8 @@
   "author": "vdtrung",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.21.1",
+    "dotenv-webpack": "^7.0.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },

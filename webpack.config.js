@@ -3,6 +3,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 let mode = 'development';
 let target = 'web';
@@ -14,6 +15,10 @@ const plugins = [
   }),
   new HtmlWebpackPlugin({
     template: path.resolve(__dirname, './src/index.html'),
+  }),
+  new Dotenv({
+    path: path.resolve(__dirname, './.env'),
+    safe: true,
   }),
 ];
 
@@ -35,7 +40,7 @@ module.exports = {
     assetModuleFilename: 'images/[hash][ext][query]',
   },
   devServer: {
-    port: 3000,
+    port: 8080,
     contentBase: path.resolve(__dirname, './dist'),
     hot: true,
   },
@@ -64,7 +69,7 @@ module.exports = {
         ],
       },
       {
-        test: /\.(png|jpe?g|gif|svg)$/i,
+        test: /\.(png|jpe?g|gif|svg|ico)$/i,
         type: 'asset',
       },
     ],

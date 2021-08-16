@@ -2,7 +2,11 @@ module.exports = {
   purge: ['./src/**/*.html', './src/**/*.jsx', './src/**/*.js'],
   darkMode: false,
   theme: {
-    extend: {},
+    extend: {
+      maxWidth: {
+        poster: '200px',
+      },
+    },
   },
   variants: {
     extend: {},

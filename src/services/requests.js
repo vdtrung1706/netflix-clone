@@ -1,4 +1,5 @@
 const API_KEY = process.env.API_KEY;
+export const BASE_IMG_URL = 'https://image.tmdb.org/t/p/original';
 
 export default {
   trending: `/trending/all/week?api_key=${API_KEY}&sort_by=popularity.desc&language=en-US`,

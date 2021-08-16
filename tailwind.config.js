@@ -4,7 +4,8 @@ module.exports = {
   theme: {
     extend: {
       maxWidth: {
-        poster: '200px',
+        'poster-200': '200px',
+        'poster-300': '300px',
       },
     },
   },

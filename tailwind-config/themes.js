@@ -1,9 +1,9 @@
 const { colors } = require('./colors');
 const { fontFamily } = require('./typography');
-const layout = require('./layout');
+const spacing = require('./spacing');
 
 module.exports = {
   fontFamily,
   colors,
-  ...layout,
+  ...spacing,
 };

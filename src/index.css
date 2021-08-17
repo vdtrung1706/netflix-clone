@@ -4,15 +4,22 @@
 
 @layer base {
   html {
-    @apply max-w-screen-2xl;
+    @apply max-w-screen-2xl text-base;
   }
+
+  *,
+  *:before,
+  *:after {
+    box-sizing: inherit;
+  }
+
   body {
-    @apply bg-black text-white font-main;
+    @apply bg-black text-white antialiased font-main;
   }
 }
 
 @layer components {
-  .bg-header-gradient {
+  .bg-banner-gradient {
     background: linear-gradient(
       180deg,
       transparent,

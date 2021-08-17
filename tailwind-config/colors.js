@@ -11,7 +11,7 @@ const colors = {
     DEFAULT: '#f2f2f2',
   },
   grey: {
-    DEFAULT: '#101011',
+    DEFAULT: '#6d6d6d',
   },
   blue: {
     google: '#1356c7',

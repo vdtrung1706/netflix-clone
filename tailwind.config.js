@@ -1,5 +1,5 @@
-const themes = require('./themes');
-const variants = require('./themes/variants');
+const themes = require('./tailwind-config/themes');
+const variants = require('./tailwind-config/variants');
 
 module.exports = {
   purge: ['./src/**/*.html', './src/**/*.jsx', './src/**/*.js'],

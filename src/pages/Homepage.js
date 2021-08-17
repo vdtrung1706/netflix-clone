@@ -4,7 +4,7 @@ import Banner from '../components/common/Banner';
 
 export default function Homepage() {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col -mt-16">
       <Banner />
       <Row title="Trending" fetchUrl={requests.trending} />
       <Row title="Top Rated" fetchUrl={requests.topRated} />

@@ -2,6 +2,7 @@ import logoUrl from '../../assets/images/netflix-2015-logo.svg';
 import profileDefaultUrl from '../../assets/images/profile-default.png';
 import { useEffect, useState } from 'react';
 import SearchBox from '../common/SearchBox';
+import NavigationMenu from '../common/NavigationMenu';
 
 const NavBar = () => {
   const [fadedNav, setFadedNav] = useState(false);
@@ -22,47 +23,23 @@ const NavBar = () => {
 
   return (
     <nav
-      className={`fixed z-20 w-full h-16 top-0 text-sm bg-gradient-to-b from-black-pure transition ease-linear duration-400 ${
-        fadedNav ? 'bg-black bg-none' : ''
+      className={`fixed z-20 w-full h-16 top-0 bg-gradient-to-b from-black-pure transition ease-linear duration-400 ${
+        fadedNav ? 'bg-black-pure bg-none' : ''
       }`}
     >
       <div className="flex items-center h-full justify-between px-11">
         <div className="flex justify-start items-center">
-          <a href="/" className="w-24">
+          <a href="/" className="w-20 md:w-24">
             <img src={logoUrl} alt="Logo" />
           </a>
-          <ul className="flex gap-4 items-center p-0 m-0 ml-9 text-shadow">
-            <li>
-              <a href="/" className="inline-block">
-                Home
-              </a>
-            </li>
-            <li>
-              <a href="/" className="inline-block">
-                TV Shows
-              </a>
-            </li>
-            <li>
-              <a href="/" className="inline-block">
-                Movies
-              </a>
-            </li>
-            <li>
-              <a href="/" className="inline-block">
-                New & Popular
-              </a>
-            </li>
-            <li>
-              <a href="/" className="inline-block">
-                My List
-              </a>
-            </li>
-          </ul>
+          <NavigationMenu />
         </div>
 
-        <div className="flex gap-3 items-center ml-auto">
+        <div className="flex text-base gap-3 items-center ml-auto">
           <SearchBox />
-          <a href="/">KIDS</a>
+          <a href="/" className="text-bold text-xs md:text-sm lg:text-sm">
+            KIDS
+          </a>
           <div>
             <div>
               <img

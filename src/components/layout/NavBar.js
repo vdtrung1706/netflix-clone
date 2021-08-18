@@ -1,10 +1,31 @@
 import logoUrl from '../../assets/images/netflix-2015-logo.svg';
 import profileDefaultUrl from '../../assets/images/profile-default.png';
-import searchIcon from '../../assets/icons/search-icon.svg';
+import { useEffect, useState } from 'react';
+import SearchBox from '../common/SearchBox';
 
-const Header = () => {
+const NavBar = () => {
+  const [fadedNav, setFadedNav] = useState(false);
+
+  useEffect(() => {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 1) {
+        setFadedNav(true);
+      } else {
+        setFadedNav(false);
+      }
+    });
+
+    return () => {
+      window.removeEventListener('scroll', null);
+    };
+  }, []);
+
   return (
-    <nav className="absolute z-10 w-full h-16 top-0 bg-gradient-to-b from-black-pure text-sm">
+    <nav
+      className={`fixed z-20 w-full h-16 top-0 text-sm bg-gradient-to-b from-black-pure transition ease-linear duration-400 ${
+        fadedNav ? 'bg-black bg-none' : ''
+      }`}
+    >
       <div className="flex items-center h-full justify-between px-11">
         <div className="flex justify-start items-center">
           <a href="/" className="w-24">
@@ -40,13 +61,7 @@ const Header = () => {
         </div>
 
         <div className="flex gap-3 items-center ml-auto">
-          <div className="flex items-center bg-black bg-opacity-80 border-white border-solid border">
-            <input
-              className="p-2 mr-4 bg-transparent outline-none"
-              placeholder="Title, people, genres"
-            />
-            <img className="h-6 w-6" src={searchIcon} alt="Search" />
-          </div>
+          <SearchBox />
           <a href="/">KIDS</a>
           <div>
             <div>
@@ -63,4 +78,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default NavBar;

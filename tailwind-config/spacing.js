@@ -21,4 +21,8 @@ const backgroundPosition = {
   'top-center': 'top center',
 };
 
-module.exports = { maxWidth, backgroundPosition };
+const transitionProperty = {
+  width: 'width',
+};
+
+module.exports = { maxWidth, backgroundPosition, transitionProperty };

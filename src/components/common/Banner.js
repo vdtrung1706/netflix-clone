@@ -5,7 +5,7 @@ import { truncate } from '../../utils';
 import { BASE_IMG_URL } from '../../services/requests';
 
 export default function Banner() {
-  const [movie, setMovie] = useState();
+  const [movie, setMovie] = useState(null);
   const [data] = useFetch(requests.netflixOrignals);
 
   useEffect(() => {
@@ -13,10 +13,16 @@ export default function Banner() {
     setMovie(data[indexRnd]);
   }, [data]);
 
+  const getBackgorundImage = () => {
+    if (movie == null) {
+      return 'none';
+    }
+    return `url(${BASE_IMG_URL}${movie.backdrop_path})`;
+  };
   return (
     <header
       className="w-full flex items-center relative h-screen bg-black bg-cover bg-no-repeat bg-top-center "
-      style={{ backgroundImage: `url(${BASE_IMG_URL}${movie?.backdrop_path})` }}
+      style={{ backgroundImage: getBackgorundImage() }}
     >
       <div className="flex flex-col items-start text-left z-10 py-0 pr-2 pl-11">
         <h1 className="overflow-clip overflow-hidden w-7/12 font-bold text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-shadow">

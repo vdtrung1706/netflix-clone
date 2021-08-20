@@ -6,9 +6,9 @@
   "scripts": {
     "format": "prettier --write \"src/**/*.{js,jsx}\"",
     "lint": "eslint \"src/**/*.{js,jsx}\" --quiet",
-    "start": "SERVE=true webpack serve",
+    "dev": "NODE_ENV=development webpack serve --progress --color",
     "watch": "webpack --watch",
-    "build": "NODE_ENV=production webpack",
+    "build:prod": "NODE_ENV=production webpack --progress --color",
     "build-dev": "webpack"
   },
   "author": "vdtrung",
@@ -39,8 +39,11 @@
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.3.2",
+    "json-loader": "^0.5.7",
     "mini-css-extract-plugin": "^2.2.0",
+    "node-sass": "^6.0.1",
     "postcss": "^8.3.6",
     "postcss-import": "^14.0.2",
     "postcss-loader": "^6.1.1",
@@ -50,6 +53,7 @@
     "sass-loader": "^12.1.0",
     "style-loader": "^3.2.1",
     "tailwindcss": "^2.2.7",
+    "url-loader": "^4.1.1",
     "webpack": "^5.50.0",
     "webpack-cli": "^4.7.2",
     "webpack-dev-server": "^3.11.2"

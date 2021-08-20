@@ -1,26 +1,24 @@
 import requests from '../../services/requests';
 import { useEffect, useState } from 'react';
 import useFetch from '../../hooks/useFetch';
-import { truncate } from '../../utils';
-import { BASE_IMG_URL } from '../../services/requests';
+import { randomIndex, truncate } from '../../utils';
+import { IMAGE_BASE } from '../../services/requests';
 
 export default function Banner() {
   const [movie, setMovie] = useState(null);
-  const [data] = useFetch(requests.netflixOrignals);
+  const [movies] = useFetch(requests.netflixOrignals);
 
   useEffect(() => {
-    const indexRnd = Math.floor(Math.random() * data.length);
-    setMovie(data[indexRnd]);
-  }, [data]);
+    const index = randomIndex(movies.length);
+    setMovie(movies[index]);
+  }, [movies]);
 
   const getBackgorundImage = () => {
-    if (movie == null) {
-      return 'none';
-    }
-    return `url(${BASE_IMG_URL}${movie.backdrop_path})`;
+    return movie ? `url(${IMAGE_BASE}/original${movie.backdrop_path})` : 'none';
   };
+
   return (
-    <header
+    <div
       className="w-full flex items-center relative h-screen bg-black bg-cover bg-no-repeat bg-top-center "
       style={{ backgroundImage: getBackgorundImage() }}
     >
@@ -59,6 +57,6 @@ export default function Banner() {
 
       <div className="absolute top-0 left-0 w-full h-full z-0 bg-black bg-opacity-20" />
       <div className="absolute bottom-0 left-0 w-full h-10 bg-gradient-to-t from-black" />
-    </header>
+    </div>
   );
 }

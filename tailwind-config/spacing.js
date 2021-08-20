@@ -1,28 +1,21 @@
-const maxWidth = {
+const spacing = {
   'poster-sp': '40vw',
   'poster-sm': '28.57vw',
   'poster-lg': '22.22vw',
   'poster-xl': '18.18vw',
-  '1/2': '50%',
-  1: '4px',
-  2: '8px',
-  3: '12px',
-  4: '16px',
-  5: '20px',
-  6: '24px',
-  7: '28px',
-  8: '32px',
-  9: '36px',
-  10: '40px',
-  11: '44px',
+  '4%': '4%',
+  '1%': '1%',
+  '2%': '2%',
+  '88%': '88%',
+  '52rem': '52rem',
+  '16.66666667%': '16.66666667%',
+  '2.5%': '2.5%',
+  '0.5em': '0.5em',
+  '6em': '6em',
+  '200px': '200px',
+  '1px': '1px',
+  '2px': '2px',
+  '28.125%': '28.125%',
 };
 
-const backgroundPosition = {
-  'top-center': 'top center',
-};
-
-const transitionProperty = {
-  width: 'width',
-};
-
-module.exports = { maxWidth, backgroundPosition, transitionProperty };
+module.exports = { spacing };

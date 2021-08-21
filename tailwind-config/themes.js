@@ -3,8 +3,14 @@ const { fontFamily } = require('./typography');
 const spacing = require('./spacing');
 
 const transitionDelay = {
+  850: '850ms',
+  1200: '1200ms',
   1500: '1500ms',
-  2000: '2000ms',
+};
+const transitionDuration = {
+  0: '0ms',
+  25: '25ms',
+  50: '0ms',
 };
 
 const backgroundPosition = {
@@ -20,6 +26,7 @@ module.exports = {
   fontFamily,
   colors,
   ...spacing,
+  transitionDuration,
   transitionDelay,
   backgroundPosition,
   transitionProperty,

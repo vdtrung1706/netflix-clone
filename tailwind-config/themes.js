@@ -13,6 +13,7 @@ const backgroundPosition = {
 
 const transitionProperty = {
   width: 'width',
+  height: 'height',
 };
 
 module.exports = {

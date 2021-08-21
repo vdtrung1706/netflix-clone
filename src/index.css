@@ -14,7 +14,7 @@
   }
 
   body {
-    @apply bg-black text-white antialiased font-main;
+    @apply bg-black text-white antialiased font-main overflow-x-hidden;
   }
 }
 

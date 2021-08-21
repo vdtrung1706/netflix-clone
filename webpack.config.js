@@ -1,5 +1,4 @@
 const path = require('path');
-const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
@@ -117,25 +116,18 @@ if (nodeUtils.isProduction()) {
   webpackConfig.entry = './src/index.js';
   webpackConfig.target = 'browserslist';
 } else {
-  (webpackConfig.target = 'web'), (webpackConfig.mode = 'development');
-  webpackConfig.entry = [
-    'regenerator-runtime/runtime.js',
-    `webpack-dev-server/client?http://localhost:${3000}`,
-    'webpack/hot/only-dev-server',
-    './src/index.js',
-  ];
-  webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
-  webpackConfig.plugins.push(new ReactRefreshWebpackPlugin({ overlay: false }));
+  webpackConfig.target = 'web';
+  webpackConfig.mode = 'development';
+  webpackConfig.entry = ['regenerator-runtime/runtime.js', './src/index.js'];
+  webpackConfig.plugins.push(new ReactRefreshWebpackPlugin());
 
   webpackConfig.devServer = {
-    open: true,
     port: 3000,
-    stats: 'errors-only',
-    inline: true,
-    injectClient: false,
-    historyApiFallback: true,
-    compress: true,
+    hot: true,
+    contentBase: './dist',
   };
+
+  webpackConfig.devtool = 'eval-cheap-source-map';
 }
 
 module.exports = webpackConfig;

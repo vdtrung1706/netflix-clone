@@ -1,19 +1,15 @@
-import requests from '../services/requests';
-import Row from '../components/common/Row';
 import Banner from '../components/common/Banner';
+import Slider from '../components/layout/Slider';
+import requests from '../services/requests';
+// import Slider from '../components/layout/Slider';
+// import { useEffect, useState } from 'react';
 
 export default function Homepage() {
   return (
     <div className="flex flex-col -mt-16">
       <Banner />
-      <Row title="Trending" fetchUrl={requests.trending} />
-      <Row title="Top Rated" fetchUrl={requests.topRated} />
-      <Row title="Netflix Originals" fetchUrl={requests.netflixOrignals} />
-      <Row title="Adventure" fetchUrl={requests.adventureMovies} />
-      <Row title="Horror Movies" fetchUrl={requests.horrorMovies} />
-      <Row title="Anime" fetchUrl={requests.animeMovies} />
-      <Row title="Action" fetchUrl={requests.actionMovies} />
-      <Row title="Romance" fetchUrl={requests.romanceMovies} />
+      <Slider title="Netflix Original" url={requests.netflixOrignals} />
+      <Slider title="Trending" url={requests.trending} />
     </div>
   );
 }

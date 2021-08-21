@@ -14,6 +14,8 @@
   "author": "vdtrung",
   "license": "ISC",
   "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/react-fontawesome": "^0.1.15",
     "axios": "^0.21.1",
     "classnames": "^2.3.1",
     "dotenv-webpack": "^7.0.3",

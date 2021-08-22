@@ -1,10 +1,10 @@
-import requests from '../../services/requests';
 import { useEffect, useState } from 'react';
-import useFetch from '../../hooks/useFetch';
+import { useFetch } from '../../hooks';
 import { randomIndex, truncate } from '../../utils';
-import { IMAGE_BASE } from '../../services/requests';
+import { IMAGE_BASE } from '../../services/api';
+import requests from '../../services/requests';
 
-export default function Banner() {
+function Banner() {
   const [movie, setMovie] = useState(null);
   const [movies] = useFetch(requests.netflixOrignals);
 
@@ -22,7 +22,7 @@ export default function Banner() {
       className="w-full flex items-center relative h-screen bg-black bg-cover bg-no-repeat bg-top-center "
       style={{ backgroundImage: getBackgorundImage() }}
     >
-      <div className="flex flex-col items-start text-left z-10 py-0 pr-2 pl-11">
+      <div className="flex flex-col items-start text-left z-10 py-0 pr-2 px-4%">
         <h1 className="overflow-clip overflow-hidden w-7/12 font-bold text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-shadow">
           {movie?.title || movie?.name || movie?.original_name}
         </h1>
@@ -60,3 +60,5 @@ export default function Banner() {
     </div>
   );
 }
+
+export default Banner;

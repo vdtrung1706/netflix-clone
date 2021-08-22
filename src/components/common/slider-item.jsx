@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import useViewport from '../../hooks/useViewport';
-import { IMAGE_BASE } from '../../services/requests';
+import { useViewport } from '../../hooks';
+import { IMAGE_BASE } from '../../services/api';
 import cx from 'classnames';
 
-const Slide = ({ movie }) => {
+function SliderItem({ movie }) {
   const [zIndex, setZIndex] = useState(11);
   const [onHover, setOnHover] = useState(false);
   const { width } = useViewport();
@@ -21,8 +21,8 @@ const Slide = ({ movie }) => {
   return (
     <div
       className={cx(
-        `w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 2xl:w-1/6 relative overflow-y-hidden cursor-pointer first:ml-0 inline-block px-2px box-border transition-transform ease-in-out duration-25 ${
-          onHover ? 'delay-1000' : 'delay-75'
+        `w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 2xl:w-1/6 relative overflow-y-hidden cursor-pointer first:ml-0 inline-block px-2px box-border transition-transform ease-in-out ${
+          onHover ? 'duration-75 delay-1000' : 'delay-75 duration-25'
         }`,
         {
           'hover:transform hover:scale-x-125 hover:scale-y-125':
@@ -49,6 +49,6 @@ const Slide = ({ movie }) => {
       </div>
     </div>
   );
-};
+}
 
-export default Slide;
+export default SliderItem;

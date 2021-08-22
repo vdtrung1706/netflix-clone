@@ -5,6 +5,7 @@
     "plugin:react/recommended",
     "plugin:jsx-a11y/recommended",
     "plugin:react-hooks/recommended",
+    "plugin:import/react",
     "prettier"
   ],
   "parser": "@babel/eslint-parser",
@@ -26,6 +27,11 @@
     "node": true
   },
   "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx"]
+      }
+    },
     "react": {
       "version": "detect"
     }

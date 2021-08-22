@@ -1,19 +1,17 @@
 import { useEffect } from 'react';
 
-export default function useOutsideEffectSearchBox(ref, txt, setToggle) {
+function useOutsideEffectSearchBox(ref, txt, setToggle) {
   useEffect(() => {
     function handleClickOutside(event) {
-      if (ref.current && !ref.current.contains(event.target)) {
-        if (!txt) {
-          setToggle(false);
-        }
+      if (ref.current && !ref.current.contains(event.target) && !txt) {
+        setToggle(false);
       }
     }
 
     document.addEventListener('mousedown', handleClickOutside);
 
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [ref, txt, setToggle]);
 }
+
+export default useOutsideEffectSearchBox;

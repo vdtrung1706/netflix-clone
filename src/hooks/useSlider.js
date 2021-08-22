@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
-import axios from '../services/axios';
-import { paginationIndicator } from '../utils';
+import useFetch from './useFetch';
+import cx from 'classnames';
 
-const useSlider = (windowWidth, containerRef, url) => {
+function useSlider(windowWidth, containerRef, url) {
+  const [movies] = useFetch(url);
+
   // to calculate does the slider have next or pre item
   const [viewed, setViewed] = useState(0);
 
@@ -12,8 +14,6 @@ const useSlider = (windowWidth, containerRef, url) => {
   const [containerWidth, setContainerWidth] = useState(0);
   const [totalInViewport, setTotalInViewport] = useState(0);
 
-  const [movies, setMovies] = useState([]);
-
   // slider status
   const [sliderIndex, setSliderIndex] = useState(0);
   const [sliderPages, setSliderPages] = useState(0);
@@ -22,26 +22,17 @@ const useSlider = (windowWidth, containerRef, url) => {
   const hasNext = viewed + totalInViewport < movies.length;
 
   useEffect(() => {
-    fetchMovies(url);
-
-    if (containerRef.current && movies.length > 0) {
+    if (containerRef.current && containerRef.current.firstChild && movies) {
       const containerEl = containerRef.current;
-
       const containerWidth = containerEl.clientWidth;
-      const itemWidth = containerEl.firstChild.clientWidth;
+      const itemWidth = containerEl.firstChild?.clientWidth;
 
       const totalInViewport = Math.ceil(containerWidth / itemWidth);
-
       setContainerWidth(containerWidth);
       setTotalInViewport(totalInViewport);
       setSliderPages(movies.length / totalInViewport);
     }
-
-    async function fetchMovies(url) {
-      const res = await axios.get(url);
-      setMovies(res.data.results);
-    }
-  }, [containerRef, movies.length, url, windowWidth]);
+  }, [containerRef, movies, url, windowWidth]);
 
   const moveSection = type => {
     if (type === 'RIGHT') {
@@ -63,6 +54,26 @@ const useSlider = (windowWidth, containerRef, url) => {
     }
   };
 
+  const paginationIndicator = pageLength => {
+    var listItems = [];
+
+    for (let i = 0; i < pageLength; i++) {
+      const listItem = (
+        <li
+          key={i}
+          className={cx(
+            `inline-block w-3 h-2px ml-1px ${
+              sliderIndex === i ? 'bg-white' : 'bg-gray-800'
+            }`
+          )}
+        ></li>
+      );
+      listItems.push(listItem);
+    }
+
+    return listItems;
+  };
+
   return {
     hasNext,
     hasPrev,
@@ -73,6 +84,6 @@ const useSlider = (windowWidth, containerRef, url) => {
     moveSection,
     paginationIndicator,
   };
-};
+}
 
 export default useSlider;

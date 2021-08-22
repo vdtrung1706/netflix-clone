@@ -1,5 +1,4 @@
-const API_KEY = process.env.API_KEY;
-export const IMAGE_BASE = process.env.IMAGE_BASE;
+import { API_KEY } from './api';
 
 export default {
   trending: `/trending/all/week?api_key=${API_KEY}&sort_by=popularity.desc&language=en-US`,

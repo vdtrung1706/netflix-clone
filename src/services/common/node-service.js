@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = {
   getNodeEnv: function () {
     return process.env;

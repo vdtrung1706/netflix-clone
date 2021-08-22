@@ -1,38 +1,35 @@
+import { useEffect, useState } from 'react';
+import { NarMainMenu, SearchBox } from '../common';
+import { Link } from 'react-router-dom';
+
 import logoUrl from '../../assets/images/netflix-2015-logo.svg';
 import profileDefaultUrl from '../../assets/images/profile-default.png';
-import { useEffect, useState } from 'react';
-import SearchBox from '../common/SearchBox';
-import NavigationMenu from '../common/NavigationMenu';
 
-const NavBar = () => {
-  const [fadedNav, setFadedNav] = useState(false);
+function NavBar() {
+  const [fixedNav, setFixedNav] = useState(false);
 
   useEffect(() => {
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 1) {
-        setFadedNav(true);
-      } else {
-        setFadedNav(false);
-      }
-    });
+    function handleFixedNav() {
+      window.scrollY >= 1 ? setFixedNav(true) : setFixedNav(false);
+    }
 
-    return () => {
-      window.removeEventListener('scroll', null);
-    };
+    window.addEventListener('scroll', handleFixedNav);
+
+    return () => window.removeEventListener('scroll', handleFixedNav);
   }, []);
 
   return (
     <nav
       className={`fixed z-20 w-full h-16 top-0 bg-gradient-to-b from-black-pure transition ease-linear duration-400 ${
-        fadedNav ? 'bg-black-pure bg-none' : ''
+        fixedNav ? 'bg-black-pure bg-none' : ''
       }`}
     >
-      <div className="flex items-center h-full justify-between px-11">
+      <div className="flex items-center h-full justify-between px-4%">
         <div className="flex justify-start items-center">
-          <a href="/" className="w-20 md:w-24">
+          <Link href="/" className="w-20 md:w-24">
             <img src={logoUrl} alt="Logo" />
-          </a>
-          <NavigationMenu />
+          </Link>
+          <NarMainMenu />
         </div>
 
         <div className="flex text-base gap-3 items-center ml-auto">
@@ -53,6 +50,6 @@ const NavBar = () => {
       </div>
     </nav>
   );
-};
+}
 
 export default NavBar;

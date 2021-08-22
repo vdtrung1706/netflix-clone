@@ -1,8 +1,5 @@
-import Banner from '../components/common/Banner';
-import Slider from '../components/layout/Slider';
+import { Banner, Slider } from '../components/layout';
 import requests from '../services/requests';
-// import Slider from '../components/layout/Slider';
-// import { useEffect, useState } from 'react';
 
 export default function Homepage() {
   return (

@@ -1,7 +1,7 @@
-import axios from '../services/axios';
 import { useState, useEffect } from 'react';
+import axios from '../services/api';
 
-export default function useFetch(url) {
+function useFetch(url) {
   const [response, setReponse] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -23,3 +23,5 @@ export default function useFetch(url) {
 
   return [response, loading, error];
 }
+
+export default useFetch;

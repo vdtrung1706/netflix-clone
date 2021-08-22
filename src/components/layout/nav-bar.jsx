@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { NarMainMenu, SearchBox } from '../common';
 import { Link } from 'react-router-dom';
+import { signInWithGoogle, signOut } from '../../firebase';
 
 import logoUrl from '../../assets/images/netflix-2015-logo.svg';
 import profileDefaultUrl from '../../assets/images/profile-default.png';
 
-function NavBar() {
+function NavBar({ currentUser }) {
   const [fixedNav, setFixedNav] = useState(false);
 
   useEffect(() => {
@@ -26,10 +27,15 @@ function NavBar() {
     >
       <div className="flex items-center h-full justify-between px-4%">
         <div className="flex justify-start items-center">
-          <Link href="/" className="w-20 md:w-24">
+          <Link to="/" className="w-20 md:w-24">
             <img src={logoUrl} alt="Logo" />
           </Link>
           <NarMainMenu />
+          {currentUser ? (
+            <button onClick={signOut}>Sign Out</button>
+          ) : (
+            <button onClick={signInWithGoogle}>Sign In With Google</button>
+          )}
         </div>
 
         <div className="flex text-base gap-3 items-center ml-auto">

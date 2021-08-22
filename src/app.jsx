@@ -1,16 +1,33 @@
-import { NavBar } from './components/layout';
 import { Homepage } from './pages';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { auth } from './firebase';
+import { createUserProfileDocument } from './firebase/user';
+import { NavBarContainer } from './containers/navbar-container';
 
-function App() {
+const App = ({ setCurrentUser }) => {
+  const unsubscribeFromAuth = useRef();
+
+  useEffect(() => {
+    unsubscribeFromAuth.current = auth.onAuthStateChanged(async authUser => {
+      const user = await createUserProfileDocument(authUser);
+      setCurrentUser(user);
+    });
+
+    return () => {
+      this.unsubscribeFromAuth.current();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Router>
-      <NavBar />
+      <NavBarContainer />
       <Route path="/browse">
         <Homepage />
       </Route>
     </Router>
   );
-}
+};
 
 export default App;

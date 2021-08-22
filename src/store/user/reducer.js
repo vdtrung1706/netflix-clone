@@ -6,7 +6,7 @@ const inititalState = {
 
 const reducer = (state = inititalState, action) => {
   if (action.type === SET_CURRENT_USER) {
-    return { ...state, currentUser: action.payload };
+    return { ...state, currentUser: action.payload.user };
   }
 
   return state;

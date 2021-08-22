@@ -1,6 +1,11 @@
-import useOutsideEffectSearchBox from './useOutsideEffectSearchBox';
-import useFetch from './useFetch';
-import useSlider from './useSlider';
-import useViewport from './useViewport';
+import useSearchBox from './use-search-box';
+import useFetch from './use-fetch';
+import useSlider from './use-slider';
+import useViewport from './use-viewport';
 
-export { useOutsideEffectSearchBox, useFetch, useSlider, useViewport };
+export {
+  useSearchBox as useOutsideEffectSearchBox,
+  useFetch,
+  useSlider,
+  useViewport,
+};

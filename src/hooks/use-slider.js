@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import useFetch from './useFetch';
+import useFetch from './use-fetch';
 import cx from 'classnames';
 
 function useSlider(windowWidth, containerRef, url) {

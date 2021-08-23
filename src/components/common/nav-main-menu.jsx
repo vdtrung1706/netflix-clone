@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useViewport } from '../../hooks';
-import { Link } from 'react-router-dom';
+import useViewport from '../../hooks/use-viewport';
 import NavMainMenuItems from './nav-main-menu-items';
 
 import arrowDownUrl from '../../assets/icons/arrow-point-to-down.svg';
@@ -22,16 +21,13 @@ function NarMainMenu() {
           smallScreen ? 'block' : 'hidden'
         }`}
       >
-        <Link
-          to="/"
+        <button
           onClick={() => setExpandedBrowse(!expandedBrowse)}
           className="flex items-center h-full no-underline relative font-bold"
-          role="button"
-          aria-haspopup="true"
         >
           Browse
           <img className="ml-1 h-3" src={arrowDownUrl} alt={'browse'} />
-        </Link>
+        </button>
         {expandedBrowse && (
           <div className="absolute bg-black-pure opacity-90 -ml-20 top-16">
             <div className="absolute left-1/2 -top-3 h-4 w-4">

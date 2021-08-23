@@ -7,4 +7,5 @@ module.exports = {
   display: ['group-hover'],
   transform: ['hover', 'group-hover'],
   zIndex: ['hover', 'active', 'group-hover'],
+  borderWidth: ['hover', 'focus', 'focus-within'],
 };

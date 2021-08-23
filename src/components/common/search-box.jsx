@@ -1,6 +1,6 @@
 // import { useState } from "react"
 import { useState, useRef } from 'react';
-import { useOutsideEffectSearchBox } from '../../hooks';
+import useSearchBox from '../../hooks/use-search-box';
 import searchIconUrl from '../../assets/icons/search-icon.svg';
 import crossSign from '../../assets/icons/cross-sign.svg';
 import cx from 'classnames';
@@ -10,7 +10,7 @@ export function SearchBox() {
   const [txt, setTxt] = useState('');
   const [toggle, setToggle] = useState(false);
 
-  useOutsideEffectSearchBox(ref, txt, setToggle);
+  useSearchBox(ref, txt, setToggle);
 
   const handleToggle = () => {
     if (!txt) {

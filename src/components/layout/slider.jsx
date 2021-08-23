@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
-import { useSlider, useViewport } from '../../hooks';
-import { SliderItem } from '../common';
+import useSlider from '../../hooks/use-slider';
+import useViewport from '../../hooks/use-viewport';
+import SliderItem from '../common/slider-item';
 import cx from 'classnames';
 
 import {
@@ -21,14 +22,17 @@ function Slider({ title, url }) {
 
 function SliderHeader({ title }) {
   return (
-    <div name="slider-header">
+    <div>
       <a
         className="mx-4% mb-1 flex items-baseline cursor-pointer whitespace-nowrap w-max"
-        href={'/'}
+        href="/"
       >
+        {/* title */}
         <div className="text-sm md:text-sm lg:text-base xl:text-xl font-bold">
           {title}
         </div>
+
+        {/* Explore more */}
         <div className="text-xs font-bold flex items-baseline w-0 ml-1 opacity-0 transition-all group-hover:transform duration-300 delay-100 group-hover:w-auto group-hover:opacity-100 group-hover:translate-x-3">
           <div>Explore All</div>
           <div className="ml-2px">
@@ -64,6 +68,7 @@ function SliderContainer({ url }) {
           paginationIndicator={paginationIndicator}
         />
 
+        {/* Slider Items */}
         <div className="overflow-x-visible">
           <div
             className="whitespace-nowrap transform duration-300 ease-in-out delay-300"
@@ -78,6 +83,7 @@ function SliderContainer({ url }) {
           </div>
         </div>
 
+        {/* Action Buttons */}
         <SliderButtons
           hasPrev={hasPrev}
           hasNext={hasNext}

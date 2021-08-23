@@ -1,4 +1,4 @@
-import { Homepage } from './pages';
+import Homepage from './pages/homepage';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { useEffect, useRef } from 'react';
 import { auth } from './firebase';

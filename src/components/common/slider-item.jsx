@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useViewport } from '../../hooks';
 import { IMAGE_BASE } from '../../services/api';
+import useViewport from '../../hooks/use-viewport';
 import cx from 'classnames';
 
 function SliderItem({ movie }) {

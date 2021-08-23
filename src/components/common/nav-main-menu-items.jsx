@@ -10,21 +10,25 @@ function NavMainMenuItems({ listItemsClassName }) {
           Home
         </Link>
       </li>
+
       <li>
         <Link to="/browse/genre/83" className={className}>
           TV Shows
         </Link>
       </li>
+
       <li>
         <Link to="/browse/genre/83" className={className}>
           Movies
         </Link>
       </li>
+
       <li>
         <Link to="/lastest" className={className}>
           New & Popular
         </Link>
       </li>
+
       <li>
         <Link to="/browse/my-list" className={className}>
           My List

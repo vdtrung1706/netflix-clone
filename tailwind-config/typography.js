@@ -3,4 +3,11 @@ const fontFamily = {
   pionflix: ['"Bebas Neue"', 'cursive'],
 };
 
-module.exports = { fontFamily };
+const fontSize = {
+  '3.125rem': ['3.125rem', '55px'],
+  '1.75rem': ['1.75rem', '30.8px'],
+  '1.625rem': '1.625rem',
+  '1.125rem': '1.125rem',
+};
+
+module.exports = { fontFamily, fontSize };

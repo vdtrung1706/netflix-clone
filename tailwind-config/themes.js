@@ -1,5 +1,5 @@
 const { colors } = require('./colors');
-const { fontFamily } = require('./typography');
+const typography = require('./typography');
 const spacing = require('./spacing');
 
 const transitionDelay = {
@@ -15,6 +15,7 @@ const transitionDuration = {
 
 const backgroundPosition = {
   'top-center': 'top center',
+  '0-0': '0px 0px',
 };
 
 const transitionProperty = {
@@ -23,9 +24,9 @@ const transitionProperty = {
 };
 
 module.exports = {
-  fontFamily,
-  colors,
+  ...typography,
   ...spacing,
+  colors,
   transitionDuration,
   transitionDelay,
   backgroundPosition,

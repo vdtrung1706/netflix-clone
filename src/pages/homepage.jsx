@@ -1,7 +1,8 @@
-import { Banner, Slider } from '../components/layout';
+import Banner from '../components/layout/banner';
+import Slider from '../components/layout/slider';
 import requests from '../services/requests';
 
-export default function Homepage() {
+function Homepage() {
   return (
     <div className="flex flex-col -mt-16">
       <Banner />
@@ -10,3 +11,5 @@ export default function Homepage() {
     </div>
   );
 }
+
+export default Homepage;

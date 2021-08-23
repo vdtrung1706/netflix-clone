@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useFetch } from '../../hooks';
 import { randomIndex, truncate } from '../../utils';
 import { IMAGE_BASE } from '../../services/api';
+import useFetch from '../../hooks/use-fetch';
 import requests from '../../services/requests';
 
 function Banner() {
@@ -23,14 +23,17 @@ function Banner() {
       style={{ backgroundImage: getBackgorundImage() }}
     >
       <div className="flex flex-col items-start text-left z-10 py-0 pr-2 px-4%">
-        <h1 className="overflow-clip overflow-hidden w-7/12 font-bold text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-shadow">
+        {/* Movie Title */}
+        <h1 className="overflow-hidden w-7/12 font-bold text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-shadow">
           {movie?.title || movie?.name || movie?.original_name}
         </h1>
 
-        <p className="overflow-clip overflow-hidden w-5/12 leading-relaxed mt-4 text-xs lg:text-base xl:text-lg text-shadow">
+        {/* Descriptions */}
+        <p className="overflow-hidden w-5/12 leading-relaxed mt-4 text-xs lg:text-base xl:text-lg text-shadow">
           {truncate(movie?.overview, 120)}
         </p>
 
+        {/* Buttons */}
         <div className="flex gap-2 text-xs md:text-sm lg:text-base mt-4">
           <button className="flex items-center transition duration-300 ease-linear hover:bg-white-darker transform justify-center gap-1 w-24 md:w-28 py-2 rounded cursor-pointer bg-white text-black-pure">
             <div className="h-6 w-6" role="presentation">
@@ -55,6 +58,7 @@ function Banner() {
         </div>
       </div>
 
+      {/* Gradient */}
       <div className="absolute top-0 left-0 w-full h-full z-0 bg-black bg-opacity-20" />
       <div className="absolute bottom-0 left-0 w-full h-10 bg-gradient-to-t from-black" />
     </div>

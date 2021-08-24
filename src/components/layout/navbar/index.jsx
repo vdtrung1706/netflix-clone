@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { signInWithGoogle, signOut } from '../../firebase';
-import NarMainMenu from '../common/nav-main-menu';
-import NavSecondaryMenu from '../common/nav-secondary-menu';
+import { signInWithGoogle, signOut } from '../../../firebase';
+import MainMenu from './main-menu';
+import SecondaryMenu from './secondary-menu';
 
-import logoUrl from '../../assets/images/netflix-2015-logo.svg';
+import logoUrl from '../../../assets/images/netflix-2015-logo.svg';
 
-function NavBar({ currentUser }) {
+function Navbar({ currentUser }) {
   const [fixedNav, setFixedNav] = useState(false);
 
   useEffect(() => {
@@ -26,23 +26,21 @@ function NavBar({ currentUser }) {
       }`}
     >
       <div className="flex items-center h-full justify-between px-4%">
-        {/* Main Nav */}
         <div className="flex justify-start items-center">
           <Link to="/" className="w-20 md:w-24">
             <img src={logoUrl} alt="Logo" />
           </Link>
-          <NarMainMenu />
+          <MainMenu />
           {currentUser ? (
             <button onClick={signOut}>Sign Out</button>
           ) : (
             <button onClick={signInWithGoogle}>Sign In With Google</button>
           )}
         </div>
-
-        <NavSecondaryMenu currentUser={currentUser} />
+        <SecondaryMenu currentUser={currentUser} />
       </div>
     </nav>
   );
 }
 
-export default NavBar;
+export default Navbar;

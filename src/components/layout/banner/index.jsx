@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { randomIndex, truncate } from '../../utils';
-import { IMAGE_BASE } from '../../services/api';
-import useFetch from '../../hooks/use-fetch';
-import requests from '../../services/requests';
+import { randomIndex, truncate } from '../../../utils';
+import { IMAGE_BASE } from '../../../services/api';
+import useFetch from '../../../hooks/use-fetch';
+import requests from '../../../services/requests';
 
 function Banner() {
   const [movie, setMovie] = useState(null);

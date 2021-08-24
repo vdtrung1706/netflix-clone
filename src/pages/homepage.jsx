@@ -7,7 +7,6 @@ function Homepage() {
     <div className="flex flex-col -mt-16">
       <Banner />
       <Slider title="Netflix Original" url={requests.netflixOrignals} />
-      <Slider title="Trending" url={requests.trending} />
     </div>
   );
 }

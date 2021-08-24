@@ -1,7 +1,7 @@
-import SearchBox from './search-box';
-import profileDefaultUrl from '../../assets/images/profile-default.png';
+import SearchBox from '../../common/search-box';
+import profileDefaultUrl from '../../../assets/images/profile-default.png';
 
-function NavSecondaryMenu({ currentUser }) {
+function SecondaryMenu({ currentUser }) {
   return (
     <div className="flex text-base gap-3 items-center ml-auto">
       <SearchBox />
@@ -21,4 +21,4 @@ function NavSecondaryMenu({ currentUser }) {
   );
 }
 
-export default NavSecondaryMenu;
+export default SecondaryMenu;

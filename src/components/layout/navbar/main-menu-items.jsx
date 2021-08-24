@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-function NavMainMenuItems({ listItemsClassName }) {
+function MainMenuItems({ listItemsClassName }) {
   const className = `${listItemsClassName} hover:text-gray-400 transition-colors duration-200 ease-linear focus:font-bold focus:text-white`;
 
   return (
@@ -38,4 +38,4 @@ function NavMainMenuItems({ listItemsClassName }) {
   );
 }
 
-export default NavMainMenuItems;
+export default MainMenuItems;

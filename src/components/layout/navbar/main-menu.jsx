@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import useViewport from '../../hooks/use-viewport';
-import NavMainMenuItems from './nav-main-menu-items';
+import useViewport from '../../../hooks/use-viewport';
+import MainMenuItems from './main-menu-items';
 
-import arrowDownUrl from '../../assets/icons/arrow-point-to-down.svg';
-import arrowUpUrl from '../../assets/icons/arrow-point-to-up.svg';
+import arrowDownUrl from '../../../assets/icons/arrow-point-to-down.svg';
+import arrowUpUrl from '../../../assets/icons/arrow-point-to-up.svg';
 
-function NarMainMenu() {
+function MainMenu() {
   const { width } = useViewport();
   const [expandedBrowse, setExpandedBrowse] = useState(false);
   const [smallScreen, setSmallScreen] = useState(false);
@@ -34,17 +34,17 @@ function NarMainMenu() {
               <img src={arrowUpUrl} alt={'browse'} />
             </div>
             <ul className="p-0 h-auto border-t-2 border-solid border-white">
-              <NavMainMenuItems listItemsClassName="flex items-center justify-around leading-6 w-64 h-12" />
+              <MainMenuItems listItemsClassName="flex items-center justify-around leading-6 w-64 h-12" />
             </ul>
           </div>
         )}
       </li>
 
-      <NavMainMenuItems
+      <MainMenuItems
         listItemsClassName={`${smallScreen ? 'hidden' : 'block'}`}
       />
     </ul>
   );
 }
 
-export default NarMainMenu;
+export default MainMenu;

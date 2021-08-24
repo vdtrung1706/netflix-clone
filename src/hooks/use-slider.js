@@ -26,7 +26,6 @@ function useSlider(windowWidth, containerRef, url) {
       const containerEl = containerRef.current;
       const containerWidth = containerEl.clientWidth;
       const itemWidth = containerEl.firstChild?.clientWidth;
-
       const totalInViewport = Math.ceil(containerWidth / itemWidth);
       setContainerWidth(containerWidth);
       setTotalInViewport(totalInViewport);

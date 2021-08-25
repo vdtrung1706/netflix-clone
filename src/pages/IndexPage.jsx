@@ -4,6 +4,7 @@ import hero from '../assets/images/hero.jpg';
 import hero1000 from '../assets/images/hero-1000.jpg';
 import hero1500 from '../assets/images/hero-1500.jpg';
 import hero1800 from '../assets/images/hero-1800.jpg';
+import { Link } from 'react-router-dom';
 
 const IndexPage = () => {
   return (
@@ -25,12 +26,12 @@ const GreetingHeader = () => {
         >
           <img src={logoUrl} alt="logo" />
         </a>
-        <a
-          href="/signin"
+        <Link
+          to="/login"
           className="rounded-sm bg-red px-3 py-2px text-sm sm:py-1 sm:text-base sm:px-4"
         >
           Sign In
-        </a>
+        </Link>
       </div>
     </div>
   );

@@ -12,13 +12,13 @@ const PrimaryNavItems = ({ listItemsClassName }) => {
       </li>
 
       <li>
-        <Link to="/browse/genre/83" className={className}>
+        <Link to="/tvshows" className={className}>
           TV Shows
         </Link>
       </li>
 
       <li>
-        <Link to="/browse/genre/83" className={className}>
+        <Link to="/movies" className={className}>
           Movies
         </Link>
       </li>

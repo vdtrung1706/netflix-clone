@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import cx from 'classnames';
-import useViewport from './use-viewport';
+import useViewport from './useViewport';
 
-function useSlider(ref, movies = []) {
+const useSlider = (ref, movies = []) => {
   const [viewed, setViewed] = useState(0);
   const [distance, setDistance] = useState(0);
   const [sliderWidth, setSliderWidth] = useState(0);
@@ -78,6 +78,6 @@ function useSlider(ref, movies = []) {
     moveSection,
     paginationIndicator,
   };
-}
+};
 
 export default useSlider;

@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import useViewport from '../../../hooks/use-viewport';
-import MainMenuItems from './main-menu-items';
+import useViewport from '../../hooks/useViewport';
+import PrimaryNavItems from './PrimaryNavItems';
 
-import arrowDownUrl from '../../../assets/icons/arrow-point-to-down.svg';
-import arrowUpUrl from '../../../assets/icons/arrow-point-to-up.svg';
+import arrowDownUrl from '../../assets/icons/arrow-point-to-down.svg';
+import arrowUpUrl from '../../assets/icons/arrow-point-to-up.svg';
 
-function MainMenu() {
+const PrimaryNav = () => {
   const { width } = useViewport();
   const [expandedBrowse, setExpandedBrowse] = useState(false);
   const [smallScreen, setSmallScreen] = useState(false);
@@ -34,17 +34,17 @@ function MainMenu() {
               <img src={arrowUpUrl} alt={'browse'} />
             </div>
             <ul className="p-0 h-auto border-t-2 border-solid border-white">
-              <MainMenuItems listItemsClassName="flex items-center justify-around leading-6 w-64 h-12" />
+              <PrimaryNavItems listItemsClassName="flex items-center justify-around leading-6 w-64 h-12" />
             </ul>
           </div>
         )}
       </li>
 
-      <MainMenuItems
+      <PrimaryNavItems
         listItemsClassName={`${smallScreen ? 'hidden' : 'block'}`}
       />
     </ul>
   );
-}
+};
 
-export default MainMenu;
+export default PrimaryNav;

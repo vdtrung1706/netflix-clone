@@ -1,13 +1,15 @@
-import SearchBox from '../../common/search-box';
-import profileDefaultUrl from '../../../assets/images/profile-default.png';
+import SearchBox from './SearchBox';
+import profileDefaultUrl from '../../assets/images/profile-default.png';
 
-function SecondaryMenu({ currentUser }) {
+const SecondaryNav = ({ currentUser }) => {
   return (
     <div className="flex text-base gap-3 items-center ml-auto">
       <SearchBox />
+
       <a href="/" className="text-bold text-xs md:text-sm lg:text-sm">
         KIDS
       </a>
+
       <div>
         <div>
           <img
@@ -19,6 +21,6 @@ function SecondaryMenu({ currentUser }) {
       </div>
     </div>
   );
-}
+};
 
-export default SecondaryMenu;
+export default SecondaryNav;

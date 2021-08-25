@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { setCurrentUser } from '../store/user/actions';
-import App from '../app';
+import App from '../App';
 
 const mapDispatchToProps = {
   setCurrentUser,

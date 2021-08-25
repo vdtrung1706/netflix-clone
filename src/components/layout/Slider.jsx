@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useSelector } from 'react-redux';
-import SliderItem from './slider-item';
-import useSlider from '../../../hooks/use-slider';
+import SliderItem from '../common/SliderItem';
+import useSlider from '../../hooks/useSlider';
 import cx from 'classnames';
 import {
   faChevronLeft,
@@ -10,7 +10,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-function Slider({ title, selector }) {
+const Slider = ({ title, selector }) => {
   const { loading, error, data: movies } = useSelector(selector);
 
   const ref = useRef();
@@ -110,6 +110,6 @@ function Slider({ title, selector }) {
       </div>
     </section>
   );
-}
+};
 
 export default Slider;

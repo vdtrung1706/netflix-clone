@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-function useSearchBox(ref, txt, setToggle) {
+const useSearchBox = (ref, txt, setToggle) => {
   useEffect(() => {
     function handleClickOutside(event) {
       if (ref.current && !ref.current.contains(event.target) && !txt) {
@@ -12,6 +12,6 @@ function useSearchBox(ref, txt, setToggle) {
 
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [ref, txt, setToggle]);
-}
+};
 
 export default useSearchBox;

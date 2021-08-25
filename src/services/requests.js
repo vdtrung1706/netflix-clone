@@ -1,4 +1,4 @@
-import { API_KEY } from './api';
+import { API_KEY } from './axios';
 
 export default {
   trending: `/trending/all/week?api_key=${API_KEY}&sort_by=popularity.desc&language=en-US`,

@@ -1,9 +1,9 @@
-import Homepage from './pages/homepage';
+import Homepage from './pages/Homepage';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { useEffect, useRef } from 'react';
 import { auth } from './firebase';
 import { createUserProfileDocument } from './firebase/user';
-import { NavBarContainer } from './containers/navbar-container';
+import { NavContainer } from './containers/NavContainer';
 
 const App = ({ setCurrentUser }) => {
   const unsubscribeFromAuth = useRef();
@@ -22,7 +22,7 @@ const App = ({ setCurrentUser }) => {
 
   return (
     <Router>
-      <NavBarContainer />
+      <NavContainer />
       <Route path="/browse">
         <Homepage />
       </Route>

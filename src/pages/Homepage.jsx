@@ -1,19 +1,19 @@
-import Banner from '../components/layout/banner';
-import Slider from '../components/layout/slider';
-import useRetrieveData from '../hooks/use-retrieve-data';
+import Billboard from '../components/layout/Billboard';
+import Slider from '../components/layout/Slider';
+import useRetrieveData from '../hooks/useRetrieveData';
 
-function Homepage() {
+const Homepage = () => {
   const sliders = useRetrieveData('MOVIES');
 
   console.log(sliders);
 
   return (
     <div className="flex flex-col -mt-16">
-      <Banner />
+      <Billboard />
 
       {sliders && sliders.map(props => <Slider key={props.id} {...props} />)}
     </div>
   );
-}
+};
 
 export default Homepage;

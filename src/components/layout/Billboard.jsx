@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { randomIndex, truncate } from '../../../utils';
-import { IMAGE_BASE } from '../../../services/api';
-import useFetch from '../../../hooks/use-fetch';
-import requests from '../../../services/requests';
+import { randomIndex, truncate } from '../../utils';
+import { IMAGE_BASE } from '../../services/axios';
+import useFetch from '../../hooks/useFetch';
+import requests from '../../services/requests';
 
-function Banner() {
+const Billboard = () => {
   const [movie, setMovie] = useState(null);
   const [movies] = useFetch(requests.netflixOrignals);
 
@@ -63,6 +63,6 @@ function Banner() {
       <div className="absolute bottom-0 left-0 w-full h-10 bg-gradient-to-t from-black" />
     </div>
   );
-}
+};
 
-export default Banner;
+export default Billboard;

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import Navbar from '../components/layout/navbar';
+import Nav from '../components/layout/Nav';
 
 const mapStateToProps = state => {
   return {
@@ -7,4 +7,4 @@ const mapStateToProps = state => {
   };
 };
 
-export const NavBarContainer = connect(mapStateToProps)(Navbar);
+export const NavContainer = connect(mapStateToProps)(Nav);

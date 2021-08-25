@@ -4,7 +4,8 @@ import hero from '../assets/images/hero.jpg';
 import hero1000 from '../assets/images/hero-1000.jpg';
 import hero1500 from '../assets/images/hero-1500.jpg';
 import hero1800 from '../assets/images/hero-1800.jpg';
-function IndexPage() {
+
+const IndexPage = () => {
   return (
     <div className="bg-black-zero">
       <GreetingHeader />
@@ -12,9 +13,9 @@ function IndexPage() {
       <div>This is second card</div>
     </div>
   );
-}
+};
 
-function GreetingHeader() {
+const GreetingHeader = () => {
   return (
     <div className="relative text-base pt-5 z-10">
       <div className="flex flex-row flex-nowrap items-center mx-4% pt-2 relative justify-between">
@@ -33,9 +34,9 @@ function GreetingHeader() {
       </div>
     </div>
   );
-}
+};
 
-function StoryCard() {
+const StoryCard = () => {
   const [email, setEmail] = useState('');
 
   return (
@@ -112,6 +113,6 @@ function StoryCard() {
       <div className="center-pixel absolute top-1/2 left-1/2"></div>
     </div>
   );
-}
+};
 
 export default IndexPage;

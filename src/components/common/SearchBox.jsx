@@ -1,11 +1,11 @@
 // import { useState } from "react"
 import { useState, useRef } from 'react';
-import useSearchBox from '../../hooks/use-search-box';
+import useSearchBox from '../../hooks/useSearchBox';
 import searchIconUrl from '../../assets/icons/search-icon.svg';
 import crossSign from '../../assets/icons/cross-sign.svg';
 import cx from 'classnames';
 
-export function SearchBox() {
+const SearchBox = () => {
   const ref = useRef(null);
   const [txt, setTxt] = useState('');
   const [toggle, setToggle] = useState(false);
@@ -61,6 +61,6 @@ export function SearchBox() {
       </button>
     </div>
   );
-}
+};
 
 export default SearchBox;

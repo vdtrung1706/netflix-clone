@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { IMAGE_BASE } from '../../../services/api';
-import useViewport from '../../../hooks/use-viewport';
+import { IMAGE_BASE } from '../../services/axios';
+import useViewport from '../../hooks/useViewport';
 import cx from 'classnames';
 
-function SliderItem({ movie }) {
+const SliderItem = ({ movie }) => {
   const [zIndex, setZIndex] = useState(11);
   const [onHover, setOnHover] = useState(false);
   const { width } = useViewport();
@@ -49,6 +49,6 @@ function SliderItem({ movie }) {
       </div>
     </div>
   );
-}
+};
 
 export default SliderItem;

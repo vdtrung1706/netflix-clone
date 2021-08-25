@@ -1,55 +1,50 @@
 import { useEffect, useState } from 'react';
-import useFetch from './use-fetch';
 import cx from 'classnames';
+import useViewport from './use-viewport';
 
-function useSlider(windowWidth, containerRef, url) {
-  const [movies] = useFetch(url);
-
-  // to calculate does the slider have next or pre item
+function useSlider(ref, movies = []) {
   const [viewed, setViewed] = useState(0);
-
-  // to slide by distance
   const [distance, setDistance] = useState(0);
-
-  const [containerWidth, setContainerWidth] = useState(0);
+  const [sliderWidth, setSliderWidth] = useState(0);
   const [totalInViewport, setTotalInViewport] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
 
-  // slider status
-  const [sliderIndex, setSliderIndex] = useState(0);
-  const [sliderPages, setSliderPages] = useState(0);
+  const { width } = useViewport();
 
-  const hasPrev = distance < 0;
+  const hasPre = distance < 0;
   const hasNext = viewed + totalInViewport < movies.length;
 
   useEffect(() => {
-    if (containerRef.current && containerRef.current.firstChild && movies) {
-      const containerEl = containerRef.current;
-      const containerWidth = containerEl.clientWidth;
-      const itemWidth = containerEl.firstChild?.clientWidth;
-      const totalInViewport = Math.ceil(containerWidth / itemWidth);
-      setContainerWidth(containerWidth);
+    if (ref.current && ref.current.firstChild && movies) {
+      const sliderWidth = ref.current.clientWidth;
+      const itemWidth = ref.current.firstChild.clientWidth;
+
+      const totalInViewport = Math.ceil(sliderWidth / itemWidth);
+
+      setSliderWidth(sliderWidth);
       setTotalInViewport(totalInViewport);
-      setSliderPages(movies.length / totalInViewport);
+      setTotalPages(movies.length / totalInViewport);
     }
-  }, [containerRef, movies, url, windowWidth]);
+  }, [ref, movies, width]);
 
   const moveSection = type => {
     if (type === 'RIGHT') {
       setViewed(viewed + totalInViewport);
-      setDistance(distance - containerWidth);
-      setSliderIndex(pre => pre + 1);
+      setDistance(distance - sliderWidth);
+      setCurrentPage(pre => pre + 1);
     }
 
     if (type === 'LEFT') {
       setViewed(viewed - totalInViewport);
-      setDistance(distance + containerWidth);
-      setSliderIndex(pre => pre - 1);
+      setDistance(distance + sliderWidth);
+      setCurrentPage(pre => pre - 1);
     }
 
     if (type === 'RESET') {
       setViewed(0);
       setDistance(0);
-      setSliderIndex(0);
+      setCurrentPage(0);
     }
   };
 
@@ -62,7 +57,7 @@ function useSlider(windowWidth, containerRef, url) {
           key={i}
           className={cx(
             `inline-block w-3 h-2px ml-1px ${
-              sliderIndex === i ? 'bg-white' : 'bg-gray-800'
+              currentPage === i ? 'bg-white' : 'bg-gray-800'
             }`
           )}
         ></li>
@@ -75,11 +70,11 @@ function useSlider(windowWidth, containerRef, url) {
 
   return {
     hasNext,
-    hasPrev,
-    sliderPages,
+    hasPre,
+    totalPages,
     movies,
     distance,
-    sliderIndex,
+    currentPage,
     moveSection,
     paginationIndicator,
   };

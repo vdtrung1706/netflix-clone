@@ -1,12 +1,17 @@
 import Banner from '../components/layout/banner';
 import Slider from '../components/layout/slider';
-import requests from '../services/requests';
+import useRetrieveData from '../hooks/use-retrieve-data';
 
 function Homepage() {
+  const sliders = useRetrieveData('MOVIES');
+
+  console.log(sliders);
+
   return (
     <div className="flex flex-col -mt-16">
       <Banner />
-      <Slider title="Netflix Original" url={requests.netflixOrignals} />
+
+      {sliders && sliders.map(props => <Slider key={props.id} {...props} />)}
     </div>
   );
 }

@@ -7,6 +7,7 @@ const transitionDelay = {
   1200: '1200ms',
   1500: '1500ms',
 };
+
 const transitionDuration = {
   0: '0ms',
   25: '25ms',
@@ -23,10 +24,20 @@ const transitionProperty = {
   height: 'height',
 };
 
+const lineHeight = {
+  '50px': '50px',
+};
+
+const fontSize = {
+  '0.7rem': '0.7rem',
+};
+
 module.exports = {
   ...typography,
   ...spacing,
   colors,
+  lineHeight,
+  fontSize,
   transitionDuration,
   transitionDelay,
   backgroundPosition,

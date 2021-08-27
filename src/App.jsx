@@ -5,10 +5,10 @@ import { auth } from './firebase';
 import { createUserProfileDocument } from './firebase/user';
 import { NavContainer } from './containers/NavContainer';
 import { useSelector } from 'react-redux';
-import SignInPage from './pages/SignInPage';
 import TVShowsPage from './pages/TVShowsPage';
 import MoviesPage from './pages/MoviesPage';
 import IndexPage from './pages/IndexPage';
+import AuthPage from './pages/AuthPage';
 
 const App = ({ setCurrentUser }) => {
   const currentUser = useSelector(state => state.user.currentUser);
@@ -34,7 +34,8 @@ const App = ({ setCurrentUser }) => {
       {currentUser && <NavContainer />}
 
       <Route path="/">
-        {currentUser ? <Redirect to="/browse" /> : <Redirect to="/welcome" />}
+        {/* {currentUser ? <Redirect to="/browse" /> : <Redirect to="/welcome" />} */}
+        <AuthPage />
       </Route>
 
       <Route path="/welcome">
@@ -46,7 +47,7 @@ const App = ({ setCurrentUser }) => {
       </Route>
 
       <Route path="/login">
-        {!currentUser ? <SignInPage /> : <Redirect to="/browse" />}
+        {!currentUser ? <AuthPage /> : <Redirect to="/browse" />}
       </Route>
 
       <Route path="/tvshows">

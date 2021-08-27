@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 
 const IndexPage = () => {
   return (
-    <div className="bg-black-zero">
+    <div className="bg-black-pure">
       <GreetingHeader />
       <StoryCard />
       <div>This is second card</div>
@@ -51,7 +51,7 @@ const StoryCard = () => {
             alt="hero"
           />
           <div
-            className="absolute top-0 left-0 bottom-0 right-0 bg-black-zero bg-opacity-40"
+            className="absolute top-0 left-0 bottom-0 right-0 bg-black-pure bg-opacity-40"
             style={{
               backgroundImage:
                 'linear-gradient(to top,rgba(0,0,0,.8) 0,rgba(0,0,0,0) 60%,rgba(0,0,0,.8) 100%)',
@@ -77,7 +77,7 @@ const StoryCard = () => {
             <div className="bg-white border-solid border-b-2 border-opacity-0 border-red focus-within:border-opacity-100 transition-opacity duration-700 ease-linear rounded sm:min-w-550px md:max-w-lg lg:min-w-max lg:rounded-tr-none lg:rounded-br-none">
               <div className="px-2 md:px-8 lg:px-2">
                 <input
-                  className="text-black-zero min-w-450px md:min-w-550px h-12 w-full outline-none border-none bg-transparent text-base font-medium md:h-14"
+                  className="text-black-pure min-w-450px md:min-w-550px h-12 w-full outline-none border-none bg-transparent text-base font-medium md:h-14"
                   type="email"
                   placeholder="Email Address"
                   value={email}

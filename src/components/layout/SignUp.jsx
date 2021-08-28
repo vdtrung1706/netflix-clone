@@ -5,87 +5,102 @@ import { InputLogin } from '../common/Inputs';
 import { ButtonDefault } from '../common/Buttons';
 import { useDispatch } from 'react-redux';
 import { userActions } from '../../redux/devtools/userSlice';
+import { useForm } from 'react-hook-form';
 
-const SignIn = () => {
+const SignUp = ({ setIsSignIn }) => {
   const [email, setEmail] = useState('');
+  const [displayName, setdisplayName] = useState('');
   const [password, setPassword] = useState('');
-  const [repassword, setRepassword] = useState('');
+  const [comfirm, setComfirm] = useState('');
+
+  const { handleSubmit } = useForm();
 
   const dispatch = useDispatch();
 
-  const hanldeSubmit = () => {
-    dispatch(
-      userActions.signUpStart({ displayName: 'Haruno', email, password })
-    );
+  const onSubmit = () => {
+    if (password === comfirm) {
+      dispatch(userActions.signUpStart({ email, password, displayName }));
+    }
   };
 
   return (
-    <div
-      name="LoginBody"
-      className="flex flex-col pt-5 px-5% min-h-550px w-full pb-8 rounded box-border"
-    >
-      <div className="flex-grow">
-        <h1 className="text-3xl text-white font-bold mb-7">Sign In</h1>
-        <div>
-          <InputLogin
-            type="text"
-            id="signin_email"
-            name="SignEmail"
-            value={email}
-            setValue={setEmail}
-            placeholder="Email or phone number"
-            maxLength={50}
-            validation={isEmail}
-            validationMessage="Please enter a valid email or phone number."
-            className="pb-4"
-          />
-          <InputLogin
-            type="password"
-            id="signin_password"
-            name="SiginPassword"
-            value={password}
-            setValue={setPassword}
-            placeholder="Password"
-            validation={new RegExp('^(?=.*[a-z])(?=.*[!@#$%^&*])(?=.{8,})')}
-            validationMessage="Password requires atleast 8 characters and a special one."
-            className="pb-4"
-          />
-          <InputLogin
-            type="password"
-            id="sign_repassword"
-            name="SignupRepassword"
-            value={repassword}
-            setValue={setRepassword}
-            placeholder="Repassword"
-            validation={password}
-            validationMessage="Repassword needs to be match with the password above."
-            className="pb-4"
-          />
-          <ButtonDefault onClick={hanldeSubmit} className="w-full mt-5 h-12">
-            Sign Up
-          </ButtonDefault>
-        </div>
+    <div className="flex-grow">
+      <h1 className="text-3xl text-white font-bold mb-7">Sign Up</h1>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <InputLogin
+          type="text"
+          id="signup_email"
+          name="email"
+          value={email}
+          setValue={setEmail}
+          placeholder="Email or phone number"
+          maxLength={50}
+          validation={isEmail}
+          validationMessage="Please enter a valid email or phone number."
+          className="pb-4"
+        />
+        <InputLogin
+          type="password"
+          id="signup_password"
+          name="password"
+          value={password}
+          setValue={setPassword}
+          placeholder="Password"
+          validation={new RegExp('^(?=.*[a-z])(?=.*[!@#$%^&*])(?=.{8,})')}
+          validationMessage="Password requires atleast 8 characters and a special one."
+          className="pb-4"
+        />
+        <InputLogin
+          type="password"
+          id="signup_comfirm"
+          name="comfirm"
+          value={comfirm}
+          setValue={setComfirm}
+          placeholder="Comfirm password"
+          validation={password}
+          validationMessage="Comfirm password needs to be match with the one above."
+          className="pb-4"
+        />
+        <InputLogin
+          type="text"
+          id="display_name"
+          name="displayName"
+          value={displayName}
+          setValue={setdisplayName}
+          placeholder="Display name"
+          maxLength={50}
+          className="pb-7"
+        />
+        <ButtonDefault type="submit" className="w-full mt-5 h-12">
+          Sign Up
+        </ButtonDefault>
+      </form>
 
-        <div className="flex justify-between items-center">
-          <a href="/" className="text-xs text-white-dark hover:underline">
-            Need help?
-          </a>
-        </div>
+      <div className="flex justify-between items-center mt-3">
+        <a href="/help" className="text-xs text-white-dark hover:underline">
+          Need help?
+        </a>
+      </div>
 
-        <button className="flex gap-2 items-center text-xs text-gray-400 mt-10">
-          <FcGoogle className="h-6 w-6" />
-          <div>Login with Google</div>
+      <button
+        onClick={() => dispatch(userActions.signInGoogleStart())}
+        className="flex gap-2 items-center text-xs text-gray-400 mt-10"
+      >
+        <FcGoogle className="h-6 w-6" />
+        <span>Login with Google</span>
+      </button>
+
+      <div className="flex items-center text-base mt-5">
+        <span className="text-gray-400">Already have an account?</span>
+        <button
+          onClick={() => setIsSignIn(pre => !pre)}
+          className="text-white cursor-pointer ml-1 hover:underline"
+        >
+          Sign in Now.
         </button>
-
-        <div className="flex items-center text-base mt-5">
-          <span className="text-gray-400">Already have an account?</span>
-          <span className="text-white cursor-pointer ml-1 hover:underline">
-            Sign in Now.
-          </span>
-        </div>
       </div>
     </div>
   );
 };
 
-export default SignIn;
+export default SignUp;

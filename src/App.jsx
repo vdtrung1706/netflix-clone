@@ -1,22 +1,25 @@
 import Homepage from './pages/Homepage';
 import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from './redux/selectors/userSelectors';
+import { selectUser } from './redux/selectors/userSelectors';
 import TVShowsPage from './pages/TVShowsPage';
 import MoviesPage from './pages/MoviesPage';
 import IndexPage from './pages/IndexPage';
 import AuthPage from './pages/AuthPage';
+import Nav from './components/layout/Nav';
 
 const App = () => {
-  const currentUser = useSelector(selectCurrentUser);
+  const { loading, error, currentUser } = useSelector(selectUser);
 
   return (
     <Router>
-      {/* {currentUser && <NavContainer />} */}
+      {loading && <div>Loading...</div>}
+      {error && <div>{error}</div>}
+
+      {currentUser && <Nav />}
 
       <Route path="/">
-        {/* {currentUser ? <Redirect to="/browse" /> : <Redirect to="/welcome" />} */}
-        <AuthPage />
+        {currentUser ? <Redirect to="/browse" /> : <Redirect to="/welcome" />}
       </Route>
 
       <Route path="/welcome">

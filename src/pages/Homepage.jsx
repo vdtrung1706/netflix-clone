@@ -5,8 +5,6 @@ import useRetrieveData from '../hooks/useRetrieveData';
 const Homepage = () => {
   const sliders = useRetrieveData('MOVIES');
 
-  console.log(sliders);
-
   return (
     <div className="flex flex-col -mt-16">
       <Billboard />

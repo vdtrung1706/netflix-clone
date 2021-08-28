@@ -8,7 +8,11 @@ const initialState = {
 
 const handleStart = state => ({ ...state, loading: true });
 
-const handleFailure = (state, action) => ({ ...state, error: action.payload });
+const handleFailure = (state, action) => ({
+  ...state,
+  error: action.payload,
+  loading: false,
+});
 
 const handleSuccess = (state, action) => ({
   ...state,
@@ -21,19 +25,20 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    signInWithGoogleStart: handleStart,
-    signInWithEmailStart: handleStart,
-    signUpStart: handleStart,
-
+    signInGoogleStart: handleStart,
+    signInEmailStart: handleStart,
     signInSuccess: handleSuccess,
-    signUpSuccess: handleSuccess,
+    signInFailure: handleFailure,
+
+    signUpStart: handleStart,
+    signUpSuccess: state => ({ ...state }),
+    signUpFailure: handleFailure,
+
+    signOutStart: handleStart,
     signOutSuccess: state => {
       return { ...state, currentUser: null, error: null, loading: false };
     },
-
-    signInFailure: (state, action) => handleFailure(state, action),
-    signOutFailure: (state, action) => handleFailure(state, action),
-    signUpFailure: (state, action) => handleFailure(state, action),
+    signOutFailure: handleFailure,
   },
 });
 

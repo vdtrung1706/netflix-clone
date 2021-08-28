@@ -28,16 +28,11 @@ const lineHeight = {
   '50px': '50px',
 };
 
-const fontSize = {
-  '0.7rem': '0.7rem',
-};
-
 module.exports = {
   ...typography,
   ...spacing,
   colors,
   lineHeight,
-  fontSize,
   transitionDuration,
   transitionDelay,
   backgroundPosition,

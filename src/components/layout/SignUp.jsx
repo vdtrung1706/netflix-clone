@@ -1,13 +1,23 @@
+import isEmail from 'validator/lib/isEmail';
 import { useState } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { InputLogin } from '../common/Inputs';
 import { ButtonDefault } from '../common/Buttons';
-import isEmail from 'validator/lib/isEmail';
+import { useDispatch } from 'react-redux';
+import { userActions } from '../../redux/devtools/userSlice';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [repassword, setRepassword] = useState('');
+
+  const dispatch = useDispatch();
+
+  const hanldeSubmit = () => {
+    dispatch(
+      userActions.signUpStart({ displayName: 'Haruno', email, password })
+    );
+  };
 
   return (
     <div
@@ -16,7 +26,7 @@ const SignIn = () => {
     >
       <div className="flex-grow">
         <h1 className="text-3xl text-white font-bold mb-7">Sign In</h1>
-        <form>
+        <div>
           <InputLogin
             type="text"
             id="signin_email"
@@ -51,10 +61,10 @@ const SignIn = () => {
             validationMessage="Repassword needs to be match with the password above."
             className="pb-4"
           />
-          <ButtonDefault type="submit" className="w-full mt-5 h-12">
-            Sign In
+          <ButtonDefault onClick={hanldeSubmit} className="w-full mt-5 h-12">
+            Sign Up
           </ButtonDefault>
-        </form>
+        </div>
 
         <div className="flex justify-between items-center">
           <a href="/" className="text-xs text-white-dark hover:underline">

@@ -10,7 +10,7 @@ import {
   fetchAdventureFromAPI,
   fetchActionFromAPI,
   fetchRomanceFromAPI,
-} from '../store/movies/slice';
+} from '../redux/devtools/moviesSlice';
 
 import {
   selectTrending,
@@ -22,7 +22,7 @@ import {
   selectRomance,
   selectNetflixOriginal,
   selectTopRated,
-} from '../store/movies/selectors';
+} from '../redux/selectors/moviesSelectors';
 import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 

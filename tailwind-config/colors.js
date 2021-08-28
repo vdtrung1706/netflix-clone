@@ -1,24 +1,32 @@
 const colors = {
   red: {
     DEFAULT: '#e50914',
-    hover: '#f50e19',
+    hover: '#f5131e',
   },
   black: {
-    zero: '#000000',
-    pure: '#030303',
-    light: '#181818',
     DEFAULT: '#141414',
+    pure: '#000000',
+    light: '#181818',
+    lighter: {
+      DEFAULT: '#333333',
+      hover: '#474747',
+    },
   },
   white: {
     DEFAULT: '#fff',
+    dark: '#b3b3b3',
     darker: '#b2b2b2',
   },
   grey: {
     DEFAULT: '#6d6d6d',
+    placeholder: '#8c8c8c',
     darker: '#4c4c4c',
   },
   blue: {
     google: '#1356c7',
+  },
+  orange: {
+    error: '#e87c03',
   },
 };
 

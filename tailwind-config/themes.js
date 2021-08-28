@@ -7,6 +7,7 @@ const transitionDelay = {
   1200: '1200ms',
   1500: '1500ms',
 };
+
 const transitionDuration = {
   0: '0ms',
   25: '25ms',
@@ -23,10 +24,23 @@ const transitionProperty = {
   height: 'height',
 };
 
+const lineHeight = {
+  '50px': '50px',
+};
+
+const zIndex = {
+  '-1': '-1',
+  25: 25,
+  75: 75,
+  100: 100,
+};
+
 module.exports = {
   ...typography,
   ...spacing,
   colors,
+  zIndex,
+  lineHeight,
   transitionDuration,
   transitionDelay,
   backgroundPosition,

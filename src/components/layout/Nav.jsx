@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { signInWithGoogle, signOut } from '../../firebase';
 import PrimaryNav from '../common/PrimaryNav';
 import SecondaryNav from '../common/SecondaryNav';
-
 import logoUrl from '../../assets/images/netflix-2015-logo.svg';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectCurrentUser } from '../../redux/selectors/userSelectors';
+import { userActions } from '../../redux/devtools/userSlice';
 
-const Nav = ({ currentUser }) => {
+const Nav = () => {
   const [fixedNav, setFixedNav] = useState(false);
+  const currentUser = useSelector(selectCurrentUser);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     function handleFixedNav() {
@@ -18,6 +22,10 @@ const Nav = ({ currentUser }) => {
 
     return () => window.removeEventListener('scroll', handleFixedNav);
   }, []);
+
+  const handleSignOut = () => {
+    dispatch(userActions.signOutStart());
+  };
 
   return (
     <nav
@@ -31,11 +39,8 @@ const Nav = ({ currentUser }) => {
             <img src={logoUrl} alt="Logo" />
           </Link>
           <PrimaryNav />
-          {currentUser ? (
-            <button onClick={signOut}>Sign Out</button>
-          ) : (
-            <button onClick={signInWithGoogle}>Sign In With Google</button>
-          )}
+
+          <button onClick={handleSignOut}>Sign Out</button>
         </div>
         <SecondaryNav currentUser={currentUser} />
       </div>

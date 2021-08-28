@@ -100,9 +100,14 @@ export const fetchHorrorFromAPI = createAsyncThunk(
   }
 );
 
-export const moviesSlice = createSlice({
+const moviesSlice = createSlice({
   name: 'movies',
   initialState,
+  reducers: {
+    hello: () => {
+      console.log('hello');
+    },
+  },
   extraReducers: builder => {
     builder.addCase(fetchTrendingFromAPI.fulfilled, (state, action) => {
       state.trending.data = action.payload;
@@ -204,3 +209,8 @@ export const moviesSlice = createSlice({
     });
   },
 });
+
+export default moviesSlice;
+
+export const moviesActions = moviesSlice.actions;
+export const moviesReducer = moviesSlice.reducer;

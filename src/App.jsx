@@ -22,13 +22,9 @@ const App = () => {
         {currentUser ? <Redirect to="/browse" /> : <Redirect to="/welcome" />}
       </Route>
 
-      <Route path="/welcome">
-        <IndexPage />
-      </Route>
+      <Route path="/welcome" component={IndexPage} />
 
-      <Route path="/browse">
-        <Homepage />
-      </Route>
+      <Route path="/browse" component={Homepage} />
 
       <Route path="/login">
         {!currentUser ? <AuthPage /> : <Redirect to="/browse" />}

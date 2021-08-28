@@ -1,13 +1,16 @@
 const colors = {
   red: {
     DEFAULT: '#e50914',
-    hover: '#f50e19',
+    hover: '#f5131e',
   },
   black: {
     DEFAULT: '#141414',
     pure: '#000000',
     light: '#181818',
-    lighter: '#333333',
+    lighter: {
+      DEFAULT: '#333333',
+      hover: '#474747',
+    },
   },
   white: {
     DEFAULT: '#fff',

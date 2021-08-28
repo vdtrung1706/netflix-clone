@@ -34,7 +34,7 @@ export const InputLogin = ({
   return (
     <div className={`relative max-w-full ${className}`}>
       <div className="relative">
-        <div className="relative flex justify-between items-center rounded mb-1 bg-black-lighter border-solid border-orange-error border-b-2 border-opacity-0 focus-within:border-opacity-100 transition-all duration-200 ease-in-out">
+        <div className="relative flex justify-between items-center rounded mb-1 bg-black-lighter border-solid border-orange-error border-b-2 border-opacity-0 focus-within:border-opacity-100 transition-all duration-200 ease-in-out focus-within:bg-black-lighter-hover">
           <label htmlFor="input" className="w-full">
             <input
               id={id}
@@ -44,7 +44,7 @@ export const InputLogin = ({
               onChange={event => setValue(event.target.value)}
               minLength={minLength}
               maxLength={maxLength}
-              className="block shadow-none appearance-none outline-none text-base text-white bg-transparent rounded h-12 pt-4 px-5 w-full"
+              className="block appearance-none outline-none text-base text-white bg-transparent rounded h-12 pt-4 px-5 w-full"
             />
             <label
               htmlFor={id}
@@ -66,7 +66,7 @@ export const InputLogin = ({
               title="Show Password"
               onClick={toggleShow}
               className={cx(
-                'appearance-none text-grey-placeholder text-sm px-4 h-full transition-all duration-200',
+                'appearance-none text-grey-placeholder text-sm px-4 h-12 transition-all duration-200 active:bg-black-lighter',
                 {
                   'opacity-0': !value,
                 }
@@ -78,18 +78,11 @@ export const InputLogin = ({
         </div>
       </div>
 
-      <label
-        htmlFor={id}
-        className={cx(
-          'text-orange-error text-xs mx-1 transition-all duration-200 ease-in-out',
-          {
-            'opacity-0': !error,
-            'opacity-100': error,
-          }
-        )}
-      >
-        {validationMessage}
-      </label>
+      {error && (
+        <label htmlFor={id} className="text-orange-error text-xs mx-1">
+          {validationMessage}
+        </label>
+      )}
     </div>
   );
 };

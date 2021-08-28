@@ -20,9 +20,12 @@ const SignIn = ({ setIsSignIn }) => {
   };
 
   return (
-    <div className="flex-grow">
-      <h1 className="text-3xl text-white font-bold mb-7">Sign In</h1>
-      <div>
+    <div name="loginWrapper" className="flex-grow">
+      <h1 name="title" className="text-3xl text-white font-bold mb-7">
+        Sign In
+      </h1>
+
+      <div name="loginForm" className="flex flex-col gap-2">
         <InputLogin
           type="text"
           id="signin_email"
@@ -33,7 +36,6 @@ const SignIn = ({ setIsSignIn }) => {
           maxLength={50}
           validation={isEmail}
           validationMessage="Please enter a valid email or phone number."
-          className="pb-4"
         />
         <InputLogin
           type="password"
@@ -44,7 +46,6 @@ const SignIn = ({ setIsSignIn }) => {
           placeholder="Password"
           validation={new RegExp('^(?=.*[a-z])(?=.*[!@#$%^&*])(?=.{8,})')}
           validationMessage="Password requires atleast 8 characters and a special one."
-          className="pb-4"
         />
         <ButtonDefault
           type="submit"
@@ -55,7 +56,7 @@ const SignIn = ({ setIsSignIn }) => {
         </ButtonDefault>
       </div>
 
-      <div className="flex justify-between items-center mt-3">
+      <div name="rememberMe" className="flex justify-between items-center mt-3">
         <div className="relative inline-block flex-grow select-none text-base pl-5">
           <input
             type="checkbox"
@@ -90,6 +91,7 @@ const SignIn = ({ setIsSignIn }) => {
       </div>
 
       <button
+        name="loginWithGoogle"
         onClick={() => dispatch(userActions.signInGoogleStart())}
         className="flex gap-2 items-center text-xs text-gray-400 mt-10"
       >
@@ -97,7 +99,7 @@ const SignIn = ({ setIsSignIn }) => {
         <span>Login with Google</span>
       </button>
 
-      <div className="flex items-center text-base mt-5">
+      <div name="signUpQuestion" className="flex items-center text-base mt-5">
         <span className="text-gray-400">New to Netflix?</span>
         <button
           onClick={() => setIsSignIn(pre => !pre)}

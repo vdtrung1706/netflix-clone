@@ -28,10 +28,18 @@ const lineHeight = {
   '50px': '50px',
 };
 
+const zIndex = {
+  '-1': '-1',
+  25: 25,
+  75: 75,
+  100: 100,
+};
+
 module.exports = {
   ...typography,
   ...spacing,
   colors,
+  zIndex,
   lineHeight,
   transitionDuration,
   transitionDelay,

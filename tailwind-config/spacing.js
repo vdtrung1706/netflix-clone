@@ -6,6 +6,8 @@ const spacing = {
   '3%': '3%',
   '4%': '4%',
   '5%': '5%',
+  '1/5': '20%',
+  '1/4': '25%',
   '28.125%': '28.125%',
   '1px': '1px',
   '2px': '2px',
@@ -18,9 +20,11 @@ const spacing = {
 const minWidth = {
   '450px': '450px',
   '550px': '550px',
+  '380px': '380px',
 };
 const minHeight = {
   '60px': '60px',
   '550px': '550px',
+  '660px': '660px',
 };
 module.exports = { spacing, minWidth, minHeight };

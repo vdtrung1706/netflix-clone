@@ -10,4 +10,5 @@ module.exports = {
   zIndex: ['hover', 'active', 'group-hover'],
   borderWidth: ['hover', 'focus', 'focus-within'],
   inset: ['hover', 'focus', 'group-hover', 'group-focus', 'sibling-focus'],
+  backgroundColor: ['active'],
 };

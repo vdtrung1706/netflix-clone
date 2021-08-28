@@ -41,7 +41,7 @@ const StoryCard = () => {
   const [email, setEmail] = useState('');
 
   return (
-    <div className="relative border-b-8 border-solid border-black-light py-12 px-4% lg:min-h-screen">
+    <div className="relative border-b-8 border-solid border-black-light py-12 px-5% lg:min-h-screen">
       <div className="absolute left-0 right-0 bottom-0 -top-20 overflow-hidden">
         <div className="absolute bottom-0 top right-0 left-0 h-full">
           <img

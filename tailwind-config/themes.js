@@ -17,6 +17,11 @@ const transitionDuration = {
 const backgroundPosition = {
   'top-center': 'top center',
   '0-0': '0px 0px',
+  '0-top': '0 top',
+};
+
+const backgroundSize = {
+  '100-100': '100% 100%',
 };
 
 const transitionProperty = {
@@ -44,5 +49,6 @@ module.exports = {
   transitionDuration,
   transitionDelay,
   backgroundPosition,
+  backgroundSize,
   transitionProperty,
 };

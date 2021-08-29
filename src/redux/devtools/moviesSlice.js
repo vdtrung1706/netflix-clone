@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from '../../services/axios';
+import { randomIndex } from '../../utils';
 
 const stateModal = {
   loading: false,
@@ -8,6 +9,7 @@ const stateModal = {
 };
 
 const initialState = {
+  billboard: { loading: false, error: '', movie: {} },
   trending: { ...stateModal },
   topRated: { ...stateModal },
   netflixOriginal: { ...stateModal },
@@ -18,6 +20,15 @@ const initialState = {
   horror: { ...stateModal },
   romance: { ...stateModal },
 };
+
+export const fetchBillboardFromAPI = createAsyncThunk(
+  'movies/fetchBillboard',
+  async url => {
+    const res = await axios.get(url);
+    const results = await res.data.results;
+    return results[randomIndex(results.length)];
+  }
+);
 
 export const fetchTrendingFromAPI = createAsyncThunk(
   'movies/fetchTrending',
@@ -109,6 +120,17 @@ const moviesSlice = createSlice({
     },
   },
   extraReducers: builder => {
+    builder.addCase(fetchBillboardFromAPI.fulfilled, (state, action) => {
+      state.billboard.movie = action.payload;
+      state.billboard.loading = false;
+    });
+    builder.addCase(fetchBillboardFromAPI.pending, state => {
+      state.billboard.loading = true;
+    });
+    builder.addCase(fetchBillboardFromAPI.rejected, state => {
+      state.billboard.error = 'Error fetching billboard movie';
+    });
+
     builder.addCase(fetchTrendingFromAPI.fulfilled, (state, action) => {
       state.trending.data = action.payload;
       state.trending.loading = false;

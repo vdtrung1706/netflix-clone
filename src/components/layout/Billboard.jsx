@@ -25,7 +25,7 @@ const Billboard = () => {
             <img
               src={movie && `${IMAGE_BASE}/original${movie.backdrop_path}`}
               alt="hero"
-              className="w-full bg-cover bg-no-repeat bg-top-center"
+              className="w-full bg-cover bg-repeat-x bg-top-center"
             />
             <div className="absolute top-0 left-0 w-full h-full z-0 bg-black bg-opacity-20" />
             <div className="absolute top-0 bottom-0 left-0 right-2/3 opacity-70 bg-gradient-to-r from-black"></div>

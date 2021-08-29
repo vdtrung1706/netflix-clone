@@ -1,24 +1,17 @@
 import SearchBox from './SearchBox';
-import profileDefaultUrl from '../../assets/images/profile-default.png';
+import { Link } from 'react-router-dom';
+import ProfileDropdown from './profileDropdown';
 
-const SecondaryNav = ({ currentUser }) => {
+const SecondaryNav = () => {
   return (
     <div className="flex text-base gap-3 items-center ml-auto">
       <SearchBox />
 
-      <a href="/" className="text-bold text-xs md:text-sm lg:text-sm">
+      <Link to="/kids" className="text-bold text-xs md:text-sm lg:text-sm">
         KIDS
-      </a>
+      </Link>
 
-      <div>
-        <div>
-          <img
-            src={currentUser ? currentUser.photoURL : profileDefaultUrl}
-            alt="profile"
-            className="w-8"
-          />
-        </div>
-      </div>
+      <ProfileDropdown />
     </div>
   );
 };

@@ -1,6 +1,6 @@
-import { firestore } from '.';
+import { auth, firestore } from '.';
 
-const createUserProfileDocument = async (user, addtionalInfo) => {
+export const createUserProfileDocument = async (user, addtionalInfo) => {
   if (!user) return;
 
   const userRef = firestore.doc(`users/${user.uid}`);
@@ -26,7 +26,7 @@ const createUserProfileDocument = async (user, addtionalInfo) => {
   return getUserDocument(user.uid);
 };
 
-const getUserDocument = async uid => {
+export const getUserDocument = async uid => {
   if (!uid) return null;
 
   try {
@@ -37,4 +37,11 @@ const getUserDocument = async uid => {
   }
 };
 
-export { createUserProfileDocument, getUserDocument };
+export const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribeFromAuth = auth.onAuthStateChanged(userAuth => {
+      unsubscribeFromAuth();
+      resolve(userAuth);
+    }, reject);
+  });
+};

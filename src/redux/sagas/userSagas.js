@@ -1,6 +1,6 @@
 import { all, put, call, takeLatest } from 'redux-saga/effects';
 import { auth, signInWithGoogle, signOut } from '../../firebase';
-import { createUserProfileDocument } from '../../firebase/user';
+import { createUserProfileDocument, getCurrentUser } from '../../firebase/user';
 import { userActions } from '../devtools/userSlice';
 
 export function* signInUserAuthSync(userAuth, additionalInfo) {
@@ -84,6 +84,21 @@ export function* onSignOutStart() {
   yield takeLatest(userActions.signOutStart.type, signOutSync);
 }
 
+export function* checkUserSessionSync() {
+  try {
+    const userAuth = yield getCurrentUser();
+    if (userAuth) {
+      yield signInUserAuthSync(userAuth);
+    }
+  } catch (error) {
+    yield put(userActions.signInFailure(error.message));
+  }
+}
+
+export function* onCheckUserSession() {
+  yield takeLatest(userActions.checkUserSession.type, checkUserSessionSync);
+}
+
 export function* userSagas() {
   yield all([
     call(onSignInEmailStart),
@@ -91,5 +106,6 @@ export function* userSagas() {
     call(onSignUpStart),
     call(onSignUpSuccess),
     call(onSignOutStart),
+    call(onCheckUserSession),
   ]);
 }

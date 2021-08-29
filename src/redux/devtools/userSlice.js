@@ -39,6 +39,8 @@ const userSlice = createSlice({
       return { ...state, currentUser: null, error: null, loading: false };
     },
     signOutFailure: handleFailure,
+
+    checkUserSession: () => {},
   },
 });
 

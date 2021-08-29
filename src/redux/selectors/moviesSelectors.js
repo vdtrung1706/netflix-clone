@@ -1,5 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 
+export const selectBillboard = state => state.movies.billboard;
 export const selectTrending = state => state.movies.trending;
 export const selectAction = state => state.movies.action;
 export const selectAnime = state => state.movies.anime;

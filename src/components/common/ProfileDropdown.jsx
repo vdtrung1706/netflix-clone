@@ -9,7 +9,6 @@ import cx from 'classnames';
 const ProfileDropdown = () => {
   const currentUser = useSelector(selectCurrentUser);
   const [expanded, setExpanded] = useState(false);
-
   const dispatch = useDispatch();
 
   const handleSignOut = () => {
@@ -50,7 +49,7 @@ const ProfileDropdown = () => {
         <ul className="flex flex-col gap-2 px-2 py-3">
           <li className="hover:underline">
             <Link
-              to="/profile"
+              to="/profiles/manage/1001"
               className="flex items-center justify-start gap-2"
             >
               <img
@@ -70,7 +69,7 @@ const ProfileDropdown = () => {
           </li>
 
           <li className="hover:underline">
-            <Link to="/profiles">Manage Profiles</Link>
+            <Link to="/profiles/manage">Manage Profiles</Link>
           </li>
         </ul>
 
@@ -78,7 +77,7 @@ const ProfileDropdown = () => {
 
         <ul className="flex flex-col gap-2 px-2 py-3 h-auto">
           <li className="hover:underline">
-            <Link to="/accounts">Accounts</Link>
+            <Link to="/your-account">Your account</Link>
           </li>
 
           <li className="hover:underline">

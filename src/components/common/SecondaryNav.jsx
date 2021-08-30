@@ -1,6 +1,6 @@
 import SearchBox from './SearchBox';
 import { Link } from 'react-router-dom';
-import ProfileDropdown from './profileDropdown';
+import ProfileDropdown from './ProfileDropdown';
 
 const SecondaryNav = () => {
   return (

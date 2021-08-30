@@ -1,38 +1,59 @@
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 const PrimaryNavItems = ({ listItemsClassName }) => {
   const className = `${listItemsClassName} hover:text-gray-400 transition-colors duration-200 ease-linear focus:font-bold focus:text-white`;
+  const activeClassName = 'font-bold cursor-default';
 
   return (
     <>
       <li>
-        <Link to="/browse" className={className}>
+        <NavLink
+          to="/browse"
+          className={className}
+          activeClassName={activeClassName}
+        >
           Home
-        </Link>
+        </NavLink>
       </li>
 
       <li>
-        <Link to="/tvshows" className={className}>
+        <NavLink
+          to="/browse/tvshows"
+          className={className}
+          activeClassName={activeClassName}
+        >
           TV Shows
-        </Link>
+        </NavLink>
       </li>
 
       <li>
-        <Link to="/movies" className={className}>
+        <NavLink
+          to="/browse/movies"
+          className={className}
+          activeClassName={activeClassName}
+        >
           Movies
-        </Link>
+        </NavLink>
       </li>
 
       <li>
-        <Link to="/lastest" className={className}>
+        <NavLink
+          to="/latest"
+          className={className}
+          activeClassName={activeClassName}
+        >
           New & Popular
-        </Link>
+        </NavLink>
       </li>
 
       <li>
-        <Link to="/browse/my-list" className={className}>
+        <NavLink
+          to="/browse/my-list"
+          className={className}
+          activeClassName={activeClassName}
+        >
           My List
-        </Link>
+        </NavLink>
       </li>
     </>
   );

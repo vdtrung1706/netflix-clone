@@ -127,7 +127,7 @@ if (nodeUtils.isProduction()) {
     contentBase: './dist',
   };
 
-  webpackConfig.devtool = 'eval-cheap-source-map';
+  // webpackConfig.devtool = 'eval-cheap-source-map';
 }
 
 module.exports = webpackConfig;

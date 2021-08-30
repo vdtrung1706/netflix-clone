@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { truncate } from '../../utils';
 import { IMAGE_BASE } from '../../services/axios';
-import requests from '../../services/requests';
+import { moviesRequests } from '../../services/requests';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchBillboardFromAPI } from '../../redux/devtools/moviesSlice';
 import { selectBillboard } from '../../redux/selectors/moviesSelectors';
@@ -11,7 +11,7 @@ const Billboard = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchBillboardFromAPI(requests.netflixOrignals));
+    dispatch(fetchBillboardFromAPI(moviesRequests.netflixOrignal.url));
   }, [dispatch]);
 
   return (

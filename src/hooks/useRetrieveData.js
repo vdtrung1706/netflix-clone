@@ -1,107 +1,29 @@
-import requests from '../services/requests';
-
-import {
-  fetchTrendingFromAPI,
-  fetchTopRatedFromAPI,
-  fetchNetflixOriginalFromAPI,
-  fetchHorrorFromAPI,
-  fetchComedyFromAPI,
-  fetchAnimeFromAPI,
-  fetchAdventureFromAPI,
-  fetchActionFromAPI,
-  fetchRomanceFromAPI,
-} from '../redux/devtools/moviesSlice';
-
-import {
-  selectTrending,
-  selectAction,
-  selectComedy,
-  selectAdventure,
-  selectAnime,
-  selectHorror,
-  selectRomance,
-  selectNetflixOriginal,
-  selectTopRated,
-} from '../redux/selectors/moviesSelectors';
-import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { fetchThunks } from '../redux/devtools/moviesSlice';
+import { moviesRequests } from '../services/requests';
+import { movieSelectors } from '../redux/selectors/moviesSelectors';
+
+function dataTemplate(id, thunk, selector, url, title, genre) {
+  return { id, thunk, url, title, genre, selector };
+}
+
+const movies = Object.keys(moviesRequests).map((genre, index) => {
+  return dataTemplate(
+    index,
+    fetchThunks[index],
+    movieSelectors[index],
+    moviesRequests[genre].url,
+    moviesRequests[genre].title,
+    genre
+  );
+});
+
+const tvShows = [];
 
 const fetchData = {
-  movies: [
-    {
-      id: 0,
-      thunk: fetchTrendingFromAPI,
-      url: requests.trending,
-      title: 'Trending',
-      genre: 'Trending',
-      selector: selectTrending,
-    },
-    {
-      id: 1,
-      thunk: fetchActionFromAPI,
-      url: requests.actionMovies,
-      title: 'Action',
-      genre: 'Action',
-      selector: selectAction,
-    },
-    {
-      id: 2,
-      thunk: fetchNetflixOriginalFromAPI,
-      url: requests.netflixOrignals,
-      title: 'Netflix Original',
-      genre: 'netflixOriginal',
-      selector: selectNetflixOriginal,
-    },
-    {
-      id: 3,
-      thunk: fetchAdventureFromAPI,
-      url: requests.adventureMovies,
-      title: 'Adventure',
-      genre: 'Adventure',
-      selector: selectAdventure,
-    },
-    {
-      id: 4,
-      thunk: fetchComedyFromAPI,
-      url: requests.comedyMovies,
-      title: 'Comedy',
-      genre: 'Comedy',
-      selector: selectComedy,
-    },
-    {
-      id: 5,
-      thunk: fetchAnimeFromAPI,
-      url: requests.animeMovies,
-      title: 'Anime',
-      genre: 'Anime',
-      selector: selectAnime,
-    },
-    {
-      id: 6,
-      thunk: fetchHorrorFromAPI,
-      url: requests.horrorMovies,
-      title: 'Horror',
-      genre: 'Horror',
-      selector: selectHorror,
-    },
-    {
-      id: 7,
-      thunk: fetchTopRatedFromAPI,
-      url: requests.topRated,
-      title: 'Top Rated',
-      genre: 'TopRated',
-      selector: selectTopRated,
-    },
-    {
-      id: 8,
-      thunk: fetchRomanceFromAPI,
-      url: requests.romanceMovies,
-      title: 'Romance',
-      genre: 'Romance',
-      selector: selectRomance,
-    },
-  ],
-  series: [],
+  movies,
+  tvShows,
 };
 
 const useRetrieveData = type => {

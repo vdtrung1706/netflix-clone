@@ -1,4 +1,9 @@
 import { createSelector } from '@reduxjs/toolkit';
+import { moviesRequests } from '../../services/requests';
+
+export const movieSelectors = Object.keys(moviesRequests).map(
+  genre => state => state.movies[genre]
+);
 
 export const selectBillboard = state => state.movies.billboard;
 export const selectTrending = state => state.movies.trending;

@@ -8,6 +8,7 @@ const PrimaryNavItems = ({ listItemsClassName }) => {
     <>
       <li>
         <NavLink
+          exact
           to="/browse"
           className={className}
           activeClassName={activeClassName}
@@ -18,6 +19,7 @@ const PrimaryNavItems = ({ listItemsClassName }) => {
 
       <li>
         <NavLink
+          exact
           to="/browse/tvshows"
           className={className}
           activeClassName={activeClassName}
@@ -28,6 +30,7 @@ const PrimaryNavItems = ({ listItemsClassName }) => {
 
       <li>
         <NavLink
+          exact
           to="/browse/movies"
           className={className}
           activeClassName={activeClassName}
@@ -38,6 +41,7 @@ const PrimaryNavItems = ({ listItemsClassName }) => {
 
       <li>
         <NavLink
+          exact
           to="/latest"
           className={className}
           activeClassName={activeClassName}
@@ -48,6 +52,7 @@ const PrimaryNavItems = ({ listItemsClassName }) => {
 
       <li>
         <NavLink
+          exact
           to="/browse/my-list"
           className={className}
           activeClassName={activeClassName}

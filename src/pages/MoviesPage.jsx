@@ -3,13 +3,14 @@ import Slider from '../components/layout/Slider';
 import useRetrieveData from '../hooks/useRetrieveData';
 
 const MoviesPage = () => {
-  const slidersInfo = useRetrieveData('MOVIES');
+  const sliders = useRetrieveData('MOVIES');
 
   return (
-    <div className="flex flex-col -mt-16">
+    <div className="flex flex-col">
       <Billboard />
-      {slidersInfo &&
-        slidersInfo.map(props => <Slider key={props.id} {...props} />)}
+      <div name="slidersWrapper" className="slider-wrapper pt-16">
+        {sliders && sliders.map(props => <Slider key={props.id} {...props} />)}
+      </div>
     </div>
   );
 };

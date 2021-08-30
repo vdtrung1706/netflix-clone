@@ -1,9 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchThunks } from '../redux/devtools/moviesSlice';
-import { moviesRequests } from '../services/requests';
-import { movieSelectors } from '../redux/selectors/moviesSelectors';
-
+import { moviesFetchThunks } from '../redux/devtools/moviesSlice';
+import { tvshowsFetchThunks } from '../redux/devtools/tvshowsSlice';
+import {
+  latestRequests,
+  moviesRequests,
+  tvshowsRequests,
+} from '../services/requests';
+import { moviesSelectors } from '../redux/selectors/moviesSelectors';
+import { tvshowsSelectors } from '../redux/selectors/tvshowsSelectors';
+import { latestFetchThunks } from '../redux/devtools/latestSlice';
+import { latestSelectors } from '../redux/selectors/latestSelectors';
 function dataTemplate(id, thunk, selector, url, title, genre) {
   return { id, thunk, url, title, genre, selector };
 }
@@ -11,19 +18,39 @@ function dataTemplate(id, thunk, selector, url, title, genre) {
 const movies = Object.keys(moviesRequests).map((genre, index) => {
   return dataTemplate(
     index,
-    fetchThunks[index],
-    movieSelectors[index],
+    moviesFetchThunks[genre],
+    moviesSelectors[index],
     moviesRequests[genre].url,
     moviesRequests[genre].title,
     genre
   );
 });
 
-const tvShows = [];
+const tvShows = Object.keys(tvshowsRequests).map((genre, index) => {
+  return dataTemplate(
+    index,
+    tvshowsFetchThunks[genre],
+    tvshowsSelectors[index],
+    tvshowsRequests[genre].url,
+    tvshowsRequests[genre].title,
+    genre
+  );
+});
 
+const latest = Object.keys(latestRequests).map((genre, index) => {
+  return dataTemplate(
+    index,
+    latestFetchThunks[genre],
+    latestSelectors[index],
+    latestRequests[genre].url,
+    latestRequests[genre].title,
+    genre
+  );
+});
 const fetchData = {
   movies,
   tvShows,
+  latest,
 };
 
 const useRetrieveData = type => {
@@ -36,7 +63,22 @@ const useRetrieveData = type => {
         dispatch(genre.thunk(genre.url));
         return { ...genre };
       });
+      setSlidersInfo(sliders);
+    }
 
+    if (type === 'TVSHOWS') {
+      const sliders = fetchData.tvShows.map(genre => {
+        dispatch(genre.thunk(genre.url));
+        return { ...genre };
+      });
+      setSlidersInfo(sliders);
+    }
+
+    if (type === 'LATEST') {
+      const sliders = fetchData.latest.map(genre => {
+        dispatch(genre.thunk(genre.url));
+        return { ...genre };
+      });
       setSlidersInfo(sliders);
     }
   }, [dispatch, type]);

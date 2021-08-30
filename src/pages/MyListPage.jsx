@@ -1,5 +1,11 @@
 const MyListPage = () => {
-  return <div>This is my list page</div>;
+  return (
+    <div className="flex flex-col">
+      <div name="slidersWrapper" className="slider-wrapper pt-16">
+        My list goes here
+      </div>
+    </div>
+  );
 };
 
 export default MyListPage;

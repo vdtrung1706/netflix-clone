@@ -3,11 +3,10 @@ import { truncate } from '../../utils';
 import { IMAGE_BASE } from '../../services/axios';
 import { moviesRequests } from '../../services/requests';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchBillboardFromAPI } from '../../redux/devtools/moviesSlice';
-import { selectBillboard } from '../../redux/selectors/moviesSelectors';
+import { fetchBillboardFromAPI } from '../../redux/devtools/billboardSlice';
 
 const Billboard = () => {
-  const { loading, error, movie } = useSelector(selectBillboard);
+  const { loading, error, movie } = useSelector(state => state.billboard);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -23,7 +22,10 @@ const Billboard = () => {
         <div name="billboardBase" className="absolute top-0 z-0">
           <div name="billboardImgWrapper" className="relative">
             <img
-              src={movie && `${IMAGE_BASE}/original${movie.backdrop_path}`}
+              src={
+                movie?.backdrop_path &&
+                `${IMAGE_BASE}/original${movie.backdrop_path}`
+              }
               alt="hero"
               className="w-full bg-cover bg-repeat-x bg-top-center"
             />

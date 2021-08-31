@@ -1,6 +1,8 @@
 import { API_KEY } from './axios';
 import { monthAgoDate } from '../utils';
 
+export const SEARCH_ENDPOINT = `/search/multi?api_key=${API_KEY}&language=en-US&query=`;
+
 export const moviesRequests = {
   trending: {
     title: 'Trending',

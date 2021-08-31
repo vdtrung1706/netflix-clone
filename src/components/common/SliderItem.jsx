@@ -42,7 +42,9 @@ const SliderItem = ({ movie }) => {
                 'bg-black-pure': !movie?.backdrop_path,
               }
             )}
-            src={`${IMAGE_BASE}/w500/${movie.poster_path}`}
+            src={`${IMAGE_BASE}/w500/${
+              movie.poster_path ? movie.poster_path : movie.backdrop_path
+            }`}
             alt={'box-art'}
           />
         </div>

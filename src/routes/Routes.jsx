@@ -12,6 +12,7 @@ import ProfilesPage from '../pages/ProfilesPage';
 import HelpCenterPage from '../pages/HelpCenterPage';
 import AccountPage from '../pages/AccountPage';
 import KidsPage from '../pages/KidsPage';
+import SearchPage from '../pages/SearchPage';
 
 const Routes = () => {
   const { currentUser } = useSelector(selectUser);
@@ -24,6 +25,10 @@ const Routes = () => {
         exact
         path="/welcome"
         render={() => (currentUser ? <Redirect to="/browse" /> : <IndexPage />)}
+      />
+      <Route
+        path="/search"
+        render={() => (currentUser ? <SearchPage /> : <Redirect to="/login" />)}
       />
       <Route
         exact

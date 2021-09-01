@@ -35,6 +35,14 @@ const extraReducers = builder => {
 const tvshowsSlice = createSlice({
   name: 'tvshows',
   initialState,
+  reducers: {
+    onFetches: state => {
+      state.loading = true;
+    },
+    onFetchesSuccess: state => {
+      state.loading = false;
+    },
+  },
   extraReducers,
 });
 

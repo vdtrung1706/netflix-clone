@@ -36,10 +36,16 @@ export async function fetchingResults(url) {
 
 export function initStateAndFetchThunks(genres = {}, callback) {
   const thunks = {};
-  const state = {};
+  const state = { loading: false };
 
-  Object.keys(genres).map(genre => {
-    state[genre] = { loading: false, error: '', data: [] };
+  const genreKeys = Object.keys(genres);
+
+  genreKeys.map(genre => {
+    state[genre] = {
+      loading: false,
+      error: '',
+      data: [],
+    };
     thunks[genre] = callback(genre);
   });
 

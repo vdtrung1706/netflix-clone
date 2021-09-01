@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SliderItem from '../common/SliderItem';
@@ -8,12 +8,17 @@ import {
   faChevronRight,
   faUndo,
 } from '@fortawesome/free-solid-svg-icons';
+import useViewport from '../../hooks/useViewport';
 
 export default function Slider({ title, selector }) {
   const ref = useRef();
   const { loading, error, data: movies } = useSelector(selector);
   const { hasPre, hasNext, moveSection, distance, paginationIndicator } =
     useSlider(ref, movies);
+
+  const { width } = useViewport();
+
+  useEffect(() => {}, [width]);
 
   return (
     <section className="my-3 sm:my-4 xl:my-5 relative z-0 group hover:z-10">

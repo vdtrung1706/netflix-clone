@@ -33,6 +33,14 @@ const extraReducers = builder => {
 const moviesSlice = createSlice({
   name: 'movies',
   initialState,
+  reducers: {
+    onFetches: state => {
+      state.loading = true;
+    },
+    onFetchesSuccess: state => {
+      state.loading = false;
+    },
+  },
   extraReducers,
 });
 

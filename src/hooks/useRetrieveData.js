@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { moviesFetchThunks } from '../redux/devtools/moviesSlice';
-import { tvshowsFetchThunks } from '../redux/devtools/tvshowsSlice';
-import { latestFetchThunks } from '../redux/devtools/latestSlice';
+import { moviesFetchThunks, moviesSlice } from '../redux/devtools/moviesSlice';
 import { moviesSelectors } from '../redux/selectors/moviesSelectors';
-import { tvshowsSelectors } from '../redux/selectors/tvshowsSelectors';
+import { latestFetchThunks, latestSlice } from '../redux/devtools/latestSlice';
 import { latestSelectors } from '../redux/selectors/latestSelectors';
+import { tvshowsSelectors } from '../redux/selectors/tvshowsSelectors';
+import {
+  tvshowsFetchThunks,
+  tvshowsSlice,
+} from '../redux/devtools/tvshowsSlice';
 import {
   latestRequests,
   moviesRequests,
@@ -62,6 +65,7 @@ const useRetrieveData = type => {
 
   useEffect(() => {
     if (type === 'MOVIES') {
+      dispatch(moviesSlice.actions.onFetches());
       const sliders = fetchData.movies.map(genre => {
         dispatch(genre.thunk(genre.url));
         return { ...genre };
@@ -70,6 +74,7 @@ const useRetrieveData = type => {
     }
 
     if (type === 'TVSHOWS') {
+      dispatch(tvshowsSlice.actions.onFetches());
       const sliders = fetchData.tvShows.map(genre => {
         dispatch(genre.thunk(genre.url));
         return { ...genre };
@@ -78,6 +83,7 @@ const useRetrieveData = type => {
     }
 
     if (type === 'LATEST') {
+      dispatch(latestSlice.actions.onFetches());
       const sliders = fetchData.latest.map(genre => {
         dispatch(genre.thunk(genre.url));
         return { ...genre };

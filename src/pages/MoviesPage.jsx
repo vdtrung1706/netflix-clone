@@ -2,7 +2,7 @@ import Billboard from '../components/layout/Billboard';
 import Slider from '../components/layout/Slider';
 import useRetrieveData from '../hooks/useRetrieveData';
 
-const MoviesPage = () => {
+export default function MoviesPage() {
   const sliders = useRetrieveData('MOVIES');
 
   return (
@@ -13,6 +13,4 @@ const MoviesPage = () => {
       </div>
     </div>
   );
-};
-
-export default MoviesPage;
+}

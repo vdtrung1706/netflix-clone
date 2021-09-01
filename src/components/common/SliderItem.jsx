@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { IMAGE_BASE } from '../../services/axios';
-import useViewport from '../../hooks/useViewport';
 import cx from 'classnames';
+import useViewport from '../../hooks/useViewport';
+import { IMAGE_BASE } from '../../services/axios';
 
-const SliderItem = ({ movie, inSearchPage = false }) => {
+export default function SliderItem({ movie, inSearchPage = false }) {
   const [zIndex, setZIndex] = useState(11);
   const [onHover, setOnHover] = useState(false);
   const { width } = useViewport();
@@ -51,6 +51,4 @@ const SliderItem = ({ movie, inSearchPage = false }) => {
       </div>
     </div>
   );
-};
-
-export default SliderItem;
+}

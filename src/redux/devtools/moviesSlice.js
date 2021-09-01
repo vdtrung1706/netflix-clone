@@ -36,7 +36,4 @@ const moviesSlice = createSlice({
   extraReducers,
 });
 
-const moviesReducer = moviesSlice.reducer;
-const moviesActions = moviesSlice.actions;
-
-export { moviesSlice, moviesFetchThunks, moviesReducer, moviesActions };
+export { moviesSlice, moviesFetchThunks };

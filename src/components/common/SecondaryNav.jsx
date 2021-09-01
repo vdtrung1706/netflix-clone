@@ -1,10 +1,13 @@
-import SearchBox from './SearchBox';
 import { Link } from 'react-router-dom';
+import SearchBox from './SearchBox';
 import ProfileDropdown from './ProfileDropdown';
 
-const SecondaryNav = () => {
+export default function SecondaryNav() {
   return (
-    <div className="flex text-base gap-3 items-center ml-auto">
+    <div
+      name="secondaryNav"
+      className="flex text-base gap-3 items-center ml-auto"
+    >
       <SearchBox />
 
       <Link to="/kids" className="text-bold text-xs md:text-sm lg:text-sm">
@@ -14,6 +17,4 @@ const SecondaryNav = () => {
       <ProfileDropdown />
     </div>
   );
-};
-
-export default SecondaryNav;
+}

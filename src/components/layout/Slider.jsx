@@ -1,37 +1,19 @@
 import React, { useRef } from 'react';
 import { useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SliderItem from '../common/SliderItem';
 import useSlider from '../../hooks/useSlider';
-import cx from 'classnames';
 import {
   faChevronLeft,
   faChevronRight,
   faUndo,
 } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const Slider = ({ title, selector }) => {
-  const { loading, error, data: movies } = useSelector(selector);
-
+export default function Slider({ title, selector }) {
   const ref = useRef();
-
-  const { hasPre, hasNext, moveSection, distance, currentPage, totalPages } =
+  const { loading, error, data: movies } = useSelector(selector);
+  const { hasPre, hasNext, moveSection, distance, paginationIndicator } =
     useSlider(ref, movies);
-
-  const paginationIndicator = () => {
-    if (totalPages <= 0) return;
-
-    return Array(Math.ceil(totalPages))
-      .fill(0)
-      .map((_, index) => {
-        const className = cx(`inline-block w-3 h-2px ml-1px`, {
-          'bg-white': currentPage == index,
-          'bg-gray-800': currentPage != index,
-        });
-
-        return <li key={index} className={className}></li>;
-      });
-  };
 
   return (
     <section className="my-3 sm:my-4 xl:my-5 relative z-0 group hover:z-10">
@@ -110,6 +92,4 @@ const Slider = ({ title, selector }) => {
       </div>
     </section>
   );
-};
-
-export default Slider;
+}

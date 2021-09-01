@@ -2,15 +2,16 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { moviesFetchThunks } from '../redux/devtools/moviesSlice';
 import { tvshowsFetchThunks } from '../redux/devtools/tvshowsSlice';
+import { latestFetchThunks } from '../redux/devtools/latestSlice';
+import { moviesSelectors } from '../redux/selectors/moviesSelectors';
+import { tvshowsSelectors } from '../redux/selectors/tvshowsSelectors';
+import { latestSelectors } from '../redux/selectors/latestSelectors';
 import {
   latestRequests,
   moviesRequests,
   tvshowsRequests,
 } from '../services/requests';
-import { moviesSelectors } from '../redux/selectors/moviesSelectors';
-import { tvshowsSelectors } from '../redux/selectors/tvshowsSelectors';
-import { latestFetchThunks } from '../redux/devtools/latestSlice';
-import { latestSelectors } from '../redux/selectors/latestSelectors';
+
 function dataTemplate(id, thunk, selector, url, title, genre) {
   return { id, thunk, url, title, genre, selector };
 }
@@ -47,6 +48,7 @@ const latest = Object.keys(latestRequests).map((genre, index) => {
     genre
   );
 });
+
 const fetchData = {
   movies,
   tvShows,
@@ -54,8 +56,9 @@ const fetchData = {
 };
 
 const useRetrieveData = type => {
-  const dispatch = useDispatch();
   const [slidersInfo, setSlidersInfo] = useState();
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (type === 'MOVIES') {

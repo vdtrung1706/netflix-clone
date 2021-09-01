@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { selectCurrentUser } from '../../redux/selectors/userSelectors';
-import { userActions } from '../../redux/devtools/userSlice';
-import profileDefaultUrl from '../../assets/images/profile-default.png';
 import cx from 'classnames';
+import { selectCurrentUser } from '../../redux/selectors/userSelectors';
+import { userSlice } from '../../redux/devtools/userSlice';
+import { PROFILE_DEFAULT } from '../../assets';
 
-const ProfileDropdown = () => {
+export default function ProfileDropdown() {
   const currentUser = useSelector(selectCurrentUser);
   const [expanded, setExpanded] = useState(false);
   const dispatch = useDispatch();
 
   const handleSignOut = () => {
-    dispatch(userActions.signOutStart());
+    dispatch(userSlice.actions.signOutStart());
   };
 
   return (
@@ -23,7 +23,7 @@ const ProfileDropdown = () => {
           className="flex items-center"
         >
           <img
-            src={currentUser ? currentUser.photoURL : profileDefaultUrl}
+            src={currentUser?.photoURL ? currentUser.photoURL : PROFILE_DEFAULT}
             alt="profile"
             className="w-8 rounded"
           />
@@ -53,7 +53,9 @@ const ProfileDropdown = () => {
               className="flex items-center justify-start gap-2"
             >
               <img
-                src={currentUser ? currentUser.photoURL : profileDefaultUrl}
+                src={
+                  currentUser?.photoURL ? currentUser.photoURL : PROFILE_DEFAULT
+                }
                 alt="profile"
                 className="w-8 rounded"
               />
@@ -63,7 +65,7 @@ const ProfileDropdown = () => {
 
           <li className="hover:underline">
             <Link to="/kids" className="flex items-center justify-start gap-2">
-              <img src={profileDefaultUrl} alt="kids" className="w-8 rounded" />
+              <img src={PROFILE_DEFAULT} alt="kids" className="w-8 rounded" />
               <span>Kids</span>
             </Link>
           </li>
@@ -93,5 +95,4 @@ const ProfileDropdown = () => {
       </div>
     </div>
   );
-};
-export default ProfileDropdown;
+}

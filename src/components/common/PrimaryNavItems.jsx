@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 
-const PrimaryNavItems = ({ listItemsClassName }) => {
+export default function PrimaryNavItems({ listItemsClassName }) {
   const className = `${listItemsClassName} hover:text-gray-400 transition-colors duration-200 ease-linear focus:font-bold focus:text-white`;
   const activeClassName = 'font-bold cursor-default';
 
@@ -62,6 +62,4 @@ const PrimaryNavItems = ({ listItemsClassName }) => {
       </li>
     </>
   );
-};
-
-export default PrimaryNavItems;
+}

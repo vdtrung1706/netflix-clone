@@ -1,7 +1,7 @@
 import { all, put, call, takeLatest } from 'redux-saga/effects';
 import { auth, signInWithGoogle, signOut } from '../../firebase';
 import { createUserProfileDocument, getCurrentUser } from '../../firebase/user';
-import { userActions } from '../devtools/userSlice';
+import { userSlice } from '../devtools/userSlice';
 
 export function* signInUserAuthSync(userAuth, additionalInfo) {
   try {
@@ -10,9 +10,9 @@ export function* signInUserAuthSync(userAuth, additionalInfo) {
       userAuth,
       additionalInfo
     );
-    yield put(userActions.signInSuccess(user));
+    yield put(userSlice.actions.signInSuccess(user));
   } catch (error) {
-    yield put(userActions.signInFailure(error.message));
+    yield put(userSlice.actions.signInFailure(error.message));
   }
 }
 
@@ -21,7 +21,7 @@ export function* signInGoogleSync() {
     const { user } = yield signInWithGoogle();
     yield signInUserAuthSync(user);
   } catch (error) {
-    yield put(userActions.signInFailure(error.message));
+    yield put(userSlice.actions.signInFailure(error.message));
   }
 }
 
@@ -32,16 +32,16 @@ export function* signInEmailSync(action) {
     const { user } = yield auth.signInWithEmailAndPassword(email, password);
     yield signInUserAuthSync(user);
   } catch (error) {
-    yield put(userActions.signInFailure(error.message));
+    yield put(userSlice.actions.signInFailure(error.message));
   }
 }
 
 export function* signOutSync() {
   try {
     yield signOut();
-    yield put(userActions.signOutSuccess());
+    yield put(userSlice.actions.signOutSuccess());
   } catch (error) {
-    yield put(userActions.signOutFailure(error.message));
+    yield put(userSlice.actions.signOutFailure(error.message));
   }
 }
 
@@ -51,10 +51,10 @@ export function* signUpSync(action) {
   try {
     const { user } = yield auth.createUserWithEmailAndPassword(email, password);
     yield put(
-      userActions.signUpSuccess({ user, additionalInfo: { displayName } })
+      userSlice.actions.signUpSuccess({ user, additionalInfo: { displayName } })
     );
   } catch (error) {
-    yield put(userActions.signUpFailure(error.message));
+    yield put(userSlice.actions.signUpFailure(error.message));
   }
 }
 
@@ -65,23 +65,23 @@ export function* signInAfterSignUpSync(action) {
 }
 
 export function* onSignInGoogleStart() {
-  yield takeLatest(userActions.signInGoogleStart.type, signInGoogleSync);
+  yield takeLatest(userSlice.actions.signInGoogleStart.type, signInGoogleSync);
 }
 
 export function* onSignInEmailStart() {
-  yield takeLatest(userActions.signInEmailStart.type, signInEmailSync);
+  yield takeLatest(userSlice.actions.signInEmailStart.type, signInEmailSync);
 }
 
 export function* onSignUpStart() {
-  yield takeLatest(userActions.signUpStart.type, signUpSync);
+  yield takeLatest(userSlice.actions.signUpStart.type, signUpSync);
 }
 
 export function* onSignUpSuccess() {
-  yield takeLatest(userActions.signUpSuccess.type, signInAfterSignUpSync);
+  yield takeLatest(userSlice.actions.signUpSuccess.type, signInAfterSignUpSync);
 }
 
 export function* onSignOutStart() {
-  yield takeLatest(userActions.signOutStart.type, signOutSync);
+  yield takeLatest(userSlice.actions.signOutStart.type, signOutSync);
 }
 
 export function* checkUserSessionSync() {
@@ -91,12 +91,15 @@ export function* checkUserSessionSync() {
       yield signInUserAuthSync(userAuth);
     }
   } catch (error) {
-    yield put(userActions.signInFailure(error.message));
+    yield put(userSlice.actions.signInFailure(error.message));
   }
 }
 
 export function* onCheckUserSession() {
-  yield takeLatest(userActions.checkUserSession.type, checkUserSessionSync);
+  yield takeLatest(
+    userSlice.actions.checkUserSession.type,
+    checkUserSessionSync
+  );
 }
 
 export function* userSagas() {

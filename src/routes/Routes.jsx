@@ -1,11 +1,11 @@
-import Homepage from '../pages/Homepage';
-import TVShowsPage from '../pages/TVShowsPage';
-import MoviesPage from '../pages/MoviesPage';
-import IndexPage from '../pages/IndexPage';
-import AuthPage from '../pages/AuthPage';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../redux/selectors/userSelectors';
+import Homepage from '../pages/Homepage';
+import TVShowsPage from '../pages/TVShowsPage';
+import MoviesPage from '../pages/MoviesPage';
+import WelcomePage from '../pages/WelcomePage';
+import AuthPage from '../pages/AuthPage';
 import MyListPage from '../pages/MyListPage';
 import LatestPage from '../pages/LatestPage';
 import ProfilesPage from '../pages/ProfilesPage';
@@ -24,7 +24,9 @@ const Routes = () => {
       <Route
         exact
         path="/welcome"
-        render={() => (currentUser ? <Redirect to="/browse" /> : <IndexPage />)}
+        render={() =>
+          currentUser ? <Redirect to="/browse" /> : <WelcomePage />
+        }
       />
       <Route
         path="/search"

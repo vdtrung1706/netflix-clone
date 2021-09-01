@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import SliderItem from '../components/common/SliderItem';
 
-const SearchPage = () => {
+export default function SearchPage() {
   const { loading, error, results } = useSelector(state => state.search);
 
   return (
@@ -23,6 +23,4 @@ const SearchPage = () => {
       </div>
     </div>
   );
-};
-
-export default SearchPage;
+}

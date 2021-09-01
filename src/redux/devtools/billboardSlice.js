@@ -25,11 +25,9 @@ export const billboardSlice = createSlice({
       state.movie = action.payload;
       state.loading = false;
     });
-
     builder.addCase(fetchBillboardFromAPI.pending, state => {
       state.loading = true;
     });
-
     builder.addCase(fetchBillboardFromAPI.rejected, state => {
       state.error = 'Error fetching billboard movie';
     });

@@ -4,12 +4,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
-
+const nodeUtils = require('./src/services/common/node-service');
 const APP_DIR = path.join(__dirname, 'src');
 const NODE_MODULES = path.join(__dirname, 'node_modules');
-
-// Node utils
-const nodeUtils = require('./src/services/common/node-service');
 
 const isDevelopment = nodeUtils.isDevelopment();
 
@@ -27,10 +24,7 @@ function getPlugins() {
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, './src/index.html'),
       inject: 'body',
-      favicon: path.resolve(
-        __dirname,
-        './src/assets/icons/netflix-2015-n-logo.ico'
-      ),
+      favicon: path.resolve(__dirname, './src/assets/icons/netflix_logo_n.ico'),
     }),
     new Dotenv({
       path: path.resolve(__dirname, './.env'),

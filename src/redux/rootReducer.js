@@ -1,17 +1,17 @@
 import { combineReducers } from 'redux';
 import { billboardSlice } from './devtools/billboardSlice';
-import { latestReducer } from './devtools/latestSlice';
-import { moviesReducer } from './devtools/moviesSlice';
+import { latestSlice } from './devtools/latestSlice';
+import { moviesSlice } from './devtools/moviesSlice';
 import { searchSlice } from './devtools/searchSlice';
-import { tvshowsReducer } from './devtools/tvshowsSlice';
-import { userReducer } from './devtools/userSlice';
+import { tvshowsSlice } from './devtools/tvshowsSlice';
+import { userSlice } from './devtools/userSlice';
 
 const rootReducer = combineReducers({
-  user: userReducer,
+  user: userSlice.reducer,
   billboard: billboardSlice.reducer,
-  movies: moviesReducer,
-  tvshows: tvshowsReducer,
-  latest: latestReducer,
+  movies: moviesSlice.reducer,
+  tvshows: tvshowsSlice.reducer,
+  latest: latestSlice.reducer,
   search: searchSlice.reducer,
 });
 

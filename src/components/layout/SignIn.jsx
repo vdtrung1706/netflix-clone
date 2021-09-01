@@ -1,14 +1,14 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { FcGoogle } from 'react-icons/fc';
 import { FaCheck } from 'react-icons/fa';
-import { InputLogin } from '../common/Inputs';
-import { ButtonDefault } from '../common/Buttons';
 import isEmail from 'validator/lib/isEmail';
 import cx from 'classnames';
-import { useDispatch } from 'react-redux';
-import { userActions } from '../../redux/devtools/userSlice';
+import { userSlice } from '../../redux/devtools/userSlice';
+import LoginInput from '../inputs/LoginInput';
+import PrimaryButton from '../buttons/PrimaryButton';
 
-const SignIn = ({ setIsSignIn }) => {
+export default function SignIn({ setIsSignIn }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
@@ -16,7 +16,7 @@ const SignIn = ({ setIsSignIn }) => {
   const dispatch = useDispatch();
 
   const hanldeSubmit = () => {
-    dispatch(userActions.signInEmailStart({ email, password }));
+    dispatch(userSlice.actions.signInEmailStart({ email, password }));
   };
 
   return (
@@ -26,7 +26,7 @@ const SignIn = ({ setIsSignIn }) => {
       </h1>
 
       <div name="loginForm" className="flex flex-col gap-2">
-        <InputLogin
+        <LoginInput
           type="text"
           id="signin_email"
           name="email"
@@ -37,7 +37,7 @@ const SignIn = ({ setIsSignIn }) => {
           validation={isEmail}
           validationMessage="Please enter a valid email or phone number."
         />
-        <InputLogin
+        <LoginInput
           type="password"
           id="signin_password"
           name="password"
@@ -47,13 +47,13 @@ const SignIn = ({ setIsSignIn }) => {
           validation={new RegExp('^(?=.*[a-z])(?=.*[!@#$%^&*])(?=.{8,})')}
           validationMessage="Password requires atleast 8 characters and a special one."
         />
-        <ButtonDefault
+        <PrimaryButton
           type="submit"
           onClick={hanldeSubmit}
           className="w-full mt-5 h-12"
         >
           Sign In
-        </ButtonDefault>
+        </PrimaryButton>
       </div>
 
       <div name="rememberMe" className="flex justify-between items-center mt-3">
@@ -92,7 +92,7 @@ const SignIn = ({ setIsSignIn }) => {
 
       <button
         name="loginWithGoogle"
-        onClick={() => dispatch(userActions.signInGoogleStart())}
+        onClick={() => dispatch(userSlice.actions.signInGoogleStart())}
         className="flex gap-2 items-center text-xs text-gray-400 mt-10"
       >
         <FcGoogle className="h-6 w-6" />
@@ -110,6 +110,4 @@ const SignIn = ({ setIsSignIn }) => {
       </div>
     </div>
   );
-};
-
-export default SignIn;
+}

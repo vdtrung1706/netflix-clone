@@ -1,12 +1,8 @@
 import { useState } from 'react';
-import logoUrl from '../assets/images/netflix-2015-logo.svg';
-import hero from '../assets/images/hero.jpg';
-import hero1000 from '../assets/images/hero-1000.jpg';
-import hero1500 from '../assets/images/hero-1500.jpg';
-import hero1800 from '../assets/images/hero-1800.jpg';
+import { NETFLIX_LOGO, HERO, HERO_1000, HERO_1500, HERO_1800 } from '../assets';
 import { Link } from 'react-router-dom';
 
-const IndexPage = () => {
+export default function WelcomePage() {
   return (
     <div className="bg-black-pure">
       <GreetingHeader />
@@ -14,7 +10,7 @@ const IndexPage = () => {
       <div>This is second card</div>
     </div>
   );
-};
+}
 
 const GreetingHeader = () => {
   return (
@@ -24,7 +20,7 @@ const GreetingHeader = () => {
           href="/"
           className="w-logo-xs sm:w-logo-sm lg:w-logo-lg 2xl:w-logo-2xl"
         >
-          <img src={logoUrl} alt="logo" />
+          <img src={NETFLIX_LOGO} alt="logo" />
         </a>
         <Link
           to="/login"
@@ -46,8 +42,8 @@ const StoryCard = () => {
         <div className="absolute bottom-0 top right-0 left-0 h-full">
           <img
             className="w-full h-full object-cover max-w-full"
-            src={hero}
-            srcSet={`${hero1000} 1000w, ${hero1500} 1500w, ${hero1800} 1800w`}
+            src={HERO}
+            srcSet={`${HERO_1000} 1000w, ${HERO_1500} 1500w, ${HERO_1800} 1800w`}
             alt="hero"
           />
           <div
@@ -115,5 +111,3 @@ const StoryCard = () => {
     </div>
   );
 };
-
-export default IndexPage;

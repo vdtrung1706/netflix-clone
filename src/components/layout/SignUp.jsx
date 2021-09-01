@@ -1,12 +1,12 @@
-import isEmail from 'validator/lib/isEmail';
 import { useState } from 'react';
-import { FcGoogle } from 'react-icons/fc';
-import { InputLogin } from '../common/Inputs';
-import { ButtonDefault } from '../common/Buttons';
 import { useDispatch } from 'react-redux';
-import { userActions } from '../../redux/devtools/userSlice';
+import { FcGoogle } from 'react-icons/fc';
+import isEmail from 'validator/lib/isEmail';
+import { userSlice } from '../../redux/devtools/userSlice';
+import LoginInput from '../inputs/LoginInput';
+import PrimaryButton from '../buttons/PrimaryButton';
 
-const SignUp = ({ setIsSignIn }) => {
+export default function SignUp({ setIsSignIn }) {
   const [email, setEmail] = useState('');
   const [displayName, setdisplayName] = useState('');
   const [password, setPassword] = useState('');
@@ -16,7 +16,7 @@ const SignUp = ({ setIsSignIn }) => {
 
   const onSubmit = () => {
     if (password === comfirm) {
-      dispatch(userActions.signUpStart({ email, password, displayName }));
+      dispatch(userSlice.actions.signUpStart({ email, password, displayName }));
     }
   };
 
@@ -27,7 +27,7 @@ const SignUp = ({ setIsSignIn }) => {
       </h1>
 
       <div name="signupForm" className="flex flex-col gap-2">
-        <InputLogin
+        <LoginInput
           type="text"
           id="signup_email"
           name="email"
@@ -38,7 +38,7 @@ const SignUp = ({ setIsSignIn }) => {
           validation={isEmail}
           validationMessage="Please enter a valid email or phone number."
         />
-        <InputLogin
+        <LoginInput
           type="password"
           id="signup_password"
           name="password"
@@ -48,7 +48,7 @@ const SignUp = ({ setIsSignIn }) => {
           validation={new RegExp('^(?=.*[a-z])(?=.*[!@#$%^&*])(?=.{8,})')}
           validationMessage="Password requires atleast 8 characters and a special one."
         />
-        <InputLogin
+        <LoginInput
           type="password"
           id="signup_comfirm"
           name="comfirm"
@@ -58,7 +58,7 @@ const SignUp = ({ setIsSignIn }) => {
           validation={password}
           validationMessage="Comfirm password needs to be match with the one above."
         />
-        <InputLogin
+        <LoginInput
           type="text"
           id="display_name"
           name="displayName"
@@ -67,9 +67,9 @@ const SignUp = ({ setIsSignIn }) => {
           placeholder="Display name"
           maxLength={50}
         />
-        <ButtonDefault onClick={onSubmit} className="w-full mt-5 h-12">
+        <PrimaryButton onClick={onSubmit} className="w-full mt-5 h-12">
           Sign Up
-        </ButtonDefault>
+        </PrimaryButton>
       </div>
 
       <div className="flex justify-between items-center mt-3">
@@ -80,7 +80,7 @@ const SignUp = ({ setIsSignIn }) => {
 
       <button
         name="signInWithGoogle"
-        onClick={() => dispatch(userActions.signInGoogleStart())}
+        onClick={() => dispatch(userSlice.actions.signInGoogleStart())}
         className="flex gap-2 items-center text-xs text-gray-400 mt-10"
       >
         <FcGoogle className="h-6 w-6" />
@@ -100,6 +100,4 @@ const SignUp = ({ setIsSignIn }) => {
       </div>
     </div>
   );
-};
-
-export default SignUp;
+}

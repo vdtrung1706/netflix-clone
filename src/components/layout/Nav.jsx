@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import cx from 'classnames';
+import { selectCurrentUser } from '../../redux/selectors/userSelectors';
 import PrimaryNav from '../common/PrimaryNav';
 import SecondaryNav from '../common/SecondaryNav';
-import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../redux/selectors/userSelectors';
-import cx from 'classnames';
 
-const Nav = () => {
+export default function Nav() {
   const [fixedNav, setFixedNav] = useState(false);
   const currentUser = useSelector(selectCurrentUser);
 
@@ -34,6 +34,4 @@ const Nav = () => {
       </div>
     </nav>
   );
-};
-
-export default Nav;
+}

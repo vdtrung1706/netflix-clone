@@ -21,7 +21,7 @@ const handleSuccess = (state, action) => ({
   currentUser: action.payload,
 });
 
-const userSlice = createSlice({
+export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
@@ -43,8 +43,3 @@ const userSlice = createSlice({
     checkUserSession: () => {},
   },
 });
-
-const userActions = userSlice.actions;
-const userReducer = userSlice.reducer;
-
-export { userSlice, userActions, userReducer };

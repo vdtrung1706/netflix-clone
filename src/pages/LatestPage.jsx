@@ -1,7 +1,7 @@
 import Slider from '../components/layout/Slider';
 import useRetrieveData from '../hooks/useRetrieveData';
 
-const LatestPage = () => {
+export default function LatestPage() {
   const sliders = useRetrieveData('LATEST');
 
   return (
@@ -11,6 +11,4 @@ const LatestPage = () => {
       </div>
     </div>
   );
-};
-
-export default LatestPage;
+}

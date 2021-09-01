@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
-import { truncate } from '../../utils';
-import { IMAGE_BASE } from '../../services/axios';
-import { moviesRequests } from '../../services/requests';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchBillboardFromAPI } from '../../redux/devtools/billboardSlice';
+import { moviesRequests } from '../../services/requests';
+import { truncate } from '../../utils';
+import { IMAGE_BASE } from '../../services/axios';
 
-const Billboard = () => {
+export default function Billboard() {
   const { loading, error, movie } = useSelector(state => state.billboard);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -87,6 +88,4 @@ const Billboard = () => {
       )}
     </div>
   );
-};
-
-export default Billboard;
+}

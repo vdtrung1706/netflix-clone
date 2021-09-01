@@ -38,12 +38,4 @@ const tvshowsSlice = createSlice({
   extraReducers,
 });
 
-const tvshowsReducer = tvshowsSlice.reducer;
-const tvshowsActions = tvshowsSlice.actions;
-
-export {
-  tvshowsSlice,
-  tvshowsFetchThunks,
-  tvshowsReducer,
-  tvshowsActions as tvshowsAction,
-};
+export { tvshowsSlice, tvshowsFetchThunks };

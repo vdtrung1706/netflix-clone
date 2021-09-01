@@ -1,13 +1,9 @@
-import SignUp from '../components/layout/SignUp';
-import logoUrl from '../assets/images/netflix-2015-logo.svg';
 import { useState } from 'react';
+import SignUp from '../components/layout/SignUp';
 import SignIn from '../components/layout/SignIn';
-import hero from '../assets/images/hero.jpg';
-import hero1000 from '../assets/images/hero.jpg';
-import hero1500 from '../assets/images/hero-1000.jpg';
-import hero1800 from '../assets/images/hero-1500.jpg';
+import { NETFLIX_LOGO, HERO, HERO_1000, HERO_1500, HERO_1800 } from '../assets';
 
-const AuthPage = () => {
+export default function AuthPage() {
   const [isSignIn, setIsSignIn] = useState(true);
 
   return (
@@ -20,8 +16,8 @@ const AuthPage = () => {
         className="hidden absolute w-full h-full min-h-screen opacity-50 -z-1 md:block"
       >
         <img
-          src={hero}
-          srcSet={`${hero1000} 1000w, ${hero1500} 1500w, ${hero1800} 1800w`}
+          src={HERO}
+          srcSet={`${HERO_1000} 1000w, ${HERO_1500} 1500w, ${HERO_1800} 1800w`}
           alt="hero"
           className="border-0 min-w-full min-h-full"
         />
@@ -29,7 +25,7 @@ const AuthPage = () => {
 
       <div name="loginHeader" className="h-11 sm:h-20 md:h-24">
         <a href="/" className="inline-block ml-3%">
-          <img src={logoUrl} alt="logo" className="h-5 sm:h-11 pt-5" />
+          <img src={NETFLIX_LOGO} alt="logo" className="h-5 sm:h-11 pt-5" />
         </a>
       </div>
 
@@ -50,6 +46,4 @@ const AuthPage = () => {
       </div>
     </div>
   );
-};
-
-export default AuthPage;
+}

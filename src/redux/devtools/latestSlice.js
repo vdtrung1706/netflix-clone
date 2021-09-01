@@ -36,7 +36,4 @@ const latestSlice = createSlice({
   extraReducers,
 });
 
-const latestReducer = latestSlice.reducer;
-const latestActions = latestSlice.actions;
-
-export { latestSlice, latestFetchThunks, latestReducer, latestActions };
+export { latestSlice, latestFetchThunks };

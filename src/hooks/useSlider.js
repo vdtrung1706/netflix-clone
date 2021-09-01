@@ -9,7 +9,6 @@ const useSlider = (ref, movies = []) => {
   const [totalInViewport, setTotalInViewport] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-
   const { width } = useViewport();
 
   const hasPre = distance < 0;
@@ -48,24 +47,19 @@ const useSlider = (ref, movies = []) => {
     }
   };
 
-  const paginationIndicator = pageLength => {
-    var listItems = [];
+  const paginationIndicator = () => {
+    if (totalPages <= 0) return;
 
-    for (let i = 0; i < pageLength; i++) {
-      const listItem = (
-        <li
-          key={i}
-          className={cx(
-            `inline-block w-3 h-2px ml-1px ${
-              currentPage === i ? 'bg-white' : 'bg-gray-800'
-            }`
-          )}
-        ></li>
-      );
-      listItems.push(listItem);
-    }
+    return Array(Math.ceil(totalPages))
+      .fill(0)
+      .map((_, index) => {
+        const className = cx(`inline-block w-3 h-2px ml-1px`, {
+          'bg-white': currentPage == index,
+          'bg-gray-800': currentPage != index,
+        });
 
-    return listItems;
+        return <li key={index} className={className}></li>;
+      });
   };
 
   return {

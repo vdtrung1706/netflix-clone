@@ -1,14 +1,22 @@
 import { useState } from 'react';
-import { NETFLIX_LOGO, HERO, HERO_1000, HERO_1500, HERO_1800 } from '../assets';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { defaultPageFadeInVariants } from '../utils/motionUtils';
+import { NETFLIX_LOGO, HERO, HERO_1000, HERO_1500, HERO_1800 } from '../assets';
 
 export default function WelcomePage() {
   return (
-    <div className="bg-black-pure">
+    <motion.div
+      variants={defaultPageFadeInVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      className="bg-black-pure"
+    >
       <GreetingHeader />
       <StoryCard />
       <div>This is second card</div>
-    </div>
+    </motion.div>
   );
 }
 

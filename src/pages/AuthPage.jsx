@@ -1,13 +1,19 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import SignUp from '../components/layout/SignUp';
 import SignIn from '../components/layout/SignIn';
+import { defaultPageFadeInVariants } from '../utils/motionUtils';
 import { NETFLIX_LOGO, HERO, HERO_1000, HERO_1500, HERO_1800 } from '../assets';
 
 export default function AuthPage() {
   const [isSignIn, setIsSignIn] = useState(true);
 
   return (
-    <div
+    <motion.div
+      variants={defaultPageFadeInVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
       name="authContainer"
       className="relative min-h-full z-0 bg-black-pure md:min-h-full"
     >
@@ -44,6 +50,6 @@ export default function AuthPage() {
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

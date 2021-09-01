@@ -1,31 +1,44 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchBillboardFromAPI } from '../../redux/devtools/billboardSlice';
-import { moviesRequests } from '../../services/requests';
+import {
+  fetchBillboardTVShow,
+  fetchBillboardMovie,
+} from '../../redux/devtools/billboardSlice';
+import { moviesRequests, tvshowsRequests } from '../../services/requests';
 import { truncate } from '../../utils';
 import { IMAGE_BASE } from '../../services/axios';
 
-export default function Billboard() {
-  const { loading, error, movie } = useSelector(state => state.billboard);
+export default function Billboard({ type }) {
+  let selector = state => state.billboard.movie;
+  if (type === 'TVSHOW') {
+    selector = state => state.billboard.tvshow;
+  }
 
+  const { loading, error, data } = useSelector(selector);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchBillboardFromAPI(moviesRequests.netflixOrignal.url));
-  }, [dispatch]);
+    if (!data && type === 'TVSHOW') {
+      dispatch(fetchBillboardTVShow(tvshowsRequests.trendingSeries.url));
+    }
+    if (!data && type === 'MOVIE') {
+      dispatch(fetchBillboardMovie(moviesRequests.netflixOrignal.url));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, type]);
 
   return (
     <div name="billboardContent" className="pb-35% mb-5">
       {loading && <div>Billboard background loading...</div>}
       {error && <div>Billboard background error...</div>}
 
-      {movie && (
+      {data && (
         <div name="billboardBase" className="absolute top-0 z-0">
           <div name="billboardImgWrapper" className="relative">
             <img
               src={
-                movie?.backdrop_path &&
-                `${IMAGE_BASE}/original${movie.backdrop_path}`
+                data?.backdrop_path &&
+                `${IMAGE_BASE}/original${data.backdrop_path}`
               }
               alt="hero"
               className="w-full bg-cover bg-repeat-x bg-top-center"
@@ -44,13 +57,13 @@ export default function Billboard() {
             <div className="w-full">
               <div name="billboardTitle" className="relative w-full">
                 <h1 className="w-full font-bold text-xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-shadow">
-                  {movie?.title || movie?.name || movie?.original_name}
+                  {data?.title || data?.name || data?.original_name}
                 </h1>
               </div>
 
               <div name="billboardDescription" className="w-full">
                 <p className="overflow-hidden leading-relaxed mt-1 text-xs hidden sm:block lg:text-base xl:text-lg text-shadow">
-                  {truncate(movie?.overview, 120)}
+                  {truncate(data?.overview, 120)}
                 </p>
               </div>
 

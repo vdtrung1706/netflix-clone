@@ -4,7 +4,7 @@ const { fetchingResults } = require('../../utils');
 const initialState = {
   loading: false,
   error: '',
-  inputValue: '',
+  searchContent: '',
   results: [],
 };
 
@@ -17,11 +17,11 @@ export const searchSlice = createSlice({
   name: 'search',
   initialState,
   reducers: {
-    changeInputValue: (state, action) => {
-      return { ...state, inputValue: action.payload };
+    changeSearchContent: (state, action) => {
+      return { ...state, searchContent: action.payload };
     },
-    removeInputValue: state => {
-      return { ...state, inputValue: '' };
+    removeSearchContent: state => {
+      return { ...state, searchContent: '' };
     },
   },
   extraReducers: builder => {
@@ -29,7 +29,6 @@ export const searchSlice = createSlice({
       const results = [...action.payload].filter(
         item => item.backdrop_path || item.poster_path
       );
-
       state.results = results;
       state.loading = false;
       state.error = '';

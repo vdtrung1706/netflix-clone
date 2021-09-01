@@ -22,7 +22,7 @@ const Nav = () => {
   return (
     <nav
       className={cx(
-        'fixed z-20 h-16 top-0 right-0 left-0 bg-gradient-to-b from-black-pure transition ease-linear duration-400',
+        'fixed z-50 h-16 top-0 right-0 left-0 bg-gradient-to-b from-black-pure transition ease-linear duration-400',
         {
           'bg-black-pure bg-none': fixedNav,
         }

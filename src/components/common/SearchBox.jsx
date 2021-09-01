@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from 'react';
-import useSearchBox from '../../hooks/useSearchBox';
 import searchIconUrl from '../../assets/icons/search-icon.svg';
 import crossSign from '../../assets/icons/cross-sign.svg';
 import cx from 'classnames';
@@ -10,12 +9,13 @@ import {
 } from '../../redux/devtools/searchSlice';
 import { useHistory, useLocation } from 'react-router-dom';
 import { SEARCH_ENDPOINT } from '../../services/requests';
+import useOutside from '../../hooks/useOutside';
 
 const SearchBox = () => {
   const ref = useRef(null);
   const preLocation = useRef(null);
   const [toggle, setToggle] = useState(false);
-  const { inputValue } = useSelector(state => state.search);
+  const { searchContent } = useSelector(state => state.search);
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation();
@@ -26,22 +26,24 @@ const SearchBox = () => {
     }
   }, [location.pathname]);
 
-  useSearchBox(ref, inputValue, setToggle);
+  useOutside(ref, () => {
+    if (!searchContent) setToggle(false);
+  });
 
   const handleToggle = () => {
-    if (!inputValue) {
+    if (!searchContent) {
       setToggle(!toggle);
     }
   };
 
   const handleRemoveInputValue = () => {
-    dispatch(searchSlice.actions.removeInputValue());
+    dispatch(searchSlice.actions.removeSearchContent());
     history.push(preLocation.current);
   };
 
   const handleInputValueChange = e => {
     const value = e.target.value;
-    dispatch(searchSlice.actions.changeInputValue(value));
+    dispatch(searchSlice.actions.changeSearchContent(value));
 
     if (value) {
       dispatch(fetchSearchResults(SEARCH_ENDPOINT + value.toLowerCase()));
@@ -66,7 +68,7 @@ const SearchBox = () => {
       </button>
 
       <input
-        value={inputValue}
+        value={searchContent}
         onChange={e => handleInputValueChange(e)}
         className={cx(
           `w-0 text-xs lg:text-sm bg-transparent outline-none transition-width duration-300 ease-linear`,
@@ -85,7 +87,7 @@ const SearchBox = () => {
           className={cx(
             'opacity-0 transition-opacity ease-linear duration-200',
             {
-              'opacity-100': inputValue,
+              'opacity-100': searchContent,
             }
           )}
           src={crossSign}

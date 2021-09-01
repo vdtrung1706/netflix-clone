@@ -3,13 +3,13 @@ import { IMAGE_BASE } from '../../services/axios';
 import useViewport from '../../hooks/useViewport';
 import cx from 'classnames';
 
-const SliderItem = ({ movie }) => {
+const SliderItem = ({ movie, inSearchPage = false }) => {
   const [zIndex, setZIndex] = useState(11);
   const [onHover, setOnHover] = useState(false);
   const { width } = useViewport();
 
   const onMouseEnter = () => {
-    setTimeout(() => setZIndex(50), 100);
+    setTimeout(() => setZIndex(20), 100);
     setOnHover(true);
   };
 
@@ -21,12 +21,12 @@ const SliderItem = ({ movie }) => {
   return (
     <div
       className={cx(
-        `w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 2xl:w-1/6 relative overflow-y-hidden cursor-pointer first:ml-0 inline-block px-2px box-border transition-transform ease-in-out ${
-          onHover ? 'duration-75 delay-1000' : 'delay-75 duration-25'
+        `w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 2xl:w-1/6 relative overflow-y-hidden cursor-pointer first:ml-0 inline-block px-2px box-border transform-gpu transition-transform ease-in-out ${
+          onHover ? 'duration-75 delay-700' : 'delay-75 duration-25'
         }`,
         {
-          'hover:transform hover:scale-x-125 hover:scale-y-125':
-            onHover && width > 640,
+          'hover:scale-x-125 hover:scale-y-125': onHover && width > 640,
+          'my-6': inSearchPage,
         }
       )}
       onMouseEnter={onMouseEnter}

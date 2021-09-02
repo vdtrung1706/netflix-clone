@@ -11,4 +11,5 @@ module.exports = {
   borderWidth: ['hover', 'focus', 'focus-within'],
   inset: ['hover', 'focus', 'group-hover', 'group-focus', 'sibling-focus'],
   backgroundColor: ['active'],
+  animation: ['responsive', 'motion-safe', 'motion-reduce'],
 };

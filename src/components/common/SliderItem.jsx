@@ -33,8 +33,8 @@ export default function SliderItem({ movie, inSearchPage = false }) {
       onMouseLeave={onMouseLeave}
       style={{ zIndex }}
     >
-      <div className="w-full h-full">
-        <div className="w-full h-full relative overflow-hidden py-28.125%">
+      <div className="w-full">
+        <div className="w-full relative overflow-hidden py-28.125%">
           <img
             className={cx(
               'absolute rounded top-0 w-full h-full object-cover object-center',

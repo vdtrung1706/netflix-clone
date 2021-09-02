@@ -40,6 +40,8 @@ export const userSlice = createSlice({
     },
     signOutFailure: handleFailure,
 
-    checkUserSession: () => {},
+    checkUserSession: state => {
+      return { ...state, loading: true };
+    },
   },
 });

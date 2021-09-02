@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import cx from 'classnames';
 import PrimaryNavItems from './PrimaryNavItems';
 import useViewport from '../../hooks/useViewport';
-import { NETFLIX_LOGO, ARROW_POINT_DOWN, ARROW_POINT_UP } from '../../assets';
+import { NETFLIX_LOGO, ARROW_POINT_DOWN } from '../../assets';
+import NavItemsCollapse from './NavItemsCollapse';
 
 export default function PrimaryNav() {
   const { width } = useViewport();
@@ -13,6 +14,10 @@ export default function PrimaryNav() {
   useEffect(() => {
     width <= 890 ? setSmallScreen(true) : setSmallScreen(false);
   }, [width]);
+
+  const hanldeExpanded = () => {
+    setExpanded(pre => !pre);
+  };
 
   return (
     <div name="primaryNav" className="flex justify-start items-center">
@@ -31,23 +36,14 @@ export default function PrimaryNav() {
           )}
         >
           <button
-            onClick={() => setExpanded(pre => !pre)}
+            onClick={hanldeExpanded}
             className="flex items-center h-full no-underline relative font-bold"
           >
             Browse
             <img src={ARROW_POINT_DOWN} alt="browse" className="ml-1 h-3" />
           </button>
 
-          {expanded && (
-            <div className="absolute bg-black-pure opacity-90 -ml-20 top-16">
-              <div className="absolute left-1/2 -top-3 h-4 w-4">
-                <img src={ARROW_POINT_UP} alt={'browse'} />
-              </div>
-              <ul className="p-0 h-auto border-t-2 border-solid border-white">
-                <PrimaryNavItems listItemsClassName="flex items-center justify-around leading-6 w-64 h-12" />
-              </ul>
-            </div>
-          )}
+          {expanded && <NavItemsCollapse setExpanded={setExpanded} />}
         </li>
 
         <PrimaryNavItems listItemsClassName={`${smallScreen && 'hidden'}`} />

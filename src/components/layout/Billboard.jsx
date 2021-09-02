@@ -1,12 +1,15 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { motion } from 'framer-motion';
+import cx from 'classnames';
+import { moviesRequests, tvshowsRequests } from '../../services/requests';
+import { IMAGE_BASE } from '../../services/axios';
+import { truncate } from '../../utils';
+import { defaultFadeInVariants, staggerOne } from '../../utils/motionUtils';
 import {
   fetchBillboardTVShow,
   fetchBillboardMovie,
 } from '../../redux/devtools/billboardSlice';
-import { moviesRequests, tvshowsRequests } from '../../services/requests';
-import { truncate } from '../../utils';
-import { IMAGE_BASE } from '../../services/axios';
 
 export default function Billboard({ type }) {
   let selector = state => state.billboard.movie;
@@ -28,13 +31,21 @@ export default function Billboard({ type }) {
   }, [dispatch, type]);
 
   return (
-    <div name="billboardContent" className="pb-35% mb-5">
-      {loading && <div>Billboard background loading...</div>}
+    <motion.div
+      name="billboardContent"
+      variants={defaultFadeInVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      className={cx('pb-35% mb-5', {
+        'animate-pulse bg-black-light': loading,
+      })}
+    >
       {error && <div>Billboard background error...</div>}
 
-      {data && (
-        <div name="billboardBase" className="absolute top-0 z-0">
-          <div name="billboardImgWrapper" className="relative">
+      {!loading && data && (
+        <div name="billboardBase" className="absolute top-0 z-0 w-full">
+          <div name="billboardImgWrapper" className="relative w-full">
             <img
               src={
                 data?.backdrop_path &&
@@ -47,16 +58,22 @@ export default function Billboard({ type }) {
             <div className="absolute top-0 bottom-0 left-0 right-2/3 opacity-70 bg-gradient-to-r from-black"></div>
             <div className="absolute left-0 right-0 top-auto bottom-0 bg-repeat-x bg-0-top z-10 h-10 bg-gradient-to-t from-black sm:h-20 md:h-32"></div>
             <div className="absolute right-0 bottom-1/5 flex justify-end items-center md:bottom-35%">
-              <span className="flex items-center text-0.7rem border-l-2 border-solid border-white bg-black bg-opacity-60 pr-5 pl-2 h-5 sm:text-xs lg:h-9 lg:text-base lg:pr-10 lg:pl-3">
-                18+
+              <span className="flex items-center text-0.7rem border-l-2 border-solid border-white bg-black-lighter bg-opacity-70 pr-5 pl-2 h-5 sm:text-xs lg:h-9 lg:text-base lg:pr-10 lg:pl-3">
+                {data.adult ? '18+' : '13+'}
               </span>
             </div>
           </div>
 
-          <div className="absolute top-0 bottom-1/5 left-4% flex flex-col justify-end w-6/12 z-10 md:bottom-35% lg:bottom-40% lg:w-4/12">
+          <motion.div
+            variants={staggerOne}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className="absolute top-0 bottom-1/5 left-4% flex flex-col justify-end w-6/12 z-10 md:bottom-35% lg:bottom-40% lg:w-4/12"
+          >
             <div className="w-full">
               <div name="billboardTitle" className="relative w-full">
-                <h1 className="w-full font-bold text-xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-shadow">
+                <h1 className="w-full font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-shadow">
                   {data?.title || data?.name || data?.original_name}
                 </h1>
               </div>
@@ -73,7 +90,7 @@ export default function Billboard({ type }) {
               >
                 <a
                   href="/"
-                  className="flex items-center transition duration-300 ease-linear hover:bg-white-darker transform justify-center gap-1 w-24 md:w-28 md:py-2 rounded cursor-pointer bg-white text-black-pure"
+                  className="flex items-center transition duration-300 ease-linear hover:bg-white-hover hover:opacity-60 transform justify-center gap-1 w-24 md:w-28 md:py-2 rounded cursor-pointer bg-white text-black-pure"
                 >
                   <div className="h-5 w-5 sm:h-6 sm:w-6" role="presentation">
                     <svg viewBox="0 0 24 24">
@@ -96,9 +113,9 @@ export default function Billboard({ type }) {
                 </button>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

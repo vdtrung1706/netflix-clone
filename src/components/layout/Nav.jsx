@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import cx from 'classnames';
+import { motion } from 'framer-motion';
 import { selectCurrentUser } from '../../redux/selectors/userSelectors';
 import PrimaryNav from '../common/PrimaryNav';
 import SecondaryNav from '../common/SecondaryNav';
+import { navFadeInVariants } from '../../utils/motionUtils';
 
 export default function Nav() {
   const [fixedNav, setFixedNav] = useState(false);
@@ -20,7 +22,10 @@ export default function Nav() {
   }, []);
 
   return (
-    <nav
+    <motion.nav
+      variants={navFadeInVariants}
+      initial="initial"
+      animate="animate"
       className={cx(
         'fixed z-50 h-16 top-0 right-0 left-0 bg-gradient-to-b from-black-pure transition ease-linear duration-400',
         {
@@ -32,6 +37,6 @@ export default function Nav() {
         <PrimaryNav />
         <SecondaryNav currentUser={currentUser} />
       </div>
-    </nav>
+    </motion.nav>
   );
 }

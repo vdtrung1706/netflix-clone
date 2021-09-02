@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
+import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SliderItem from '../common/SliderItem';
 import useSlider from '../../hooks/useSlider';
@@ -9,21 +10,27 @@ import {
   faUndo,
 } from '@fortawesome/free-solid-svg-icons';
 import useViewport from '../../hooks/useViewport';
+import { defaultFadeInVariants } from '../../utils/motionUtils';
 
 export default function Slider({ title, selector }) {
   const ref = useRef();
+  const { width } = useViewport();
   const { loading, error, data: movies } = useSelector(selector);
   const { hasPre, hasNext, moveSection, distance, paginationIndicator } =
-    useSlider(ref, movies);
-
-  const { width } = useViewport();
+    useSlider(ref, movies, width);
 
   useEffect(() => {}, [width]);
 
   return (
-    <section className="my-3 sm:my-4 xl:my-5 relative z-0 group hover:z-10">
+    <motion.section
+      variants={defaultFadeInVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      className="my-3 sm:my-4 xl:my-5 relative z-0 group hover:z-10"
+    >
       <a
-        href="/"
+        href="/browse?genre=111"
         className="mx-4% mb-1 flex items-baseline cursor-pointer whitespace-nowrap w-max"
       >
         <h1 className="text-sm md:text-sm lg:text-base xl:text-xl font-bold">
@@ -39,15 +46,14 @@ export default function Slider({ title, selector }) {
 
       <div className="ralative transition-transform duration-300 delay-100 ease-in-out">
         <div className="relative px-4%">
-          {loading && <div>Loading...</div>}
           {error && <div>Error...</div>}
-          {movies && (
+          {!loading && movies.length > 0 && (
             <>
               <ul className="-mt-4 mb-0 list-none absolute top-0 right-4% opacity-0 transition-all duration-300 delay-100 group-hover:opacity-100">
                 {paginationIndicator()}
               </ul>
 
-              <div className="overflow-x-visible">
+              <div className="overflow-x-scroll sm:overflow-x-visible">
                 <div
                   style={{ transform: `translate3d(${distance}px, 0, 0)` }}
                   ref={ref}
@@ -62,9 +68,9 @@ export default function Slider({ title, selector }) {
               {hasNext && (
                 <button
                   onClick={() => moveSection('RIGHT')}
-                  className="opacity-0 group-hover:opacity-100 absolute top-0 bottom-0 right-0 z-20 w-4% text-center justify-center flex items-center bg-black bg-opacity-80 transition-all duration-300 delay-100 ease-in-out"
+                  className="hidden sm:flex opacity-0 group-hover:opacity-100 absolute top-0 bottom-0 right-0 z-20 w-4% text-center justify-center items-center bg-black bg-opacity-80 transition-all duration-300 delay-100 ease-in-out"
                 >
-                  <strong className="text-4xl">
+                  <strong className="text-2xl lg:text-3xl">
                     <FontAwesomeIcon icon={faChevronRight} />
                   </strong>
                 </button>
@@ -73,9 +79,9 @@ export default function Slider({ title, selector }) {
               {hasPre && (
                 <button
                   onClick={() => moveSection('LEFT')}
-                  className="opacity-0 group-hover:opacity-100 absolute top-0 bottom-0 left-0 z-20 w-4% text-center justify-center flex items-center bg-black bg-opacity-80 transition-all duration-300 delay-100 ease-in-out"
+                  className="hidden sm:flex opacity-0 group-hover:opacity-100 absolute top-0 bottom-0 left-0 z-20 w-4% text-center justify-center items-center bg-black bg-opacity-80 transition-all duration-300 delay-100 ease-in-out"
                 >
-                  <strong className="text-4xl">
+                  <strong className="text-2xl lg:text-3xl">
                     <FontAwesomeIcon icon={faChevronLeft} />
                   </strong>
                 </button>
@@ -84,9 +90,9 @@ export default function Slider({ title, selector }) {
               {hasPre && hasNext === false ? (
                 <button
                   onClick={() => moveSection('RESET')}
-                  className="opacity-0 group-hover:opacity-100 absolute top-0 bottom-0 right-0 z-20 w-4% text-center justify-center flex items-center bg-black bg-opacity-80 transition-all duration-300 delay-100 ease-in-out"
+                  className="hidden sm:flex opacity-0 group-hover:opacity-100 absolute top-0 bottom-0 right-0 z-20 w-4% text-center justify-center items-center bg-black bg-opacity-80 transition-all duration-300 delay-100 ease-in-out"
                 >
-                  <strong className="text-4xl">
+                  <strong className="text-2xl lg:text-3xl">
                     <FontAwesomeIcon icon={faUndo} />
                   </strong>
                 </button>
@@ -95,6 +101,6 @@ export default function Slider({ title, selector }) {
           )}
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

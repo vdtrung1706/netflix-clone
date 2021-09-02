@@ -4,9 +4,11 @@ import { FcGoogle } from 'react-icons/fc';
 import { FaCheck } from 'react-icons/fa';
 import isEmail from 'validator/lib/isEmail';
 import cx from 'classnames';
+import { motion } from 'framer-motion';
 import { userSlice } from '../../redux/devtools/userSlice';
 import LoginInput from '../inputs/LoginInput';
 import PrimaryButton from '../buttons/PrimaryButton';
+import { loginFadeInVariants } from '../../utils/motionUtils';
 
 export default function SignIn({ setIsSignIn }) {
   const [email, setEmail] = useState('');
@@ -20,7 +22,13 @@ export default function SignIn({ setIsSignIn }) {
   };
 
   return (
-    <div name="loginWrapper" className="flex-grow">
+    <motion.div
+      name="loginWrapper"
+      variants={loginFadeInVariants}
+      initial="initial"
+      animate="animate"
+      className="flex-grow"
+    >
       <h1 name="title" className="text-3xl text-white font-bold mb-7">
         Sign In
       </h1>
@@ -108,6 +116,6 @@ export default function SignIn({ setIsSignIn }) {
           Sign up Now.
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 }

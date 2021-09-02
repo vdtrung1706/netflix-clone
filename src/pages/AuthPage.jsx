@@ -1,12 +1,16 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import SignUp from '../components/layout/SignUp';
 import SignIn from '../components/layout/SignIn';
+import CircleLoading from '../components/skeletons/CircleLoading';
+import { selectUser } from '../redux/selectors/userSelectors';
 import { defaultPageFadeInVariants } from '../utils/motionUtils';
 import { NETFLIX_LOGO, HERO, HERO_1000, HERO_1500, HERO_1800 } from '../assets';
 
 export default function AuthPage() {
   const [isSignIn, setIsSignIn] = useState(true);
+  const { loading } = useSelector(selectUser);
 
   return (
     <motion.div
@@ -17,9 +21,14 @@ export default function AuthPage() {
       name="authContainer"
       className="relative min-h-full z-0 bg-black-pure md:min-h-full"
     >
+      {loading && (
+        <div className="absolute left-0 top-0 right-0 bottom-0 bg-black-pure bg-opacity-60 z-75">
+          <CircleLoading />
+        </div>
+      )}
       <div
         name="backgroundWrapper"
-        className="hidden absolute w-full h-full min-h-screen opacity-50 -z-1 md:block"
+        className="hidden absolute select-none w-full h-full min-h-screen opacity-50 -z-1 md:block"
       >
         <img
           src={HERO}
@@ -29,7 +38,7 @@ export default function AuthPage() {
         />
       </div>
 
-      <div name="loginHeader" className="h-11 sm:h-20 md:h-24">
+      <div name="loginHeader" className="select-none h-11 sm:h-20 md:h-24">
         <a href="/" className="inline-block ml-3%">
           <img src={NETFLIX_LOGO} alt="logo" className="h-5 sm:h-11 pt-5" />
         </a>

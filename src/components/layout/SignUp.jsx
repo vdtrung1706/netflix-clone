@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { FcGoogle } from 'react-icons/fc';
 import isEmail from 'validator/lib/isEmail';
+import { motion } from 'framer-motion';
 import { userSlice } from '../../redux/devtools/userSlice';
 import LoginInput from '../inputs/LoginInput';
 import PrimaryButton from '../buttons/PrimaryButton';
+import { loginFadeInVariants } from '../../utils/motionUtils';
 
 export default function SignUp({ setIsSignIn }) {
   const [email, setEmail] = useState('');
@@ -21,7 +23,13 @@ export default function SignUp({ setIsSignIn }) {
   };
 
   return (
-    <div name="signupWrapper" className="flex-grow">
+    <motion.div
+      name="signupWrapper"
+      variants={loginFadeInVariants}
+      initial="initial"
+      animate="animate"
+      className="flex-grow"
+    >
       <h1 name="title" className="text-3xl text-white font-bold mb-7">
         Sign Up
       </h1>
@@ -78,15 +86,6 @@ export default function SignUp({ setIsSignIn }) {
         </a>
       </div>
 
-      <button
-        name="signInWithGoogle"
-        onClick={() => dispatch(userSlice.actions.signInGoogleStart())}
-        className="flex gap-2 items-center text-xs text-gray-400 mt-10"
-      >
-        <FcGoogle className="h-6 w-6" />
-        <span>Login with Google</span>
-      </button>
-
       <div name="questionSignIn" className="flex items-center text-base mt-5">
         <span className="text-gray-400 whitespace-nowrap">
           Already have an account?
@@ -98,6 +97,15 @@ export default function SignUp({ setIsSignIn }) {
           Sign in Now.
         </button>
       </div>
-    </div>
+
+      <button
+        name="signInWithGoogle"
+        onClick={() => dispatch(userSlice.actions.signInGoogleStart())}
+        className="flex gap-2 items-center text-xs text-gray-400 mt-5"
+      >
+        <FcGoogle className="h-6 w-6" />
+        <span>Login with Google</span>
+      </button>
+    </motion.div>
   );
 }

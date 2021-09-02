@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react';
 import cx from 'classnames';
-import useViewport from './useViewport';
 
-const useSlider = (ref, movies = []) => {
+const useSlider = (ref, movies = [], width) => {
   const [viewed, setViewed] = useState(0);
   const [distance, setDistance] = useState(0);
   const [sliderWidth, setSliderWidth] = useState(0);
   const [totalInViewport, setTotalInViewport] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const { width } = useViewport();
 
   const hasPre = distance < 0;
   const hasNext = viewed + totalInViewport < movies.length;
@@ -55,7 +53,7 @@ const useSlider = (ref, movies = []) => {
       .map((_, index) => {
         const className = cx(`inline-block w-3 h-2px ml-1px`, {
           'bg-white': currentPage == index,
-          'bg-gray-800': currentPage != index,
+          'bg-grey-darker': currentPage != index,
         });
 
         return <li key={index} className={className}></li>;

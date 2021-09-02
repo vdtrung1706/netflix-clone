@@ -1,13 +1,19 @@
 import { useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import SliderItem from '../components/common/SliderItem';
-import { staggerHalf } from '../utils/motionUtils';
+import { defaultPageFadeInVariants, staggerHalf } from '../utils/motionUtils';
 
 export default function SearchPage() {
   const { loading, error, results } = useSelector(state => state.search);
 
   return (
-    <div className="mt-36 px-4%">
+    <motion.div
+      variants={defaultPageFadeInVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      className="mt-36 px-4%"
+    >
       {loading && !results && <div>Loading...</div>}
       {error && !results && <div>Error ${error}</div>}
       <motion.div
@@ -22,11 +28,9 @@ export default function SearchPage() {
             <SliderItem key={movie.id} movie={movie} inSearchPage={true} />
           ))
         ) : (
-          <h4>
-            Sorry, we but we did not found any movie or tv-show with that title.
-          </h4>
+          <h4>Sorry, we did not found any movie or tv-show with that title.</h4>
         )}
       </motion.div>
-    </div>
+    </motion.div>
   );
 }

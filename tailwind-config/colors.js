@@ -30,6 +30,9 @@ const colors = {
   orange: {
     error: '#e87c03',
   },
+  green: {
+    DEFAULT: '#46d369',
+  },
 };
 
 module.exports = { colors };

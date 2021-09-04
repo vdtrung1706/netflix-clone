@@ -1,54 +1,46 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import cx from 'classnames';
-import useViewport from '../../hooks/useViewport';
-import { IMAGE_BASE } from '../../services/axios';
+import BoxArt from './BoxArt';
+import SliderItemPopper from './SliderItemPopper';
 
-export default function SliderItem({ movie, inSearchPage = false }) {
-  const [zIndex, setZIndex] = useState(11);
-  const [onHover, setOnHover] = useState(false);
-  const { width } = useViewport();
+export default function SliderItem({ movie, large, inSearchPage }) {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const popperRef = useRef(null);
+  const timeoutRef = useRef(null);
+  const open = Boolean(anchorEl);
 
-  const onMouseEnter = () => {
-    setTimeout(() => setZIndex(20), 100);
-    setOnHover(true);
+  const handlePopperOpen = event => {
+    popperRef.current = event.currentTarget;
+
+    timeoutRef.current = setTimeout(() => {
+      if (popperRef.current) setAnchorEl(popperRef.current);
+    }, 500);
   };
 
-  const onMouseLeave = () => {
-    setOnHover(false);
-    setTimeout(() => setZIndex(11), 100);
+  const handlePopperClose = () => {
+    setAnchorEl(null);
+    popperRef.current = null;
   };
 
   return (
     <div
+      onMouseLeave={() => clearTimeout(timeoutRef.current)}
+      onMouseEnter={handlePopperOpen}
       className={cx(
-        `w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 2xl:w-1/6 relative overflow-y-hidden cursor-pointer first:ml-0 inline-block px-2px box-border transform-gpu transition-transform ease-in-out ${
-          onHover ? 'duration-75 delay-700' : 'delay-75 duration-25'
-        }`,
-        {
-          'hover:scale-x-125 hover:scale-y-125': onHover && width > 640,
-          'my-6': inSearchPage,
-        }
+        'relative z-10 overflow-hidden cursor-pointer inline-block box-border',
+        'px-2px min-w-1/2 sm:min-w-1/3 md:min-w-1/4 h-full lg:min-w-1/5 2xl:min-w-1/6',
+        'transform-gpu transition-transform ease-in-out',
+        { 'my-6': inSearchPage }
       )}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-      style={{ zIndex }}
     >
-      <div className="w-full">
-        <div className="w-full relative overflow-hidden py-28.125%">
-          <img
-            className={cx(
-              'absolute rounded top-0 w-full h-full object-cover object-center',
-              {
-                'bg-black-pure': !movie?.backdrop_path,
-              }
-            )}
-            src={`${IMAGE_BASE}/w500/${
-              movie.poster_path ? movie.poster_path : movie.backdrop_path
-            }`}
-            alt={'box-art'}
-          />
-        </div>
-      </div>
+      <BoxArt movie={movie} large={large} />
+
+      <SliderItemPopper
+        movie={movie}
+        open={open}
+        handleClose={handlePopperClose}
+        anchorEl={anchorEl}
+      />
     </div>
   );
 }

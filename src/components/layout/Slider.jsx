@@ -27,16 +27,16 @@ export default function Slider({ title, selector }) {
       initial="initial"
       animate="animate"
       exit="exit"
-      className="my-3 sm:my-4 xl:my-5 relative z-0 group hover:z-10"
+      className="relative w-full my-3 sm:my-4 xl:my-5 group z-1"
     >
       <a
         href="/browse?genre=111"
         className="mx-4% mb-1 flex items-baseline cursor-pointer whitespace-nowrap w-max"
       >
-        <h1 className="text-sm md:text-sm lg:text-base xl:text-xl font-bold">
+        <h1 className="text-sm font-bold md:text-sm lg:text-base xl:text-xl">
           {title}
         </h1>
-        <div className="text-xs font-bold flex items-baseline w-0 ml-1 opacity-0 transition-all group-hover:transform duration-300 delay-100 group-hover:w-auto group-hover:opacity-100 group-hover:translate-x-3">
+        <div className="flex items-baseline w-0 ml-1 text-xs font-bold transition-all duration-300 delay-100 opacity-0 group-hover:transform group-hover:w-auto group-hover:opacity-100 group-hover:translate-x-3">
           <span>Explore All</span>
           <span className="ml-2px">
             <FontAwesomeIcon icon={faChevronRight} />
@@ -44,8 +44,8 @@ export default function Slider({ title, selector }) {
         </div>
       </a>
 
-      <div className="ralative transition-transform duration-300 delay-100 ease-in-out">
-        <div className="relative px-4%">
+      <div className="relative transition-transform duration-300 ease-in-out delay-100 z-3">
+        <div className="relative px-4% z-2">
           {error && <div>Error...</div>}
           {!loading && movies.length > 0 && (
             <>
@@ -57,7 +57,7 @@ export default function Slider({ title, selector }) {
                 <div
                   style={{ transform: `translate3d(${distance}px, 0, 0)` }}
                   ref={ref}
-                  className="whitespace-nowrap transform duration-300 ease-in-out delay-300"
+                  className="flex flex-shrink-0 duration-300 ease-in-out delay-300 transform whitespace-nowrap"
                 >
                   {movies.map(movie => {
                     return <SliderItem key={movie.id} movie={movie} />;

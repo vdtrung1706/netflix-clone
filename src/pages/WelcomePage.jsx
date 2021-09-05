@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { HERO, HERO_1000, HERO_1500, HERO_1800, NETFLIX_LOGO } from '@assets';
+import { defaultPageFadeInVariants } from '@utils/motion.utils';
 import { motion } from 'framer-motion';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { defaultPageFadeInVariants } from '../utils/motionUtils';
-import { NETFLIX_LOGO, HERO, HERO_1000, HERO_1500, HERO_1800 } from '../assets';
 
 export default function WelcomePage() {
   return (
@@ -22,7 +22,7 @@ export default function WelcomePage() {
 
 const GreetingHeader = () => {
   return (
-    <div className="relative text-base pt-5 z-10">
+    <div className="relative z-10 pt-5 text-base">
       <div className="flex flex-row flex-nowrap items-center mx-4% pt-2 relative justify-between">
         <a
           href="/"
@@ -32,7 +32,7 @@ const GreetingHeader = () => {
         </a>
         <Link
           to="/login"
-          className="rounded-sm bg-red px-3 py-2px text-sm sm:py-1 sm:text-base sm:px-4"
+          className="px-3 text-sm rounded-sm bg-red py-2px sm:py-1 sm:text-base sm:px-4"
         >
           Sign In
         </Link>
@@ -46,16 +46,16 @@ const StoryCard = () => {
 
   return (
     <div className="relative border-b-8 border-solid border-black-light py-12 px-5% lg:min-h-screen">
-      <div className="absolute left-0 right-0 bottom-0 -top-20 overflow-hidden">
-        <div className="absolute bottom-0 top right-0 left-0 h-full">
+      <div className="absolute bottom-0 left-0 right-0 overflow-hidden -top-20">
+        <div className="absolute bottom-0 left-0 right-0 h-full top">
           <img
-            className="w-full h-full object-cover max-w-full"
+            className="object-cover w-full h-full max-w-full"
             src={HERO}
             srcSet={`${HERO_1000} 1000w, ${HERO_1500} 1500w, ${HERO_1800} 1800w`}
             alt="hero"
           />
           <div
-            className="absolute top-0 left-0 bottom-0 right-0 bg-black-pure bg-opacity-40"
+            className="absolute top-0 bottom-0 left-0 right-0 bg-black-pure bg-opacity-40"
             style={{
               backgroundImage:
                 'linear-gradient(to top,rgba(0,0,0,.8) 0,rgba(0,0,0,0) 60%,rgba(0,0,0,.8) 100%)',
@@ -64,7 +64,7 @@ const StoryCard = () => {
         </div>
       </div>
 
-      <div className="relative w-full text-center z-10 py-4 sm:py-20">
+      <div className="relative z-10 w-full py-4 text-center sm:py-20">
         <h1 className="text-1.75rem sm:text-3.125rem font-bold m-auto mx-6 sm:mx-auto max-w-2xl">
           Unlimited movies, TV shows, and more.
         </h1>
@@ -77,15 +77,15 @@ const StoryCard = () => {
             membership.
           </h3>
 
-          <div className="relative overflow-hidden flex items-center flex-col gap-4 w-full m-auto md:max-w-lg lg:max-w-4xl lg:flex-row lg:justify-center lg:gap-0">
-            <div className="bg-white border-solid border-b-2 border-opacity-0 border-red focus-within:border-opacity-100 transition-opacity duration-700 ease-linear rounded sm:min-w-550px md:max-w-lg lg:min-w-max lg:rounded-tr-none lg:rounded-br-none">
+          <div className="relative flex flex-col items-center w-full gap-4 m-auto overflow-hidden md:max-w-lg lg:max-w-4xl lg:flex-row lg:justify-center lg:gap-0">
+            <div className="transition-opacity duration-700 ease-linear bg-white border-b-2 border-opacity-0 border-solid rounded border-red focus-within:border-opacity-100 sm:min-w-550px md:max-w-lg lg:min-w-max lg:rounded-tr-none lg:rounded-br-none">
               <div className="px-2 md:px-8 lg:px-2">
                 <input
-                  className="text-black-pure min-w-450px md:min-w-550px h-12 w-full outline-none border-none bg-transparent text-base font-medium md:h-14"
+                  className="w-full h-12 text-base font-medium bg-transparent border-none outline-none text-black-pure min-w-450px md:min-w-550px md:h-14"
                   type="email"
                   placeholder="Email Address"
                   value={email}
-                  onChange={e => setEmail(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value)}
                   autoComplete="email"
                   maxLength="50"
                   minLength="5"
@@ -94,7 +94,7 @@ const StoryCard = () => {
             </div>
 
             <button
-              className="flex items-center justify-center gap-2 px-3 h-10 border-solid border-b-2 border-opacity-0 border-red bg-red md:h-12 lg:h-14 lg:rounded-tl-none lg:rounded-bl-none hover:bg-red-hover"
+              className="flex items-center justify-center h-10 gap-2 px-3 border-b-2 border-opacity-0 border-solid border-red bg-red md:h-12 lg:h-14 lg:rounded-tl-none lg:rounded-bl-none hover:bg-red-hover"
               type="submit"
               autoComplete="off"
               role="link"
@@ -115,7 +115,7 @@ const StoryCard = () => {
           </div>
         </form>
       </div>
-      <div className="center-pixel absolute top-1/2 left-1/2"></div>
+      <div className="absolute center-pixel top-1/2 left-1/2"></div>
     </div>
   );
 };

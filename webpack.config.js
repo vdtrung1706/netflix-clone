@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
-const nodeUtils = require('./src/services/common/node-service');
+const nodeUtils = require('./src/services/node.service');
 const APP_DIR = path.join(__dirname, 'src');
 const NODE_MODULES = path.join(__dirname, 'node_modules');
 
@@ -95,6 +95,14 @@ const webpackConfig = {
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.json', 'scss'],
+    alias: {
+      '@components': path.resolve(__dirname, './src/components'),
+      '@services': path.resolve(__dirname, './src/services'),
+      '@store': path.resolve(__dirname, './src/store'),
+      '@utils': path.resolve(__dirname, './src/utils'),
+      '@hooks': path.resolve(__dirname, './src/hooks'),
+      '@assets': path.resolve(__dirname, './src/assets'),
+    },
   },
   plugins: getPlugins(),
   module: {
@@ -121,7 +129,7 @@ if (nodeUtils.isProduction()) {
     contentBase: './dist',
   };
 
-  // webpackConfig.devtool = 'eval-cheap-source-map';
+  webpackConfig.devtool = 'eval-cheap-source-map';
 }
 
 module.exports = webpackConfig;

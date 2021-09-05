@@ -4,7 +4,7 @@
 
 @layer base {
   html {
-    @apply max-w-screen-2xl text-base;
+    @apply text-base max-w-screen-2xl;
   }
 
   *,
@@ -14,7 +14,7 @@
   }
 
   body {
-    @apply bg-black text-white antialiased font-main overflow-x-hidden overflow-y-scroll;
+    @apply overflow-x-hidden overflow-y-scroll antialiased text-white bg-black font-main;
   }
 }
 

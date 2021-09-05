@@ -27,11 +27,7 @@
     "node": true
   },
   "settings": {
-    "import/resolver": {
-      "node": {
-        "extensions": [".js", ".jsx"]
-      }
-    },
+    "import/resolver": "webpack",
     "react": {
       "version": "detect"
     }

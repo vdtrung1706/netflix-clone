@@ -1,17 +1,16 @@
+import { SkeletonSliders, Slider } from '@components/layout';
+import useRetrieveData from '@hooks/useRetrieveData';
+import { latestSlice } from '@store/devtools/latestSlice';
+import { defaultPageFadeInVariants } from '@utils/motion.utils';
 import { motion } from 'framer-motion';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Slider from '../components/layout/Slider';
-import SkeletonSliders from '../components/skeletons/SkeletonSliders';
-import useRetrieveData from '../hooks/useRetrieveData';
-import { latestSlice } from '../redux/devtools/latestSlice';
-import { defaultPageFadeInVariants } from '../utils/motionUtils';
 
 export default function LatestPage() {
   const sliders = useRetrieveData('LATEST');
 
   const dispatch = useDispatch();
-  const genres = useSelector(state => state.latest);
+  const genres = useSelector((state) => state.latest);
 
   useEffect(() => {
     handleLoading();
@@ -41,9 +40,9 @@ export default function LatestPage() {
 
       {!genres.loading && (
         <>
-          <div name="slidersWrapper" className="slider-wrapper pt-16">
+          <div className="pt-16 slider-wrapper">
             {sliders &&
-              sliders.map(props => <Slider key={props.id} {...props} />)}
+              sliders.map((props) => <Slider key={props.id} {...props} />)}
           </div>
         </>
       )}

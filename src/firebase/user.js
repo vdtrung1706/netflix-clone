@@ -26,7 +26,7 @@ export const createUserProfileDocument = async (user, addtionalInfo) => {
   return getUserDocument(user.uid);
 };
 
-export const getUserDocument = async uid => {
+export const getUserDocument = async (uid) => {
   if (!uid) return null;
 
   try {
@@ -39,7 +39,7 @@ export const getUserDocument = async uid => {
 
 export const getCurrentUser = () => {
   return new Promise((resolve, reject) => {
-    const unsubscribeFromAuth = auth.onAuthStateChanged(userAuth => {
+    const unsubscribeFromAuth = auth.onAuthStateChanged((userAuth) => {
       unsubscribeFromAuth();
       resolve(userAuth);
     }, reject);

@@ -1,20 +1,17 @@
-import { useState, useRef, useEffect } from 'react';
+import { CROSS_SIGN, SEARCH_ICON } from '@assets';
+import useOutside from '@hooks/useOutside';
+import { SEARCH_ENDPOINT } from '@services/requests.service';
+import { fetchSearchResults, searchSlice } from '@store/devtools/searchSlice';
+import cx from 'classnames';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
-import cx from 'classnames';
-import { SEARCH_ENDPOINT } from '../../services/requests';
-import useOutside from '../../hooks/useOutside';
-import { CROSS_SIGN, SEARCH_ICON } from '../../assets';
-import {
-  fetchSearchResults,
-  searchSlice,
-} from '../../redux/devtools/searchSlice';
 
 export default function SearchBox() {
   const ref = useRef(null);
   const preLocation = useRef(null);
   const [toggle, setToggle] = useState(false);
-  const { searchContent } = useSelector(state => state.search);
+  const { searchContent } = useSelector((state) => state.search);
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation();
@@ -40,7 +37,7 @@ export default function SearchBox() {
     history.push(preLocation.current);
   };
 
-  const handleChangeSearchContent = e => {
+  const handleChangeSearchContent = (e) => {
     const value = e.target.value;
     dispatch(searchSlice.actions.changeSearchContent(value));
 
@@ -54,7 +51,6 @@ export default function SearchBox() {
 
   return (
     <div
-      name="searchBox"
       ref={ref}
       className={cx('flex items-center bg-opacity-90', {
         'bg-black border-white border border-solid': toggle,
@@ -62,17 +58,17 @@ export default function SearchBox() {
     >
       <button
         onClick={handleToggle}
-        className={`h-4 w-4 px-1 lg:h-5 lg:w-5 lg:px-2`}
+        className="w-4 h-4 px-1 lg:h-5 lg:w-5 lg:px-2"
       >
         <img src={SEARCH_ICON} alt="search" />
       </button>
 
       <input
         value={searchContent}
-        onChange={e => handleChangeSearchContent(e)}
+        onChange={(e) => handleChangeSearchContent(e)}
         className={cx(
-          `w-0 text-xs lg:text-sm bg-transparent outline-none transition-width duration-300 ease-linear`,
-          { 'w-36 p-1 mr-1 lg:w-48 lg:p-2 lg:mr-2': toggle }
+          `outline-none w-0 text-xs lg:text-sm bg-transparent transition-width duration-300 ease-linear`,
+          { 'w-36 p-1 mr-1 lg:w-48 lg:p-2 lg:mr-2': toggle },
         )}
         placeholder="Title, people, genres"
       />
@@ -86,9 +82,7 @@ export default function SearchBox() {
         <img
           className={cx(
             'opacity-0 transition-opacity ease-linear duration-200',
-            {
-              'opacity-100': searchContent,
-            }
+            { 'opacity-100': searchContent },
           )}
           src={CROSS_SIGN}
           alt="remove"

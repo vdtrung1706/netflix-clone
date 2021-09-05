@@ -1,19 +1,19 @@
-import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { selectUser } from '@store/selectors/userSelectors';
 import { AnimatePresence } from 'framer-motion';
-import { selectUser } from '../redux/selectors/userSelectors';
-import Homepage from '../pages/Homepage';
-import TVShowsPage from '../pages/TVShowsPage';
-import MoviesPage from '../pages/MoviesPage';
-import WelcomePage from '../pages/WelcomePage';
-import AuthPage from '../pages/AuthPage';
-import MyListPage from '../pages/MyListPage';
-import LatestPage from '../pages/LatestPage';
-import ProfilesPage from '../pages/ProfilesPage';
-import HelpCenterPage from '../pages/HelpCenterPage';
+import { useSelector } from 'react-redux';
+import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import AccountPage from '../pages/AccountPage';
+import AuthPage from '../pages/AuthPage';
+import HelpCenterPage from '../pages/HelpCenterPage';
+import Homepage from '../pages/Homepage';
 import KidsPage from '../pages/KidsPage';
+import LatestPage from '../pages/LatestPage';
+import MoviesPage from '../pages/MoviesPage';
+import MyListPage from '../pages/MyListPage';
+import ProfilesPage from '../pages/ProfilesPage';
 import SearchPage from '../pages/SearchPage';
+import TVShowsPage from '../pages/TVShowsPage';
+import WelcomePage from '../pages/WelcomePage';
 
 const Routes = () => {
   const { currentUser } = useSelector(selectUser);

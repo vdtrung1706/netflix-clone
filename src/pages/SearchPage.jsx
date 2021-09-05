@@ -1,10 +1,10 @@
-import { useSelector } from 'react-redux';
+import { SliderItem } from '@components/layout';
+import { defaultPageFadeInVariants, staggerHalf } from '@utils/motion.utils';
 import { motion } from 'framer-motion';
-import SliderItem from '../components/common/SliderItem';
-import { defaultPageFadeInVariants, staggerHalf } from '../utils/motionUtils';
+import { useSelector } from 'react-redux';
 
 export default function SearchPage() {
-  const { loading, error, results } = useSelector(state => state.search);
+  const { loading, error, results } = useSelector((state) => state.search);
 
   return (
     <motion.div
@@ -24,7 +24,7 @@ export default function SearchPage() {
         className="flex flex-wrap"
       >
         {results && results.length > 0 ? (
-          results.map(movie => (
+          results.map((movie) => (
             <SliderItem key={movie.id} movie={movie} inSearchPage={true} />
           ))
         ) : (

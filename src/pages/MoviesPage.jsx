@@ -1,18 +1,15 @@
+import { Billboard, SkeletonSliders, Slider } from '@components/layout';
+import useRetrieveData from '@hooks/useRetrieveData';
+import { moviesSlice } from '@store/devtools/moviesSlice';
+import { defaultPageFadeInVariants } from '@utils/motion.utils';
 import { motion } from 'framer-motion';
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import Billboard from '../components/layout/Billboard';
-import Slider from '../components/layout/Slider';
-import SkeletonSliders from '../components/skeletons/SkeletonSliders';
-import useRetrieveData from '../hooks/useRetrieveData';
-import { moviesSlice } from '../redux/devtools/moviesSlice';
-import { defaultPageFadeInVariants } from '../utils/motionUtils';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function MoviesPage() {
   const sliders = useRetrieveData('MOVIES');
   const dispatch = useDispatch();
-  const genres = useSelector(state => state.movies);
+  const genres = useSelector((state) => state.movies);
 
   useEffect(() => {
     handleLoading();
@@ -44,9 +41,9 @@ export default function MoviesPage() {
         <>
           <Billboard type="MOVIE" />
 
-          <div name="slidersWrapper" className="slider-wrapper pt-16">
+          <div className="pt-16 slider-wrapper">
             {sliders &&
-              sliders.map(props => <Slider key={props.id} {...props} />)}
+              sliders.map((props) => <Slider key={props.id} {...props} />)}
           </div>
         </>
       )}

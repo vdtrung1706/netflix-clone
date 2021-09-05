@@ -1,8 +1,8 @@
+import { Nav } from '@components/layout';
+import { userSlice } from '@store/devtools/userSlice';
+import { selectUser } from '@store/selectors/userSelectors';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUser } from './redux/selectors/userSelectors';
-import { userSlice } from './redux/devtools/userSlice';
-import Nav from './components/layout/Nav';
 import Routes from './routes/Routes';
 
 export default function App() {

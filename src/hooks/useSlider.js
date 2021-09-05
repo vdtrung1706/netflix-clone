@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import cx from 'classnames';
+import { useEffect, useState } from 'react';
 
 const useSlider = (ref, movies = [], width) => {
   const [viewed, setViewed] = useState(0);
@@ -25,17 +25,17 @@ const useSlider = (ref, movies = [], width) => {
     }
   }, [ref, movies, width]);
 
-  const moveSection = type => {
+  const moveSection = (type) => {
     if (type === 'RIGHT') {
       setViewed(viewed + totalInViewport);
       setDistance(distance - sliderWidth);
-      setCurrentPage(pre => pre + 1);
+      setCurrentPage((pre) => pre + 1);
     }
 
     if (type === 'LEFT') {
       setViewed(viewed - totalInViewport);
       setDistance(distance + sliderWidth);
-      setCurrentPage(pre => pre - 1);
+      setCurrentPage((pre) => pre - 1);
     }
 
     if (type === 'RESET') {

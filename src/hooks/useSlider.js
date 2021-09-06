@@ -1,7 +1,14 @@
 import cx from 'classnames';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const useSlider = (ref, movies = [], width) => {
+  const itemsRef = useRef(null);
+  const [itemsProps, setItemProps] = useState(
+    movies.map((movie) => ({
+      movie,
+      transformOrigin: 'center',
+    })),
+  );
   const [viewed, setViewed] = useState(0);
   const [distance, setDistance] = useState(0);
   const [sliderWidth, setSliderWidth] = useState(0);
@@ -19,6 +26,7 @@ const useSlider = (ref, movies = [], width) => {
 
       const totalInViewport = Math.ceil(sliderWidth / itemWidth);
 
+      itemsRef.current = ref.current.children;
       setSliderWidth(sliderWidth);
       setTotalInViewport(totalInViewport);
       setTotalPages(movies.length / totalInViewport);
@@ -60,15 +68,82 @@ const useSlider = (ref, movies = [], width) => {
       });
   };
 
+  const onScreen = (element) => {
+    if (!element) return false;
+    return element.className.includes('onScreen');
+  };
+
+  const onHover = (event) => {
+    if (!itemsRef) return;
+
+    const index = Object.entries(itemsRef.current).findIndex(
+      (item) => item[1] === event.currentTarget,
+    );
+
+    const id = itemsRef.current[index].dataset.id;
+    const itemPropsHover = itemsProps.filter((item) => item.movie.id == id)[0];
+
+    if (!itemPropsHover) return;
+
+    const hasPreOnScreen = onScreen(itemsRef.current[index - 1]);
+    const hasNextOnScreen = onScreen(itemsRef.current[index + 1]);
+
+    // middle => transform origin = "center"
+    if (hasPreOnScreen && hasNextOnScreen) {
+      setItemProps((pre) => {
+        const newState = pre.map((item) => {
+          if (item.movie.id === itemPropsHover.movie.id) {
+            return {
+              ...item,
+              transformOrigin: 'center',
+            };
+          }
+          return { ...item };
+        });
+
+        return newState;
+      });
+    } else if (hasNextOnScreen) {
+      // first
+      setItemProps((pre) => {
+        const newState = pre.map((item) => {
+          if (item.movie.id === itemPropsHover.movie.id) {
+            return {
+              ...item,
+              transformOrigin: 'left',
+            };
+          }
+          return { ...item };
+        });
+        return newState;
+      });
+    } else {
+      // last
+      setItemProps((pre) => {
+        const newState = pre.map((item) => {
+          if (item.movie.id === itemPropsHover.movie.id) {
+            return {
+              ...item,
+              transformOrigin: 'right',
+            };
+          }
+          return { ...item };
+        });
+        return newState;
+      });
+    }
+  };
+
   return {
     hasNext,
     hasPre,
     totalPages,
-    movies,
     distance,
     currentPage,
     moveSection,
     paginationIndicator,
+    onHover,
+    itemsProps,
   };
 };
 

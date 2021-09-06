@@ -40,7 +40,7 @@ export default function LatestPage() {
 
       {!genres.loading && (
         <>
-          <div className="pt-16 slider-wrapper">
+          <div className="pt-12 slider-wrapper">
             {sliders &&
               sliders.map((props) => <Slider key={props.id} {...props} />)}
           </div>

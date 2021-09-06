@@ -3,6 +3,7 @@ const spacing = {
   'logo-sm': '108px',
   'logo-lg': '133px',
   'logo-2xl': '167px',
+  '3vw': '3vw',
   '3%': '3%',
   '4%': '4%',
   '5%': '5%',
@@ -18,6 +19,8 @@ const spacing = {
   '50px': '50px',
   '350px': '350px',
   '640px': '640px',
+  116: '29rem',
+  124: '31rem',
 };
 
 const minWidth = {

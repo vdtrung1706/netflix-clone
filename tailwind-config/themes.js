@@ -45,4 +45,8 @@ module.exports = {
     width: 'width',
     height: 'height',
   },
+  scale: {
+    115: '1.15',
+    117: '1.15',
+  },
 };

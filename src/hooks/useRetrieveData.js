@@ -12,11 +12,16 @@ import { tvshowsSelectors } from '@store/selectors/tvshowsSelectors';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-function dataTemplate(id, thunk, selector, url, title, genre) {
-  return { id, thunk, url, title, genre, selector };
+function dataTemplate(id, thunk, selector, url, title, genre, large = false) {
+  return { id, thunk, url, title, genre, selector, large };
 }
 
 const movies = Object.keys(moviesRequests).map((genre, index) => {
+  let large = false;
+  if (genre == 'netflixOrignal') {
+    large = true;
+  }
+
   return dataTemplate(
     index,
     moviesFetchThunks[genre],
@@ -24,10 +29,13 @@ const movies = Object.keys(moviesRequests).map((genre, index) => {
     moviesRequests[genre].url,
     moviesRequests[genre].title,
     genre,
+    large,
   );
 });
 
 const tvShows = Object.keys(tvshowsRequests).map((genre, index) => {
+  let large = genre === 'netflixOriginal' ? true : false;
+
   return dataTemplate(
     index,
     tvshowsFetchThunks[genre],
@@ -35,6 +43,7 @@ const tvShows = Object.keys(tvshowsRequests).map((genre, index) => {
     tvshowsRequests[genre].url,
     tvshowsRequests[genre].title,
     genre,
+    large,
   );
 });
 
@@ -56,7 +65,7 @@ const fetchData = {
 };
 
 const useRetrieveData = (type) => {
-  const [slidersInfo, setSlidersInfo] = useState();
+  const [sliders, setSliders] = useState();
 
   const dispatch = useDispatch();
 
@@ -67,7 +76,7 @@ const useRetrieveData = (type) => {
         dispatch(genre.thunk(genre.url));
         return { ...genre };
       });
-      setSlidersInfo(sliders);
+      setSliders(sliders);
     }
 
     if (type === 'TVSHOWS') {
@@ -76,7 +85,7 @@ const useRetrieveData = (type) => {
         dispatch(genre.thunk(genre.url));
         return { ...genre };
       });
-      setSlidersInfo(sliders);
+      setSliders(sliders);
     }
 
     if (type === 'LATEST') {
@@ -85,11 +94,11 @@ const useRetrieveData = (type) => {
         dispatch(genre.thunk(genre.url));
         return { ...genre };
       });
-      setSlidersInfo(sliders);
+      setSliders(sliders);
     }
   }, [dispatch, type]);
 
-  return slidersInfo;
+  return sliders;
 };
 
 export default useRetrieveData;

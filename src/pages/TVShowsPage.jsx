@@ -41,7 +41,7 @@ export default function TVShowsPage() {
         <>
           <Billboard type="TVSHOW" />
 
-          <div className="pt-16 slider-wrapper">
+          <div className="pt-12 slider-wrapper">
             {sliders &&
               sliders.map((props) => <Slider key={props.id} {...props} />)}
           </div>

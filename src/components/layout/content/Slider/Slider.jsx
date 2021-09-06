@@ -7,17 +7,25 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useSlider from '@hooks/useSlider';
 import useViewport from '@hooks/useViewport';
 import { defaultFadeInVariants } from '@utils/motion.utils';
+import cx from 'classnames';
 import { motion } from 'framer-motion';
 import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import SliderItem from './SliderItem';
 
-export default function Slider({ title, selector }) {
+export default function Slider({ title, selector, large }) {
   const ref = useRef();
   const { width } = useViewport();
   const { loading, error, data: movies } = useSelector(selector);
-  const { hasPre, hasNext, moveSection, distance, paginationIndicator } =
-    useSlider(ref, movies, width);
+  const {
+    hasPre,
+    hasNext,
+    moveSection,
+    distance,
+    paginationIndicator,
+    onHover,
+    itemsProps,
+  } = useSlider(ref, movies, width);
 
   useEffect(() => {}, [width]);
 
@@ -27,16 +35,16 @@ export default function Slider({ title, selector }) {
       initial="initial"
       animate="animate"
       exit="exit"
-      className="relative w-full my-3 sm:my-4 xl:my-5 group z-1"
+      className="relative w-full my-3vw group z-1"
     >
       <a
         href="/browse?genre=111"
-        className="mx-4% mb-1 flex items-baseline cursor-pointer whitespace-nowrap w-max"
+        className="mx-4% px-1 mb-1 lg:mb-2 flex items-baseline cursor-pointer whitespace-nowrap w-max"
       >
-        <h1 className="text-sm font-bold md:text-sm lg:text-base xl:text-xl">
+        <h1 className="text-font-medium md:text-sm lg:text-base xl:text-xl">
           {title}
         </h1>
-        <div className="flex items-baseline w-0 ml-1 text-xs font-bold transition-all duration-300 delay-100 opacity-0 group-hover:transform group-hover:w-auto group-hover:opacity-100 group-hover:translate-x-3">
+        <div className="flex items-baseline w-0 ml-1 text-xs font-medium transition-all duration-300 delay-100 opacity-0 group-hover:transform group-hover:w-auto group-hover:opacity-100 group-hover:translate-x-3">
           <span>Explore All</span>
           <span className="ml-2px">
             <FontAwesomeIcon icon={faChevronRight} />
@@ -49,18 +57,33 @@ export default function Slider({ title, selector }) {
           {error && <div>Error...</div>}
           {!loading && movies.length > 0 && (
             <>
-              <ul className="-mt-4 mb-0 list-none absolute top-0 right-4% opacity-0 transition-all duration-300 delay-100 group-hover:opacity-100">
+              <ul className="-mt-4 px-1 mb-0 list-none absolute top-0 right-4% opacity-0 transition-all duration-300 delay-100 group-hover:opacity-100">
                 {paginationIndicator()}
               </ul>
 
               <div className="overflow-x-scroll sm:overflow-x-visible">
                 <div
-                  style={{ transform: `translate3d(${distance}px, 0, 0)` }}
+                  style={{
+                    transform: `translate3d(${distance}px, 0, 0)`,
+                    height: large ? '31rem' : 'auto',
+                  }}
                   ref={ref}
-                  className="flex flex-shrink-0 duration-300 ease-in-out delay-300 transform whitespace-nowrap"
+                  className={cx(
+                    'flex flex-shrink-0 duration-300 ease-in-out delay-300 transform whitespace-nowrap',
+                    { 'h-96 md:h-116 xl:h-31': large },
+                  )}
                 >
-                  {movies.map((movie) => {
-                    return <SliderItem key={movie.id} movie={movie} />;
+                  {itemsProps.map((item) => {
+                    return (
+                      <SliderItem
+                        key={item.movie.id}
+                        movie={item.movie}
+                        translate={item.translate}
+                        transformOrigin={item.transformOrigin}
+                        onHover={onHover}
+                        large={large}
+                      />
+                    );
                   })}
                 </div>
               </div>

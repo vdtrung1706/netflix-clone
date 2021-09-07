@@ -5,9 +5,8 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 const nodeUtils = require('./src/services/node.service');
-const APP_DIR = path.join(__dirname, 'src');
-const NODE_MODULES = path.join(__dirname, 'node_modules');
 
+const NODE_MODULES = path.join(__dirname, 'node_modules');
 const isDevelopment = nodeUtils.isDevelopment();
 
 /**
@@ -28,7 +27,7 @@ function getPlugins() {
     }),
     new Dotenv({
       path: path.resolve(__dirname, './.env'),
-      safe: true,
+      safe: false,
     }),
   ];
 }
@@ -44,14 +43,12 @@ function getParserRules() {
       use: [
         {
           loader: MiniCssExtractPlugin.loader,
-          options: {},
+          options: { publicPath: '' },
         },
         'css-loader',
         'postcss-loader',
         'sass-loader',
       ],
-      include: APP_DIR,
-      exclude: NODE_MODULES,
     },
     {
       test: /\.(js|jsx)$/,
@@ -63,25 +60,19 @@ function getParserRules() {
           },
         },
       ],
-      include: APP_DIR,
       exclude: NODE_MODULES,
     },
     {
       test: /\.(eot|woff|woff2|ttf|svg|png|jpg)$/,
-      use: 'url-loader?limit=10000&name=[name]-[hash].[ext]',
-      include: APP_DIR,
-      exclude: NODE_MODULES,
+      type: 'asset',
     },
     {
       test: /\.ico$/,
       use: 'file-loader?name=[name].[ext]',
-      exclude: NODE_MODULES,
     },
     {
       test: /\.json$/,
       use: 'json-loader',
-      include: APP_DIR,
-      exclude: NODE_MODULES,
     },
   ];
 }
@@ -93,6 +84,7 @@ const webpackConfig = {
     filename: 'index.bundle.js',
     assetModuleFilename: 'images/[hash][ext][query]',
   },
+  entry: ['regenerator-runtime/runtime.js', './src/index.js'],
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.json', 'scss'],
     alias: {
@@ -115,12 +107,11 @@ const webpackConfig = {
  */
 if (nodeUtils.isProduction()) {
   webpackConfig.mode = 'production';
-  webpackConfig.entry = './src/index.js';
   webpackConfig.target = 'browserslist';
+  webpackConfig.devtool = 'source-map';
 } else {
   webpackConfig.target = 'web';
   webpackConfig.mode = 'development';
-  webpackConfig.entry = ['regenerator-runtime/runtime.js', './src/index.js'];
   webpackConfig.plugins.push(new ReactRefreshWebpackPlugin());
 
   webpackConfig.devServer = {

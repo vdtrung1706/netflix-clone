@@ -29,17 +29,17 @@ export const defaultPageFadeInVariants = {
 export const defaultFadeInVariants = {
   initial: {
     opacity: 0,
-    transition: { duration: 0.4, ease: defaultEasing },
+    transition: { duration: 0.3, ease: defaultEasing },
     willChange: 'opacity, transform',
   },
   animate: {
     opacity: 1,
-    transition: { duration: 0.4, ease: defaultEasing },
+    transition: { duration: 0.3, ease: defaultEasing },
     willChange: 'opacity, transform',
   },
   exit: {
     opacity: 0,
-    transition: { delay: 0.2, duration: 0.4, ease: defaultEasing },
+    transition: { delay: 0.2, duration: 0.3, ease: defaultEasing },
     willChange: 'opacity, transform',
   },
 };

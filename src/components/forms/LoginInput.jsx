@@ -1,7 +1,7 @@
 import cx from 'classnames';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
 
-export default function LoginInput({
+function LoginInput({
   type,
   id,
   name,
@@ -85,3 +85,5 @@ export default function LoginInput({
     </div>
   );
 }
+
+export default memo(LoginInput);

@@ -8,10 +8,10 @@ import { truncate } from '@utils/convertor.utils';
 import { defaultFadeInVariants, staggerOne } from '@utils/motion.utils';
 import cx from 'classnames';
 import { motion } from 'framer-motion';
-import { useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-export default function Billboard({ type }) {
+function Billboard({ type }) {
   let selector = (state) => state.billboard.movie;
   if (type === 'TVSHOW') {
     selector = (state) => state.billboard.tvshow;
@@ -113,3 +113,5 @@ export default function Billboard({ type }) {
     </motion.div>
   );
 }
+
+export default memo(Billboard);

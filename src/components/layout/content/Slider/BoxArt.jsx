@@ -1,6 +1,7 @@
+import { memo } from 'react';
 import BoxArtImage from './BoxArtImage';
 
-export default function BoxArt({ movie, large }) {
+function BoxArt({ movie, large }) {
   return (
     <div className="w-full h-full">
       <div className="relative w-full h-full overflow-hidden py-28.125%">
@@ -13,3 +14,5 @@ export default function BoxArt({ movie, large }) {
     </div>
   );
 }
+
+export default memo(BoxArt);

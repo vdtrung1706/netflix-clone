@@ -3,7 +3,7 @@ import { userSlice } from '@store/devtools/userSlice';
 import { loginFadeInVariants } from '@utils/motion.utils';
 import cx from 'classnames';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { FaCheck } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 import { useDispatch } from 'react-redux';
@@ -15,6 +15,14 @@ export default function SignIn({ setIsSignIn }) {
   const [rememberMe, setRememberMe] = useState(true);
 
   const dispatch = useDispatch();
+
+  const handlePasswordChange = useCallback((value) => {
+    setPassword(value);
+  }, []);
+
+  const handleEmailChange = useCallback((value) => {
+    setEmail(value);
+  }, []);
 
   const hanldeSubmit = () => {
     dispatch(userSlice.actions.signInEmailStart({ email, password }));
@@ -35,7 +43,7 @@ export default function SignIn({ setIsSignIn }) {
           id="signin_email"
           name="email"
           value={email}
-          setValue={setEmail}
+          setValue={handleEmailChange}
           placeholder="Email or phone number"
           maxLength={50}
           validation={isEmail}
@@ -46,7 +54,7 @@ export default function SignIn({ setIsSignIn }) {
           id="signin_password"
           name="password"
           value={password}
-          setValue={setPassword}
+          setValue={handlePasswordChange}
           placeholder="Password"
           validation={new RegExp('^(?=.*[a-z])(?=.*[!@#$%^&*])(?=.{8,})')}
           validationMessage="Password requires atleast 8 characters and a special one."

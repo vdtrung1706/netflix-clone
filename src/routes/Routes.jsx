@@ -1,19 +1,21 @@
+import SkeletonSliders from '@components/layout/loader/SkeletonSliders';
 import { selectUser } from '@store/selectors/userSelectors';
 import { AnimatePresence } from 'framer-motion';
+import { lazy, Suspense } from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import AccountPage from '../pages/AccountPage';
 import AuthPage from '../pages/AuthPage';
 import HelpCenterPage from '../pages/HelpCenterPage';
-import Homepage from '../pages/Homepage';
 import KidsPage from '../pages/KidsPage';
-import LatestPage from '../pages/LatestPage';
-import MoviesPage from '../pages/MoviesPage';
-import MyListPage from '../pages/MyListPage';
 import ProfilesPage from '../pages/ProfilesPage';
-import SearchPage from '../pages/SearchPage';
 import TVShowsPage from '../pages/TVShowsPage';
 import WelcomePage from '../pages/WelcomePage';
+const LatestPage = lazy(() => import('../pages/LatestPage'));
+const MoviesPage = lazy(() => import('../pages/MoviesPage'));
+const MyListPage = lazy(() => import('../pages/MyListPage'));
+const SearchPage = lazy(() => import('../pages/SearchPage'));
+const Homepage = lazy(() => import('../pages/Homepage'));
 
 const Routes = () => {
   const { currentUser } = useSelector(selectUser);
@@ -21,6 +23,59 @@ const Routes = () => {
 
   return (
     <AnimatePresence exitBeforeEnter>
+      <Suspense
+        fallback={
+          <div className="pt-20">
+            <SkeletonSliders />
+          </div>
+        }
+      >
+        <Switch location={location} key={location.pathname}>
+          <Route
+            exact
+            path="/browse"
+            render={() =>
+              currentUser ? <Homepage /> : <Redirect to="/welcome" />
+            }
+          />
+          <Route
+            exact
+            path="/browse/movies"
+            render={() =>
+              currentUser ? <MoviesPage /> : <Redirect to="/welcome" />
+            }
+          />
+          <Route
+            exact
+            path="/browse/tvshows"
+            render={() =>
+              currentUser ? <TVShowsPage /> : <Redirect to="/welcome" />
+            }
+          />
+          <Route
+            exact
+            path="/browse/my-list"
+            render={() =>
+              currentUser ? <MyListPage /> : <Redirect to="/welcome" />
+            }
+          />
+          <Route
+            exact
+            path="/latest"
+            render={() =>
+              currentUser ? <LatestPage /> : <Redirect to="/welcome" />
+            }
+          />
+          <Route
+            exact
+            path="/kids"
+            render={() =>
+              currentUser ? <KidsPage /> : <Redirect to="/welcome" />
+            }
+          />
+        </Switch>
+      </Suspense>
+
       <Switch location={location} key={location.pathname}>
         <Route exact path="/" render={() => <Redirect to="/login" />} />
         <Route
@@ -36,48 +91,7 @@ const Routes = () => {
             currentUser ? <SearchPage /> : <Redirect to="/login" />
           }
         />
-        <Route
-          exact
-          path="/browse"
-          render={() =>
-            currentUser ? <Homepage /> : <Redirect to="/welcome" />
-          }
-        />
-        <Route
-          exact
-          path="/browse/movies"
-          render={() =>
-            currentUser ? <MoviesPage /> : <Redirect to="/welcome" />
-          }
-        />
-        <Route
-          exact
-          path="/browse/tvshows"
-          render={() =>
-            currentUser ? <TVShowsPage /> : <Redirect to="/welcome" />
-          }
-        />
-        <Route
-          exact
-          path="/browse/my-list"
-          render={() =>
-            currentUser ? <MyListPage /> : <Redirect to="/welcome" />
-          }
-        />
-        <Route
-          exact
-          path="/latest"
-          render={() =>
-            currentUser ? <LatestPage /> : <Redirect to="/welcome" />
-          }
-        />
-        <Route
-          exact
-          path="/kids"
-          render={() =>
-            currentUser ? <KidsPage /> : <Redirect to="/welcome" />
-          }
-        />
+
         <Route
           exact
           path="/profiles/manage"

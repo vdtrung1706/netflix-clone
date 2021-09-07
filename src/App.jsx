@@ -9,9 +9,9 @@ export default function App() {
   const { currentUser } = useSelector(selectUser);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(userSlice.actions.checkUserSession());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(userSlice.actions.checkUserSession());
+  // }, [dispatch]);
 
   return (
     <div className="w-full overflow-x-hidden">

@@ -1,12 +1,12 @@
 import { ARROW_POINT_DOWN, NETFLIX_LOGO } from '@assets';
 import useViewport from '@hooks/useViewport';
 import cx from 'classnames';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import NavMenu from './NavMenu';
 import NavMenuCollapse from './NavMenuCollapse';
 
-export default function PrimaryNav() {
+function PrimaryNav() {
   const { width } = useViewport();
   const [open, setOpen] = useState(false);
   const [smallScreen, setSmallScreen] = useState(false);
@@ -40,7 +40,7 @@ export default function PrimaryNav() {
             <img src={ARROW_POINT_DOWN} alt="browse" className="h-3 ml-1" />
           </button>
 
-          {open && <NavMenuCollapse setOpen={setOpen} />}
+          <NavMenuCollapse open={open} setOpen={setOpen} />
         </li>
 
         <NavMenu additionClass={`${smallScreen ? 'hidden' : ''}`} />
@@ -48,3 +48,5 @@ export default function PrimaryNav() {
     </div>
   );
 }
+
+export default React.memo(PrimaryNav);

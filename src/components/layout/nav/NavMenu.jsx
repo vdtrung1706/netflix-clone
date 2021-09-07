@@ -1,6 +1,7 @@
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-export default function NavMenu({ additionClass }) {
+function NavMenu({ additionClass }) {
   const className = `${additionClass} hover:text-gray-400 transition-colors duration-200 ease-linear focus:font-bold focus:text-white`;
 
   const activeClassName = 'font-bold cursor-default';
@@ -64,3 +65,5 @@ export default function NavMenu({ additionClass }) {
     </>
   );
 }
+
+export default React.memo(NavMenu);

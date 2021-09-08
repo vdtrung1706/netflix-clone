@@ -44,6 +44,7 @@ module.exports = {
   transitionProperty: {
     width: 'width',
     height: 'height',
+    spacing: 'margin, padding',
   },
   scale: {
     115: '1.15',

@@ -1,6 +1,7 @@
 import { PreviewPopper } from '@components/common';
 import useVisibility from '@hooks/useVisibility';
 import cx from 'classnames';
+import { AnimatePresence } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import BoxArt from './BoxArt';
 
@@ -97,14 +98,17 @@ export default function SliderItem({
       )}
     >
       <BoxArt movie={movie} large={large} />
-
-      <PreviewPopper
-        movie={movie}
-        open={open}
-        handleClose={handlePopperClose}
-        anchorEl={anchorEl}
-        transformOrigin={transformOrigin}
-      />
+      <AnimatePresence>
+        {open && (
+          <PreviewPopper
+            movie={movie}
+            open={open}
+            handleClose={handlePopperClose}
+            anchorEl={anchorEl}
+            transformOrigin={transformOrigin}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

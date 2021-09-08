@@ -34,9 +34,10 @@ const Routes = () => {
           <Route
             exact
             path="/browse"
-            render={() =>
-              currentUser ? <Homepage /> : <Redirect to="/welcome" />
-            }
+            render={() => (
+              // currentUser ? <Homepage /> : <Redirect to="/welcome" />
+              <Homepage />
+            )}
           />
           <Route
             exact
@@ -77,7 +78,8 @@ const Routes = () => {
       </Suspense>
 
       <Switch location={location} key={location.pathname}>
-        <Route exact path="/" render={() => <Redirect to="/login" />} />
+        {/* <Route exact path="/" render={() => <Redirect to="/login" />} /> */}
+        <Route exact path="/" render={() => <Redirect to="/browse" />} />
         <Route
           exact
           path="/welcome"

@@ -1,5 +1,6 @@
-import PreviewPopper from './PreviewPopper';
-import PreviewPopperTip from './PreviewPopperTip';
-import SearchBox from './SearchBox';
+import DetailModal from './Modals/DetailModal';
+import PreviewPopper from './Modals/PreviewPopper';
+import PreviewPopperTip from './Modals/PreviewPopperTip';
+import SearchBox from './Search/SearchBox';
 
-export { SearchBox, PreviewPopper, PreviewPopperTip };
+export { SearchBox, PreviewPopper, PreviewPopperTip, DetailModal };

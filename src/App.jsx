@@ -15,7 +15,8 @@ export default function App() {
 
   return (
     <div className="w-full overflow-x-hidden">
-      {currentUser && <Nav />}
+      <Nav />
+      {/* {currentUser && <Nav />} */}
       <Routes />
     </div>
   );

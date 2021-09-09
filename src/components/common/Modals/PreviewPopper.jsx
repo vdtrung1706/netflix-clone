@@ -35,7 +35,7 @@ export default function PreviewPopper({
     }
   }, [transformOrigin, width]);
 
-  const smallPreviewFadeInVariants = {
+  const previewFadeInVariants = {
     initial: {
       opacity: 0.7,
       transformOrigin,
@@ -86,13 +86,14 @@ export default function PreviewPopper({
       ref={ref}
     >
       <motion.div
-        variants={smallPreviewFadeInVariants}
+        variants={previewFadeInVariants}
         initial="initial"
         animate="animate"
         exit="exit"
         onMouseLeave={handlePreviewClose}
         className="flex flex-col max-w-sm rounded-md cursor-pointer select-none w-350px bg-black-light"
       >
+        {/* Image Or Video */}
         <div className="relative w-full">
           {movie?.backdrop_path ? (
             <img
@@ -114,7 +115,7 @@ export default function PreviewPopper({
 
           <button
             onClick={() => setMuted((pre) => !pre)}
-            className="box-border absolute top-0 right-0 w-10 h-10 p-2 mx-4 mt-8 duration-200 bg-white border-2 border-solid rounded-full opacity-50 bg-opacity-5 hover:opacity-100 border-grey hover:border-white trnasition-all"
+            className="box-border absolute top-0 right-0 w-10 h-10 p-2 mx-4 mt-8 text-white text-opacity-50 duration-200 bg-white border-2 border-solid rounded-full opacity-50 hover:text-opacity-100 bg-opacity-5 hover:opacity-100 border-grey hover:border-white trnasition-all"
           >
             <svg viewBox="0 0 24 24">
               {muted ? (
@@ -132,6 +133,7 @@ export default function PreviewPopper({
           </button>
         </div>
 
+        {/* Buttons */}
         <div className="p-4 cursor-pointer">
           <div className="flex items-center content-center justify-between align-middle">
             <div className="flex items-center content-center align-middle">
@@ -140,7 +142,6 @@ export default function PreviewPopper({
                   <path d="M6 4l15 8-15 8z" fill="currentColor"></path>
                 </svg>
               </div>
-
               <PreviewPopperTip
                 arrow
                 className="text-white"
@@ -166,7 +167,6 @@ export default function PreviewPopper({
                   </svg>
                 </button>
               </PreviewPopperTip>
-
               <PreviewPopperTip
                 arrow
                 className="text-white"
@@ -197,7 +197,6 @@ export default function PreviewPopper({
                   </svg>
                 </button>
               </PreviewPopperTip>
-
               <PreviewPopperTip
                 arrow
                 className="text-white"
@@ -253,17 +252,17 @@ export default function PreviewPopper({
             </PreviewPopperTip>
           </div>
 
+          {/* Info */}
           <div className="flex items-center content-center my-4 align-middle">
             <div className="font-semibold text-green">98% match</div>
-            <div className="px-2 mx-2 border border-white border-solid">
+            <div className="px-2 mx-2 leading-tight border border-white border-solid border-opacity-70">
               18+
             </div>
             <div className="">1h 42m</div>
-            <div className="px-1 mx-2 text-xs font-light border border-white border-solid rounded">
+            <div className="px-1 mx-2 text-0.7rem leading-tight border-opacity-70 font-light border border-white border-solid rounded">
               HD
             </div>
           </div>
-
           <div className="flex flex-wrap items-center content-center justify-start gap-1 my-4 text-center align-middle">
             <div className="my-1">Action</div>
             <span className="text-xs opacity-50">•</span>
@@ -272,6 +271,8 @@ export default function PreviewPopper({
             <div className="my-1">Thriller</div>
           </div>
         </div>
+
+        {/* Show Big Modal */}
         {isBig && (
           <DetailModal
             previewRef={ref}

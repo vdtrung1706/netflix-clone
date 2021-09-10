@@ -1,9 +1,11 @@
-import useViewport from '@hooks/useViewport';
+import usePreviewPopper from '@hooks/usePreviewPopper';
 import { Popper } from '@material-ui/core';
 import { IMAGE_BASE } from '@services/axios.service';
-import { defaultEasing } from '@utils/motion.utils';
+import { userListsSlice } from '@store/devtools/userListSlice';
+import { includeObjectById } from '@utils/array.utils';
 import { motion } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import DetailModal from './DetailModal';
 import PreviewPopperTip from './PreviewPopperTip';
 
@@ -14,56 +16,25 @@ export default function PreviewPopper({
   transformOrigin,
   handleClose,
 }) {
+  const ref = useRef(null);
   const [muted, setMuted] = useState(false);
-  const [inMyList, setInMyList] = useState(false);
-  const [disliked, setDisliked] = useState(false);
-  const [liked, setLiked] = useState(false);
   const [isBig, setIsBig] = useState(false);
   const [visible, setVisible] = useState(true);
-  const { width } = useViewport();
-  const translateX = useRef(0);
-  const ref = useRef(null);
+  const { currentUser } = useSelector((state) => state.user);
+  const { myList, dislikedList, likedList } = useSelector(
+    (state) => state.userLists,
+  );
 
-  useEffect(() => {
-    if (transformOrigin === 'right') {
-      // 4% and margin-x: 2px
-      translateX.current = `-${width * 0.04 - 4}px`;
-    } else if (transformOrigin === 'left') {
-      translateX.current = `${width * 0.04 - 4}px`;
-    } else {
-      translateX.current = 0;
-    }
-  }, [transformOrigin, width]);
+  const dispatch = useDispatch();
+  const liked = includeObjectById(likedList, movie.id);
+  const disliked = includeObjectById(dislikedList, movie.id);
+  const inMyList = includeObjectById(myList, movie.id);
 
-  const previewFadeInVariants = {
-    initial: {
-      opacity: 0.7,
-      transformOrigin,
-      scale: 0.7,
-      translateY: '-52%',
-      translateX: translateX.current,
-      transition: { duration: 0.3, ease: defaultEasing },
-      willChange: 'opacity, transform',
-    },
-    animate: {
-      opacity: 1,
-      transformOrigin,
-      scale: 1,
-      translateY: '-66.666667%',
-      translateX: translateX.current,
-      transition: { duration: 0.3, ease: defaultEasing },
-      willChange: 'opacity, transform',
-    },
-    exit: {
-      opacity: 0,
-      transformOrigin,
-      scale: 0.7,
-      translateY: '-52%',
-      translateX: translateX.current,
-      transition: { delay: 0.2, duration: 0.5, ease: defaultEasing },
-      willChange: 'opacity, transform',
-    },
-  };
+  const { previewVariants, getTranslateX } = usePreviewPopper(
+    transformOrigin,
+    anchorEl,
+    ref.current,
+  );
 
   const handlePreviewClose = () => {
     if (isBig) return;
@@ -75,9 +46,41 @@ export default function PreviewPopper({
     handleClose();
   };
 
+  const handleMyListClick = useCallback(
+    (movie, userId) => {
+      if (inMyList) {
+        dispatch(userListsSlice.actions.removeFromMyList({ movie, userId }));
+      } else {
+        dispatch(userListsSlice.actions.addToMyList({ movie, userId }));
+      }
+    },
+    [dispatch, inMyList],
+  );
+
+  const handleLikedClick = useCallback(
+    (movie, userId) => {
+      if (liked) {
+        dispatch(userListsSlice.actions.removeFromLiked({ movie, userId }));
+      } else {
+        dispatch(userListsSlice.actions.addToLiked({ movie, userId }));
+      }
+    },
+    [dispatch, liked],
+  );
+
+  const handleDislikedClick = useCallback(
+    (movie, userId) => {
+      if (disliked) {
+        dispatch(userListsSlice.actions.removeFromDisliked({ movie, userId }));
+      } else {
+        dispatch(userListsSlice.actions.addToDisliked({ movie, userId }));
+      }
+    },
+    [disliked, dispatch],
+  );
+
   return (
     <Popper
-      name="smallPreview"
       open={open}
       anchorEl={anchorEl}
       onClose={handlePreviewClose}
@@ -86,10 +89,10 @@ export default function PreviewPopper({
       ref={ref}
     >
       <motion.div
-        variants={previewFadeInVariants}
+        variants={previewVariants}
+        exit="exit"
         initial="initial"
         animate="animate"
-        exit="exit"
         onMouseLeave={handlePreviewClose}
         className="flex flex-col max-w-sm rounded-md cursor-pointer select-none w-350px bg-black-light"
       >
@@ -149,7 +152,7 @@ export default function PreviewPopper({
                 placement="top"
               >
                 <button
-                  onClick={() => setInMyList((pre) => !pre)}
+                  onClick={() => handleMyListClick(movie, currentUser.uid)}
                   className="box-border w-10 h-10 p-2 mr-2 duration-200 bg-white border-2 border-solid rounded-full bg-opacity-5 border-grey hover:border-white trnasition-all"
                 >
                   <svg viewBox="0 0 24 24">
@@ -174,12 +177,7 @@ export default function PreviewPopper({
                 placement="top"
               >
                 <button
-                  onClick={() => {
-                    if (liked === false) {
-                      setDisliked(false);
-                    }
-                    setLiked((pre) => !pre);
-                  }}
+                  onClick={() => handleLikedClick(movie, currentUser.uid)}
                   className="box-border relative w-10 h-10 p-2 mr-2 text-white duration-200 bg-white border-2 border-solid rounded-full bg-opacity-5 border-grey hover:border-white trnasition-all"
                 >
                   <svg viewBox="0 0 24 24" fill="currentColor">
@@ -204,12 +202,7 @@ export default function PreviewPopper({
                 placement="top"
               >
                 <button
-                  onClick={() => {
-                    if (disliked === false) {
-                      setLiked(false);
-                    }
-                    setDisliked((pre) => !pre);
-                  }}
+                  onClick={() => handleDislikedClick(movie, currentUser.uid)}
                   className="box-border relative w-10 h-10 p-2 mr-2 text-white duration-200 bg-white border-2 border-solid rounded-full bg-opacity-5 border-grey hover:border-white trnasition-all"
                 >
                   <svg viewBox="0 0 24 24">
@@ -280,7 +273,7 @@ export default function PreviewPopper({
             isBig={isBig}
             setPreviewVisible={setVisible}
             transformOrigin={transformOrigin}
-            translateX={translateX.current}
+            translateX={getTranslateX()}
             movie={movie}
           />
         )}

@@ -9,7 +9,6 @@ export async function fetchingResults(url) {
 export function initStateAndFetchThunks(genres = {}, callback) {
   const thunks = {};
   const state = { loading: false };
-
   const genreKeys = Object.keys(genres);
 
   genreKeys.map((genre) => {
@@ -22,4 +21,8 @@ export function initStateAndFetchThunks(genres = {}, callback) {
   });
 
   return [state, thunks];
+}
+
+export function conllectIdAndDocs(doc) {
+  return { id: doc.id, ...doc.data() };
 }

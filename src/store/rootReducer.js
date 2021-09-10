@@ -4,6 +4,7 @@ import { latestSlice } from './devtools/latestSlice';
 import { moviesSlice } from './devtools/moviesSlice';
 import { searchSlice } from './devtools/searchSlice';
 import { tvshowsSlice } from './devtools/tvshowsSlice';
+import { userListsSlice } from './devtools/userListSlice';
 import { userSlice } from './devtools/userSlice';
 
 const rootReducer = combineReducers({
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   tvshows: tvshowsSlice.reducer,
   latest: latestSlice.reducer,
   search: searchSlice.reducer,
+  userLists: userListsSlice.reducer,
 });
 
 export default rootReducer;

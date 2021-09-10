@@ -22,64 +22,66 @@ const Routes = () => {
   const location = useLocation();
 
   return (
-    <AnimatePresence exitBeforeEnter>
-      <Suspense
-        fallback={
-          <div className="pt-20">
-            <SkeletonSliders />
-          </div>
-        }
-      >
-        <Switch location={location} key={location.pathname}>
-          <Route
-            exact
-            path="/browse"
-            render={() => (
-              // currentUser ? <Homepage /> : <Redirect to="/welcome" />
-              <Homepage />
-            )}
-          />
-          <Route
-            exact
-            path="/browse/movies"
-            render={() =>
-              currentUser ? <MoviesPage /> : <Redirect to="/welcome" />
-            }
-          />
-          <Route
-            exact
-            path="/browse/tvshows"
-            render={() =>
-              currentUser ? <TVShowsPage /> : <Redirect to="/welcome" />
-            }
-          />
-          <Route
-            exact
-            path="/browse/my-list"
-            render={() =>
-              currentUser ? <MyListPage /> : <Redirect to="/welcome" />
-            }
-          />
-          <Route
-            exact
-            path="/latest"
-            render={() =>
-              currentUser ? <LatestPage /> : <Redirect to="/welcome" />
-            }
-          />
-          <Route
-            exact
-            path="/kids"
-            render={() =>
-              currentUser ? <KidsPage /> : <Redirect to="/welcome" />
-            }
-          />
-        </Switch>
-      </Suspense>
+    <div>
+      <AnimatePresence exitBeforeEnter>
+        <Suspense
+          fallback={
+            <div className="pt-20">
+              <SkeletonSliders />
+            </div>
+          }
+        >
+          <Switch location={location} key={location.pathname}>
+            <Route
+              exact
+              path="/browse"
+              render={() =>
+                currentUser ? <Homepage /> : <Redirect to="/welcome" />
+                // <Homepage />
+              }
+            />
+            <Route
+              exact
+              path="/browse/movies"
+              render={() =>
+                currentUser ? <MoviesPage /> : <Redirect to="/welcome" />
+              }
+            />
+            <Route
+              exact
+              path="/browse/tvshows"
+              render={() =>
+                currentUser ? <TVShowsPage /> : <Redirect to="/welcome" />
+              }
+            />
+            <Route
+              exact
+              path="/browse/my-list"
+              render={() =>
+                currentUser ? <MyListPage /> : <Redirect to="/welcome" />
+              }
+            />
+            <Route
+              exact
+              path="/latest"
+              render={() =>
+                currentUser ? <LatestPage /> : <Redirect to="/welcome" />
+              }
+            />
+            <Route
+              exact
+              path="/kids"
+              render={() =>
+                currentUser ? <KidsPage /> : <Redirect to="/welcome" />
+              }
+            />
+          </Switch>
+        </Suspense>
+      </AnimatePresence>
 
       <Switch location={location} key={location.pathname}>
-        {/* <Route exact path="/" render={() => <Redirect to="/login" />} /> */}
-        <Route exact path="/" render={() => <Redirect to="/browse" />} />
+        <Route exact path="/" render={() => <Redirect to="/login" />} />
+        {/* <Route exact path="/" render={() => <Redirect to="/browse" />} /> */}
         <Route
           exact
           path="/welcome"
@@ -124,7 +126,7 @@ const Routes = () => {
         />
         <Route path="*" redner={() => <Redirect to="/" />} />
       </Switch>
-    </AnimatePresence>
+    </div>
   );
 };
 

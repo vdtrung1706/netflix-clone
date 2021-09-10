@@ -122,7 +122,6 @@ function* removeFromUserList(action, collection) {
 
 function* addToUserList(action, collection) {
   const { movie, userId } = action.payload;
-  console.log(movie, userId);
   try {
     yield firestore
       .collection('users')

@@ -17,17 +17,17 @@ const usePreviewPopper = (transformOrigin, anchorEl, popperEl) => {
     const anchorRect = anchorEl?.getBoundingClientRect();
     const popperRect = popperEl?.getBoundingClientRect();
     if (!anchorRect && !popperRect) return 0.7;
-    if (!popperRect) return anchorRect.width / 350 - 0.01;
-    return anchorRect.width / popperRect.width - 0.01;
+    if (!popperRect) return (anchorRect.width - 4) / 350;
+    return (anchorRect.width - 4) / popperRect.width;
   };
 
   const previewVariants = {
     initial: {
-      opacity: 1,
       transformOrigin,
       scale: getScale(),
       translateX: getTranslateX(),
       translateY: '-52%',
+      willChange: 'opacity, transform',
     },
     animate: {
       opacity: 1,
@@ -39,12 +39,11 @@ const usePreviewPopper = (transformOrigin, anchorEl, popperEl) => {
       willChange: 'opacity, transform',
     },
     exit: {
-      opacity: 1,
       transformOrigin,
       scale: getScale(),
       translateX: getTranslateX(),
       translateY: '-52%',
-      transition: { delay: 0.2, duration: 0.3, ease: defaultEasing },
+      transition: { duration: 0.35, ease: defaultEasing },
       willChange: 'opacity, transform',
     },
   };

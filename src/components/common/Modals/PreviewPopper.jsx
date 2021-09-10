@@ -1,10 +1,14 @@
+/* eslint-disable jsx-a11y/media-has-caption */
 import usePreviewPopper from '@hooks/usePreviewPopper';
 import { Popper } from '@material-ui/core';
 import { IMAGE_BASE } from '@services/axios.service';
+import { playerSlice } from '@store/devtools/playerSlice';
 import { userListsSlice } from '@store/devtools/userListSlice';
 import { includeObjectById } from '@utils/array.utils';
-import { motion } from 'framer-motion';
-import { useCallback, useRef, useState } from 'react';
+import { defaultEasing } from '@utils/motion.utils';
+import cx from 'classnames';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DetailModal from './DetailModal';
 import PreviewPopperTip from './PreviewPopperTip';
@@ -17,18 +21,32 @@ export default function PreviewPopper({
   handleClose,
 }) {
   const ref = useRef(null);
-  const [muted, setMuted] = useState(false);
+  const videoRef = useRef(null);
+  const videoTimeout = useRef(null);
   const [isBig, setIsBig] = useState(false);
+  const [play, setPlay] = useState(false);
   const [visible, setVisible] = useState(true);
+  const [onClosing, setOnClosing] = useState(false);
+
+  const dispatch = useDispatch();
+  const { muted } = useSelector((state) => state.player);
   const { currentUser } = useSelector((state) => state.user);
   const { myList, dislikedList, likedList } = useSelector(
     (state) => state.userLists,
   );
 
-  const dispatch = useDispatch();
   const liked = includeObjectById(likedList, movie.id);
   const disliked = includeObjectById(dislikedList, movie.id);
   const inMyList = includeObjectById(myList, movie.id);
+
+  useEffect(() => {
+    if (!videoTimeout?.current) {
+      videoTimeout.current = setTimeout(() => setPlay(true), 2500);
+    }
+    return () => {
+      clearTimeout(videoTimeout.current);
+    };
+  }, []);
 
   const { previewVariants, getTranslateX } = usePreviewPopper(
     transformOrigin,
@@ -36,17 +54,20 @@ export default function PreviewPopper({
     ref.current,
   );
 
-  const handlePreviewClose = () => {
+  const handlePreviewClose = useCallback(() => {
     if (isBig) return;
+    setOnClosing(true);
+    if (videoTimeout.current) clearTimeout(videoTimeout.current);
+    videoTimeout.current = setTimeout(() => setPlay(false), 200);
     handleClose();
-  };
+  }, [handleClose, isBig]);
 
-  const handleModalClose = () => {
+  const handleModalClose = useCallback(() => {
     setIsBig(false);
     handleClose();
-  };
+  }, [handleClose]);
 
-  const handleMyListClick = useCallback(
+  const toggleMyList = useCallback(
     (movie, userId) => {
       if (inMyList) {
         dispatch(userListsSlice.actions.removeFromMyList({ movie, userId }));
@@ -57,7 +78,7 @@ export default function PreviewPopper({
     [dispatch, inMyList],
   );
 
-  const handleLikedClick = useCallback(
+  const toggleLiked = useCallback(
     (movie, userId) => {
       if (liked) {
         dispatch(userListsSlice.actions.removeFromLiked({ movie, userId }));
@@ -68,7 +89,7 @@ export default function PreviewPopper({
     [dispatch, liked],
   );
 
-  const handleDislikedClick = useCallback(
+  const toggleDisliked = useCallback(
     (movie, userId) => {
       if (disliked) {
         dispatch(userListsSlice.actions.removeFromDisliked({ movie, userId }));
@@ -83,7 +104,6 @@ export default function PreviewPopper({
     <Popper
       open={open}
       anchorEl={anchorEl}
-      onClose={handlePreviewClose}
       placement="bottom"
       className={visible ? 'block' : 'hidden'}
       ref={ref}
@@ -94,53 +114,71 @@ export default function PreviewPopper({
         initial="initial"
         animate="animate"
         onMouseLeave={handlePreviewClose}
-        className="flex flex-col max-w-sm rounded-md cursor-pointer select-none w-350px bg-black-light"
+        className="flex flex-col rounded-md cursor-pointer select-none w-350px"
       >
         {/* Image Or Video */}
-        <div className="relative w-full">
-          {movie?.backdrop_path ? (
-            <img
-              src={`${IMAGE_BASE}/w500/${movie.backdrop_path}`}
-              alt="small-preview-player"
-              className="object-cover object-center rounded-t-md"
-            />
+        <motion.div
+          exit={{
+            opacity: 0.4,
+            transition: { duration: 0.3, ease: defaultEasing },
+          }}
+          className="relative w-full min-h-196.88px bg-black-light rounded-t-md"
+        >
+          {play ? (
+            <>
+              <video
+                ref={videoRef}
+                muted={muted}
+                autoPlay
+                disableRemotePlayback
+                onEnded={() => setPlay(false)}
+                src="https://imdb-video.media-imdb.com/vi270974489/1434659607842-pgv4ql-1592298111084.mp4?Expires=1631347822&Signature=hAusBjXPGwAyj7wU0xRh2jj42-uycJh40jS37Ee2Tw95EJk4sPWNS~-2poIsmExmbOo3biqCUofvTorytt1xN6bMMcYO~6Let9b7jMFnmxjs65UJX7Yu5iMunf~RekPXPAj4lNigrB400RgIDAKKY2nqCDqurLI3ko~~uGWKplZeK2LzhFIyIe4MmHWcF2Hz4tjWUiwH5KfeCFh3rXZRW1ojwVijUlI9U6ArdSkoW2ao7kEsO8pYZ6Zr4VeqH4RXr1nECdiebHJiKec1iGlkKGDIrjF6c8bzc2Lsue64P9qY62xOlLcNxnmx~cObXN5CIxbXi5VsolTgNtFk4FO9Ig__&Key-Pair-Id=APKAIFLZBVQZ24NQH3KA"
+                className="object-cover object-center w-full h-full rounded-t-md"
+              />
+              <button
+                onClick={() => dispatch(playerSlice.actions.toggleMuted())}
+                className="box-border absolute top-0 right-0 w-10 h-10 p-2 mx-4 mt-8 text-white duration-200 bg-white border border-solid rounded-full text-opacity-30 opacity-30 hover:text-opacity-100 bg-opacity-5 hover:opacity-100 border-grey hover:border-white trnasition-all"
+              >
+                <svg viewBox="0 0 24 24">
+                  {muted ? (
+                    <path
+                      d="M9 7.828L6.828 10H4v4h2.828L9 16.172V7.828zM11 21l-5-5H2V8h4l5-5v18zm6-10.414l3.293-3.293 1.414 1.414L18.414 12l3.293 3.293-1.414 1.414L17 13.414l-3.293 3.293-1.414-1.414L15.586 12l-3.293-3.293 1.414-1.414L17 10.586z"
+                      fill="currentColor"
+                    ></path>
+                  ) : (
+                    <path
+                      d="M9 7.828L6.828 10H4v4h2.828L9 16.172V7.828zM11 21l-5-5H2V8h4l5-5v18zm2.744-4.611l-1.414-1.414a4.161 4.161 0 0 0 0-5.885l1.414-1.414a6.161 6.161 0 0 1 0 8.713zm2.47 1.825L14.8 16.8a6.742 6.742 0 0 0 0-9.535l1.414-1.414a8.742 8.742 0 0 1 0 12.363zm2.47 1.825l-1.415-1.415a9.323 9.323 0 0 0 0-13.184l1.415-1.414c4.421 4.422 4.421 11.59 0 16.013z"
+                      fill="currentColor"
+                    ></path>
+                  )}
+                </svg>
+              </button>
+            </>
           ) : (
-            // eslint-disable-next-line jsx-a11y/media-has-caption
-            <video
-              className="object-cover object-center w-full h-full"
-              src="https://imdb-video.media-imdb.com/vi1867431961/1434659607842-pgv4ql-1630590421341.mp4?Expires=1631038986&Signature=EOeikQ6LQJT3pAjSre82rK1D4zxUCOXLka-NGJgD7huX4VnICXN~4rmwf~S5qhWRkYzZwrVdvHGHFpnvw2i~pxY96UaIJO-wEZ4t1rAEXdY~WCFmjJVDkAu5bHSVuo8l3CoOPffRl-wAhClgnN4N6007GZD1H47~18eW5AwS0IEvumRNtzx6AxmdSjay~Zmdy6mie1OMLzDCW-9e2vIELI4ZgKP~Dr~Uhm9N0ZWUGH~G3YnhzgR3suwXwfu9vP9MMTXvVbSI0izdtaS67~bJ6DK1X-GJIoId9yZlrkFaENsFZ8m2dh3U82Jh23O1U2MIUQQ7~D-0vvUx-20uxGGg9A__&Key-Pair-Id=APKAIFLZBVQZ24NQH3KA"
-              loop
-              muted={muted}
-              autoPlay
-              disableRemotePlayback
+            <img
+              src={`${IMAGE_BASE}/original${movie.backdrop_path}`}
+              alt="small-preview-player"
+              className={cx(
+                'object-cover object-center rounded-t-md w-full h-full',
+                {
+                  'rounded-md': onClosing,
+                },
+              )}
             />
           )}
-
-          <button
-            onClick={() => setMuted((pre) => !pre)}
-            className="box-border absolute top-0 right-0 w-10 h-10 p-2 mx-4 mt-8 text-white text-opacity-50 duration-200 bg-white border-2 border-solid rounded-full opacity-50 hover:text-opacity-100 bg-opacity-5 hover:opacity-100 border-grey hover:border-white trnasition-all"
-          >
-            <svg viewBox="0 0 24 24">
-              {muted ? (
-                <path
-                  d="M9 7.828L6.828 10H4v4h2.828L9 16.172V7.828zM11 21l-5-5H2V8h4l5-5v18zm6-10.414l3.293-3.293 1.414 1.414L18.414 12l3.293 3.293-1.414 1.414L17 13.414l-3.293 3.293-1.414-1.414L15.586 12l-3.293-3.293 1.414-1.414L17 10.586z"
-                  fill="currentColor"
-                ></path>
-              ) : (
-                <path
-                  d="M9 7.828L6.828 10H4v4h2.828L9 16.172V7.828zM11 21l-5-5H2V8h4l5-5v18zm2.744-4.611l-1.414-1.414a4.161 4.161 0 0 0 0-5.885l1.414-1.414a6.161 6.161 0 0 1 0 8.713zm2.47 1.825L14.8 16.8a6.742 6.742 0 0 0 0-9.535l1.414-1.414a8.742 8.742 0 0 1 0 12.363zm2.47 1.825l-1.415-1.415a9.323 9.323 0 0 0 0-13.184l1.415-1.414c4.421 4.422 4.421 11.59 0 16.013z"
-                  fill="currentColor"
-                ></path>
-              )}
-            </svg>
-          </button>
-        </div>
+        </motion.div>
 
         {/* Buttons */}
-        <div className="p-4 cursor-pointer">
+        <motion.div
+          exit={{
+            opacity: 0,
+            transition: { delay: 0.1, duration: 0.4, ease: defaultEasing },
+          }}
+          className="p-4 cursor-pointer bg-black-light rounded-b-md"
+        >
           <div className="flex items-center content-center justify-between align-middle">
             <div className="flex items-center content-center align-middle">
-              <div className="box-border relative w-10 h-10 p-2 mr-2 text-black bg-white border-2 border-white border-solid rounded-full hover:bg-white-hover">
+              <div className="box-border relative w-10 h-10 p-2 mr-2 text-black bg-white border border-white border-solid rounded-full hover:bg-white-hover">
                 <svg viewBox="0 0 24 24">
                   <path d="M6 4l15 8-15 8z" fill="currentColor"></path>
                 </svg>
@@ -152,8 +190,8 @@ export default function PreviewPopper({
                 placement="top"
               >
                 <button
-                  onClick={() => handleMyListClick(movie, currentUser.uid)}
-                  className="box-border w-10 h-10 p-2 mr-2 duration-200 bg-white border-2 border-solid rounded-full bg-opacity-5 border-grey hover:border-white trnasition-all"
+                  onClick={() => toggleMyList(movie, currentUser.uid)}
+                  className="box-border w-10 h-10 p-2 mr-2 duration-200 bg-white border border-solid rounded-full bg-opacity-5 border-grey hover:border-white trnasition-all"
                 >
                   <svg viewBox="0 0 24 24">
                     {inMyList ? (
@@ -177,8 +215,8 @@ export default function PreviewPopper({
                 placement="top"
               >
                 <button
-                  onClick={() => handleLikedClick(movie, currentUser.uid)}
-                  className="box-border relative w-10 h-10 p-2 mr-2 text-white duration-200 bg-white border-2 border-solid rounded-full bg-opacity-5 border-grey hover:border-white trnasition-all"
+                  onClick={() => toggleLiked(movie, currentUser.uid)}
+                  className="box-border relative w-10 h-10 p-2 mr-2 text-white duration-200 bg-white border border-solid rounded-full bg-opacity-5 border-grey hover:border-white trnasition-all"
                 >
                   <svg viewBox="0 0 24 24" fill="currentColor">
                     {liked ? (
@@ -202,8 +240,8 @@ export default function PreviewPopper({
                 placement="top"
               >
                 <button
-                  onClick={() => handleDislikedClick(movie, currentUser.uid)}
-                  className="box-border relative w-10 h-10 p-2 mr-2 text-white duration-200 bg-white border-2 border-solid rounded-full bg-opacity-5 border-grey hover:border-white trnasition-all"
+                  onClick={() => toggleDisliked(movie, currentUser.uid)}
+                  className="box-border relative w-10 h-10 p-2 mr-2 text-white duration-200 bg-white border border-solid rounded-full bg-opacity-5 border-grey hover:border-white trnasition-all"
                 >
                   <svg viewBox="0 0 24 24">
                     {disliked ? (
@@ -231,7 +269,7 @@ export default function PreviewPopper({
                 onClick={() => {
                   setIsBig(true);
                 }}
-                className="box-border relative w-10 h-10 p-1 duration-200 bg-white border-2 border-solid rounded-full bg-opacity-5 border-grey hover:border-white trnasition-all"
+                className="box-border relative w-10 h-10 p-1 duration-200 bg-white border border-solid rounded-full bg-opacity-5 border-grey hover:border-white trnasition-all"
               >
                 <svg
                   fill="none"
@@ -263,20 +301,25 @@ export default function PreviewPopper({
             <span className="text-xs opacity-50">•</span>
             <div className="my-1">Thriller</div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Show Big Modal */}
-        {isBig && (
-          <DetailModal
-            previewRef={ref}
-            handleClose={handleModalClose}
-            isBig={isBig}
-            setPreviewVisible={setVisible}
-            transformOrigin={transformOrigin}
-            translateX={getTranslateX()}
-            movie={movie}
-          />
-        )}
+        <AnimatePresence>
+          {isBig && (
+            <DetailModal
+              previewRef={ref}
+              currentTime={videoRef.current ? videoRef.current.currentTime : 0}
+              movie={movie}
+              transformOrigin={transformOrigin}
+              handleClose={handleModalClose}
+              setPreviewVisible={setVisible}
+              translateX={getTranslateX()}
+              toggleDisliked={toggleDisliked}
+              toggleLiked={toggleLiked}
+              toggleMyList={toggleMyList}
+            />
+          )}
+        </AnimatePresence>
       </motion.div>
     </Popper>
   );

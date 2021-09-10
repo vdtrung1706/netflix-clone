@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import { billboardSlice } from './devtools/billboardSlice';
 import { latestSlice } from './devtools/latestSlice';
 import { moviesSlice } from './devtools/moviesSlice';
+import { playerSlice } from './devtools/playerSlice';
 import { searchSlice } from './devtools/searchSlice';
 import { tvshowsSlice } from './devtools/tvshowsSlice';
 import { userListsSlice } from './devtools/userListSlice';
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   latest: latestSlice.reducer,
   search: searchSlice.reducer,
   userLists: userListsSlice.reducer,
+  player: playerSlice.reducer,
 });
 
 export default rootReducer;

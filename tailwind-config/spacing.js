@@ -37,5 +37,6 @@ const minHeight = {
   '60px': '60px',
   '550px': '550px',
   '660px': '660px',
+  '196.88px': '196.88px',
 };
 module.exports = { spacing, minWidth, minHeight };

@@ -12,6 +12,7 @@ const PreviewPopperTip = withStyles((theme) => ({
   },
   arrow: {
     color: theme.palette.common.white,
+    border: 0,
   },
 }))(Tooltip);
 

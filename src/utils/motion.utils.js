@@ -39,7 +39,7 @@ export const defaultFadeInVariants = {
   },
   exit: {
     opacity: 0,
-    transition: { delay: 0.2, duration: 0.3, ease: defaultEasing },
+    transition: { duration: 0.3, ease: defaultEasing },
     willChange: 'opacity, transform',
   },
 };

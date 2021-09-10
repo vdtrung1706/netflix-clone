@@ -48,12 +48,11 @@ export default function Slider({ title, selector, large }) {
                 <div
                   style={{
                     transform: `translate3d(${distance}px, 0, 0)`,
-                    height: large ? '31rem' : 'auto',
                   }}
                   ref={ref}
                   className={cx(
-                    'flex flex-shrink-0 duration-300 ease-in-out delay-300 transform whitespace-nowrap',
-                    { 'h-96 md:h-116 xl:h-31': large },
+                    'flex flex-shrink-0 duration-1000 delay-200 transform whitespace-nowrap',
+                    { 'h-96 md:h-116 2xl:h-124': large },
                   )}
                 >
                   {itemsProps.map((item) => {

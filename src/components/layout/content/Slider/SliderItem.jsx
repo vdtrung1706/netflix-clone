@@ -1,10 +1,14 @@
 import { PreviewPopper } from '@components/common';
 import useVisibility from '@hooks/useVisibility';
+import { selectCurrentUser } from '@store/auth/selectors.auth';
+import { selectUserLists } from '@store/user-lists/selectors.user-lists';
+import { userListsActions } from '@store/user-lists/slice.user-lists';
+import { includeObjectById } from '@utils/array.utils';
 import cx from 'classnames';
 import { AnimatePresence } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import BoxArt from './BoxArt';
-
 export default function SliderItem({
   movie,
   large,
@@ -20,8 +24,10 @@ export default function SliderItem({
   const popperRef = useRef(null);
   const timeoutOpenRef = useRef(null);
   let open = Boolean(anchorEl && !large && inViewport);
-
-  var inMyList = false;
+  const dispatch = useDispatch();
+  const { myList } = useSelector(selectUserLists);
+  const currentUser = useSelector(selectCurrentUser);
+  var inMyList = includeObjectById(myList, movie.id);
   var muted = false;
 
   useEffect(() => {
@@ -152,7 +158,14 @@ export default function SliderItem({
                   </svg>
                 </button>
                 <button
-                  // onClick={() => toggleMyList(movie, currentUser.uid)}
+                  onClick={() =>
+                    dispatch(
+                      userListsActions.toggleMyList({
+                        movie,
+                        userId: currentUser.uid,
+                      }),
+                    )
+                  }
                   className="w-8 h-8 p-2 mr-2 transition-all duration-200 border border-white border-opacity-50 border-solid rounded-full hover:bg-white hover:bg-opacity-5"
                 >
                   <svg viewBox="0 0 24 24">

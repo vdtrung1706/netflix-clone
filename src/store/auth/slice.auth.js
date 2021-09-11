@@ -21,27 +21,26 @@ const handleSuccess = (state, action) => ({
   currentUser: action.payload,
 });
 
-export const userSlice = createSlice({
-  name: 'user',
+const authSlice = createSlice({
+  name: 'auth',
   initialState,
   reducers: {
     signInGoogleStart: handleStart,
     signInEmailStart: handleStart,
-    signInSuccess: handleSuccess,
-    signInFailure: handleFailure,
-
     signUpStart: handleStart,
-    signUpSuccess: (state) => ({ ...state }),
-    signUpFailure: handleFailure,
-
     signOutStart: handleStart,
-    signOutSuccess: (state) => {
+    signInSuccess: handleSuccess,
+    signUpSuccess() {},
+    signOutSuccess(state) {
       return { ...state, currentUser: null, error: null, loading: false };
     },
+    signInFailure: handleFailure,
+    signUpFailure: handleFailure,
     signOutFailure: handleFailure,
-
-    checkUserSession: (state) => {
+    checkUserSession(state) {
       return { ...state, loading: true };
     },
   },
 });
+
+export const { actions: authActions, reducer: authReducer } = authSlice;

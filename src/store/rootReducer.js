@@ -1,22 +1,22 @@
 import { combineReducers } from 'redux';
-import { billboardSlice } from './devtools/billboardSlice';
-import { latestSlice } from './devtools/latestSlice';
-import { moviesSlice } from './devtools/moviesSlice';
-import { playerSlice } from './devtools/playerSlice';
-import { searchSlice } from './devtools/searchSlice';
-import { tvshowsSlice } from './devtools/tvshowsSlice';
-import { userListsSlice } from './devtools/userListSlice';
-import { userSlice } from './devtools/userSlice';
+import { authReducer } from './auth/slice.auth';
+import { billboardReducer } from './billboard/billboard.slice';
+import { latestReducer } from './latest/slice.latest';
+import { moviesReducer } from './movies/slice.movies';
+import { playerReducer } from './player/slice.player';
+import { searchReducer } from './search/slice.search';
+import { tvshowsReducer } from './tvshows/slice.tvshows';
+import { userListsReducer } from './user-lists/slice.user-lists';
 
 const rootReducer = combineReducers({
-  user: userSlice.reducer,
-  billboard: billboardSlice.reducer,
-  movies: moviesSlice.reducer,
-  tvshows: tvshowsSlice.reducer,
-  latest: latestSlice.reducer,
-  search: searchSlice.reducer,
-  userLists: userListsSlice.reducer,
-  player: playerSlice.reducer,
+  auth: authReducer,
+  billboard: billboardReducer,
+  movies: moviesReducer,
+  tvshows: tvshowsReducer,
+  latest: latestReducer,
+  search: searchReducer,
+  player: playerReducer,
+  userLists: userListsReducer,
 });
 
 export default rootReducer;

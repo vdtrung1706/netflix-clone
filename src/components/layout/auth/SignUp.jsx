@@ -1,5 +1,5 @@
 import { LoginInput } from '@components/forms';
-import { userSlice } from '@store/devtools/userSlice';
+import { authActions } from '@store/auth/slice.auth';
 import { loginFadeInVariants } from '@utils/motion.utils';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
@@ -17,7 +17,7 @@ export default function SignUp({ setIsSignIn }) {
 
   const onSubmit = () => {
     if (password === comfirm) {
-      dispatch(userSlice.actions.signUpStart({ email, password, displayName }));
+      dispatch(authActions.signUpStart({ email, password, displayName }));
     }
   };
 
@@ -98,7 +98,7 @@ export default function SignUp({ setIsSignIn }) {
       </div>
 
       <button
-        onClick={() => dispatch(userSlice.actions.signInGoogleStart())}
+        onClick={() => dispatch(authActions.signInGoogleStart())}
         className="flex items-center gap-2 mt-5 text-xs text-gray-400"
       >
         <FcGoogle className="w-6 h-6" />

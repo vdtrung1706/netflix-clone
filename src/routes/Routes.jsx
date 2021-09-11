@@ -1,5 +1,5 @@
 import SkeletonSliders from '@components/layout/loader/SkeletonSliders';
-import { selectUser } from '@store/selectors/userSelectors';
+import { selectUser } from '@store/auth/selectors.auth';
 import { AnimatePresence } from 'framer-motion';
 import { lazy, Suspense } from 'react';
 import { useSelector } from 'react-redux';
@@ -35,8 +35,8 @@ const Routes = () => {
             <Route
               exact
               path="/browse"
-              render={() =>
-                currentUser ? <Homepage /> : <Redirect to="/welcome" />
+              render={
+                () => (currentUser ? <Homepage /> : <Redirect to="/welcome" />)
                 // <Homepage />
               }
             />

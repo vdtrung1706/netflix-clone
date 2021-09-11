@@ -7,28 +7,27 @@ const initialState = {
   error: '',
 };
 
-export const userListsSlice = createSlice({
-  name: 'user-list',
+const userListsSlice = createSlice({
+  name: 'user-lists',
   initialState,
   reducers: {
-    setMyList: (state, action) => {
+    setMyList(state, action) {
       return { ...state, myList: [...action.payload] };
     },
-    setDisliked: (state, action) => {
+    setDislikedList(state, action) {
       return { ...state, dislikedList: [...action.payload] };
     },
-    setLiked: (state, action) => {
+    setLikedList(state, action) {
       return { ...state, likedList: [...action.payload] };
     },
-
-    addToMyList: () => {},
-    addToLiked: () => {},
-    addToDisliked: () => {},
-    removeFromMyList: () => {},
-    removeFromLiked: () => {},
-    removeFromDisliked: () => {},
+    toggleMyList() {},
+    toggleLiked() {},
+    toggleDisliked() {},
     actionFailure: (state, action) => {
       return { ...state, error: action.payload };
     },
   },
 });
+
+export const { actions: userListsActions, reducer: userListsReducer } =
+  userListsSlice;

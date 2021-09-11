@@ -1,5 +1,5 @@
 import { PROFILE_DEFAULT } from '@assets';
-import { selectCurrentUser } from '@store/selectors/userSelectors';
+import { selectCurrentUser } from '@store/auth/selectors.auth';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import ProfileMenu from './ProfileMenu';

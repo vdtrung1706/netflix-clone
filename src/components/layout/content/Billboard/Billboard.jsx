@@ -1,9 +1,13 @@
 import { IMAGE_BASE } from '@services/axios.service';
 import { moviesRequests, tvshowsRequests } from '@services/requests.service';
 import {
+  selectBillboardMovie,
+  selectBillboardTVShow,
+} from '@store/billboard/billboard.selectors';
+import {
   fetchBillboardMovie,
   fetchBillboardTVShow,
-} from '@store/devtools/billboardSlice';
+} from '@store/billboard/billboard.slice';
 import { truncate } from '@utils/convertor.utils';
 import { defaultFadeInVariants, staggerOne } from '@utils/motion.utils';
 import cx from 'classnames';
@@ -12,13 +16,10 @@ import { memo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 function Billboard({ type }) {
-  let selector = (state) => state.billboard.movie;
-  if (type === 'TVSHOW') {
-    selector = (state) => state.billboard.tvshow;
-  }
-
-  const { loading, error, data } = useSelector(selector);
   const dispatch = useDispatch();
+  const { loading, error, data } = useSelector(
+    type === 'TVSHOW' ? selectBillboardTVShow : selectBillboardMovie,
+  );
 
   useEffect(() => {
     if (!data && type === 'TVSHOW') {

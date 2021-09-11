@@ -21,11 +21,9 @@ const extraReducers = (builder) => {
       state[genre].data = action.payload;
       state[genre].loading = false;
     });
-
     builder.addCase(latestFetchThunks[genre].pending, (state) => {
       state[genre].loading = true;
     });
-
     builder.addCase(latestFetchThunks[genre].rejected, (state) => {
       state[genre].error = `Error fetching ${genre} latest movies/tvshows`;
     });
@@ -46,4 +44,6 @@ const latestSlice = createSlice({
   extraReducers,
 });
 
-export { latestSlice, latestFetchThunks };
+export { latestFetchThunks };
+
+export const { actions: latestActions, reducer: latestReducer } = latestSlice;

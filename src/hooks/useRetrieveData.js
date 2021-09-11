@@ -3,12 +3,15 @@ import {
   moviesRequests,
   tvshowsRequests,
 } from '@services/requests.service';
-import { latestFetchThunks, latestSlice } from '@store/devtools/latestSlice';
-import { moviesFetchThunks, moviesSlice } from '@store/devtools/moviesSlice';
-import { tvshowsFetchThunks, tvshowsSlice } from '@store/devtools/tvshowsSlice';
-import { latestSelectors } from '@store/selectors/latestSelectors';
-import { moviesSelectors } from '@store/selectors/moviesSelectors';
-import { tvshowsSelectors } from '@store/selectors/tvshowsSelectors';
+import { latestSelectors } from '@store/latest/selectors.latest';
+import { latestActions, latestFetchThunks } from '@store/latest/slice.latest';
+import { moviesSelectors } from '@store/movies/selectors.movies';
+import { moviesActions, moviesFetchThunks } from '@store/movies/slice.movies';
+import { tvshowsSelectors } from '@store/tvshows/selectors.tvshows';
+import {
+  tvshowsActions,
+  tvshowsFetchThunks,
+} from '@store/tvshows/slice.tvshows';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -71,7 +74,7 @@ const useRetrieveData = (type) => {
 
   useEffect(() => {
     if (type === 'MOVIES') {
-      dispatch(moviesSlice.actions.onFetches());
+      dispatch(moviesActions.onFetches());
       const sliders = fetchData.movies.map((genre) => {
         dispatch(genre.thunk(genre.url));
         return { ...genre };
@@ -80,7 +83,7 @@ const useRetrieveData = (type) => {
     }
 
     if (type === 'TVSHOWS') {
-      dispatch(tvshowsSlice.actions.onFetches());
+      dispatch(tvshowsActions.onFetches());
       const sliders = fetchData.tvShows.map((genre) => {
         dispatch(genre.thunk(genre.url));
         return { ...genre };
@@ -89,7 +92,7 @@ const useRetrieveData = (type) => {
     }
 
     if (type === 'LATEST') {
-      dispatch(latestSlice.actions.onFetches());
+      dispatch(latestActions.onFetches());
       const sliders = fetchData.latest.map((genre) => {
         dispatch(genre.thunk(genre.url));
         return { ...genre };

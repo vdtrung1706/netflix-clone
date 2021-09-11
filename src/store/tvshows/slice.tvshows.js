@@ -21,11 +21,9 @@ const extraReducers = (builder) => {
       state[genre].data = action.payload;
       state[genre].loading = false;
     });
-
     builder.addCase(tvshowsFetchThunks[genre].pending, (state) => {
       state[genre].loading = true;
     });
-
     builder.addCase(tvshowsFetchThunks[genre].rejected, (state) => {
       state[genre].error = `Error fetching ${genre} tvshow`;
     });
@@ -46,4 +44,7 @@ const tvshowsSlice = createSlice({
   extraReducers,
 });
 
-export { tvshowsSlice, tvshowsFetchThunks };
+export { tvshowsFetchThunks };
+
+export const { actions: tvshowsActions, reducer: tvshowsReducer } =
+  tvshowsSlice;

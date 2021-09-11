@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { axios } from '@services/axios.service';
 import { randomIndex } from '@utils/array.utils';
 
-export const fetchBillboardMovie = createAsyncThunk(
+const fetchBillboardMovie = createAsyncThunk(
   'billboard/fetch_billboardMovie',
   async (url) => {
     const res = await axios.get(url);
@@ -11,7 +11,7 @@ export const fetchBillboardMovie = createAsyncThunk(
   },
 );
 
-export const fetchBillboardTVShow = createAsyncThunk(
+const fetchBillboardTVShow = createAsyncThunk(
   'billboard/fetch_billboardTVShow',
   async (url) => {
     const res = await axios.get(url);
@@ -33,7 +33,7 @@ const initialState = {
   },
 };
 
-export const billboardSlice = createSlice({
+const billboardSlice = createSlice({
   name: 'billboard',
   initialState,
   extraReducers: (builder) => {
@@ -47,7 +47,6 @@ export const billboardSlice = createSlice({
     builder.addCase(fetchBillboardMovie.rejected, (state) => {
       state.movie.error = 'Error fetching billboard movie';
     });
-
     builder.addCase(fetchBillboardTVShow.fulfilled, (state, action) => {
       state.tvshow.data = action.payload;
       state.tvshow.loading = false;
@@ -60,3 +59,7 @@ export const billboardSlice = createSlice({
     });
   },
 });
+
+export { fetchBillboardMovie, fetchBillboardTVShow };
+export const { actions: billboardActions, reducer: billboardReducer } =
+  billboardSlice;

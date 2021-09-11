@@ -1,6 +1,6 @@
 import { Billboard, SkeletonSliders, Slider } from '@components/layout';
 import useRetrieveData from '@hooks/useRetrieveData';
-import { moviesSlice } from '@store/devtools/moviesSlice';
+import { moviesActions } from '@store/movies/slice.movies';
 import { defaultPageFadeInVariants } from '@utils/motion.utils';
 import { motion } from 'framer-motion';
 import { useEffect } from 'react';
@@ -19,7 +19,7 @@ export default function MoviesPage() {
       for (let key of keys) {
         if (key != 'loading' && genres[key].loading) return;
       }
-      if (genres.loading) dispatch(moviesSlice.actions.onFetchesSuccess());
+      if (genres.loading) dispatch(moviesActions.onFetchesSuccess());
     }
   }, [dispatch, genres]);
 

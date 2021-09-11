@@ -1,6 +1,6 @@
 import { SkeletonSliders, Slider } from '@components/layout';
 import useRetrieveData from '@hooks/useRetrieveData';
-import { latestSlice } from '@store/devtools/latestSlice';
+import { latestActions } from '@store/latest/slice.latest';
 import { defaultPageFadeInVariants } from '@utils/motion.utils';
 import { motion } from 'framer-motion';
 import { useEffect } from 'react';
@@ -20,7 +20,7 @@ export default function LatestPage() {
       for (let key of keys) {
         if (key != 'loading' && genres[key].loading) return;
       }
-      if (genres.loading) dispatch(latestSlice.actions.onFetchesSuccess());
+      if (genres.loading) dispatch(latestActions.onFetchesSuccess());
     }
   }, [dispatch, genres]);
 

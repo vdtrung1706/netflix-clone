@@ -1,12 +1,12 @@
 import { Nav } from '@components/layout';
-import { userSlice } from '@store/devtools/userSlice';
-import { selectUser } from '@store/selectors/userSelectors';
+import { authActions } from '@store/auth/slice.auth';
+import { selectUser } from '@store/auth/selectors.auth';
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Routes from './routes/Routes';
 import { firestore } from './firebase';
 import { conllectIdAndDocs } from '@utils/redux.utils';
-import { userListsSlice } from '@store/devtools/userListSlice';
+import { userListsActions } from '@store/user-lists/slice.user-lists';
 
 export default function App() {
   const { currentUser } = useSelector(selectUser);
@@ -17,8 +17,9 @@ export default function App() {
   const unsubcribeFromDisliked = useRef(null);
 
   useEffect(() => {
+    console.log(currentUser);
     if (!currentUser) {
-      dispatch(userSlice.actions.checkUserSession());
+      dispatch(authActions.checkUserSession());
       return;
     }
     unsubcribeFromLiked.current = firestore
@@ -27,7 +28,7 @@ export default function App() {
       .collection('my-list')
       .onSnapshot((snapshot) => {
         const myList = snapshot.docs.map(conllectIdAndDocs);
-        dispatch(userListsSlice.actions.setMyList(myList));
+        dispatch(userListsActions.setMyList(myList));
       });
 
     unsubcribeFromDisliked.current = firestore
@@ -36,7 +37,7 @@ export default function App() {
       .collection('disliked')
       .onSnapshot((snapshot) => {
         const disliked = snapshot.docs.map(conllectIdAndDocs);
-        dispatch(userListsSlice.actions.setDisliked(disliked));
+        dispatch(userListsActions.setDislikedList(disliked));
       });
 
     unsubcribeFromMyList.current = firestore
@@ -45,7 +46,7 @@ export default function App() {
       .collection('liked')
       .onSnapshot((snapshot) => {
         const liked = snapshot.docs.map(conllectIdAndDocs);
-        dispatch(userListsSlice.actions.setLiked(liked));
+        dispatch(userListsActions.setLikedList(liked));
       });
 
     return () => {

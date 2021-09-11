@@ -1,8 +1,12 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 import useDetailModal from '@hooks/useDetailModal';
 import { Modal } from '@material-ui/core';
+import Backdrop from '@material-ui/core/Backdrop';
 import { IMAGE_BASE } from '@services/axios.service';
-import { playerSlice } from '@store/devtools/playerSlice';
+import { selectCurrentUser } from '@store/auth/selectors.auth';
+import { selectPlayer } from '@store/player/selectors.player';
+import { playerActions } from '@store/player/slice.player';
+import { selectUserLists } from '@store/user-lists/selectors.user-lists';
 import { includeObjectById } from '@utils/array.utils';
 import { truncate } from '@utils/convertor.utils';
 import { defaultEasing, defaultFadeInVariants } from '@utils/motion.utils';
@@ -12,7 +16,6 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PreModalRender from './PreModalRender';
 import PreviewPopperTip from './PreviewPopperTip';
-import Backdrop from '@material-ui/core/Backdrop';
 
 function DetailModal({
   movie,
@@ -32,11 +35,9 @@ function DetailModal({
   const transitionTimeout = useRef(null);
 
   const dispatch = useDispatch();
-  const muted = useSelector((state) => state.player.muted);
-  const { currentUser } = useSelector((state) => state.user);
-  const { myList, dislikedList, likedList } = useSelector(
-    (state) => state.userLists,
-  );
+  const { muted } = useSelector(selectPlayer);
+  const currentUser = useSelector(selectCurrentUser);
+  const { myList, dislikedList, likedList } = useSelector(selectUserLists);
   const liked = includeObjectById(likedList, movie.id);
   const disliked = includeObjectById(dislikedList, movie.id);
   const inMyList = includeObjectById(myList, movie.id);
@@ -242,9 +243,7 @@ function DetailModal({
                       </PreviewPopperTip>
                     </div>
                     <button
-                      onClick={() =>
-                        dispatch(playerSlice.actions.toggleMuted())
-                      }
+                      onClick={() => dispatch(playerActions.toggleMuted())}
                       className={cx(
                         'box-border p-2 transition-all duration-200 bg-black border border-white border-solid rounded-full opacity-30 bg-opacity-60 w-9 h-9 hover:opacity-100 border-opacity-70 hover:border-opacity-100',
                         { hidden: currentTime === 0 },

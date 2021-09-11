@@ -1,6 +1,6 @@
 import { HERO, HERO_1000, HERO_1500, HERO_1800, NETFLIX_LOGO } from '@assets';
 import { CircleLoading, SignIn, SignUp } from '@components/layout';
-import { selectUser } from '@store/selectors/userSelectors';
+import { selectUser } from '@store/auth/selectors.auth';
 import { defaultPageFadeInVariants } from '@utils/motion.utils';
 import { motion } from 'framer-motion';
 import { useState } from 'react';

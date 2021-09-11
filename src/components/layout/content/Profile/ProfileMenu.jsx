@@ -1,5 +1,5 @@
 import { KIDS, PROFILE_DEFAULT } from '@assets';
-import { userSlice } from '@store/devtools/userSlice';
+import { authActions } from '@store/auth/slice.auth';
 import { profileFadeInVariants } from '@utils/motion.utils';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useDispatch } from 'react-redux';
@@ -9,7 +9,7 @@ export default function ProfileMenu({ currentUser, open, setOpen }) {
   const dispatch = useDispatch();
 
   const handleSignOut = () => {
-    dispatch(userSlice.actions.signOutStart());
+    dispatch(authActions.signOutStart());
   };
 
   return (

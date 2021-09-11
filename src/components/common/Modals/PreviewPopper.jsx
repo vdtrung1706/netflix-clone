@@ -2,8 +2,11 @@
 import usePreviewPopper from '@hooks/usePreviewPopper';
 import { Popper } from '@material-ui/core';
 import { IMAGE_BASE } from '@services/axios.service';
-import { playerSlice } from '@store/devtools/playerSlice';
-import { userListsSlice } from '@store/devtools/userListSlice';
+import { selectCurrentUser } from '@store/auth/selectors.auth';
+import { selectPlayer } from '@store/player/selectors.player';
+import { playerActions } from '@store/player/slice.player';
+import { selectUserLists } from '@store/user-lists/selectors.user-lists';
+import { userListsActions } from '@store/user-lists/slice.user-lists';
 import { includeObjectById } from '@utils/array.utils';
 import { defaultEasing } from '@utils/motion.utils';
 import cx from 'classnames';
@@ -29,11 +32,9 @@ export default function PreviewPopper({
   const [onClosing, setOnClosing] = useState(false);
 
   const dispatch = useDispatch();
-  const { muted } = useSelector((state) => state.player);
-  const { currentUser } = useSelector((state) => state.user);
-  const { myList, dislikedList, likedList } = useSelector(
-    (state) => state.userLists,
-  );
+  const { muted } = useSelector(selectPlayer);
+  const currentUser = useSelector(selectCurrentUser);
+  const { myList, dislikedList, likedList } = useSelector(selectUserLists);
 
   const liked = includeObjectById(likedList, movie.id);
   const disliked = includeObjectById(dislikedList, movie.id);
@@ -69,35 +70,23 @@ export default function PreviewPopper({
 
   const toggleMyList = useCallback(
     (movie, userId) => {
-      if (inMyList) {
-        dispatch(userListsSlice.actions.removeFromMyList({ movie, userId }));
-      } else {
-        dispatch(userListsSlice.actions.addToMyList({ movie, userId }));
-      }
+      dispatch(userListsActions.toggleMyList({ movie, userId }));
     },
-    [dispatch, inMyList],
+    [dispatch],
   );
 
   const toggleLiked = useCallback(
     (movie, userId) => {
-      if (liked) {
-        dispatch(userListsSlice.actions.removeFromLiked({ movie, userId }));
-      } else {
-        dispatch(userListsSlice.actions.addToLiked({ movie, userId }));
-      }
+      dispatch(userListsActions.toggleLiked({ movie, userId }));
     },
-    [dispatch, liked],
+    [dispatch],
   );
 
   const toggleDisliked = useCallback(
     (movie, userId) => {
-      if (disliked) {
-        dispatch(userListsSlice.actions.removeFromDisliked({ movie, userId }));
-      } else {
-        dispatch(userListsSlice.actions.addToDisliked({ movie, userId }));
-      }
+      dispatch(userListsActions.toggleDisliked({ movie, userId }));
     },
-    [disliked, dispatch],
+    [dispatch],
   );
 
   return (
@@ -136,7 +125,7 @@ export default function PreviewPopper({
                 className="object-cover object-center w-full h-full rounded-t-md"
               />
               <button
-                onClick={() => dispatch(playerSlice.actions.toggleMuted())}
+                onClick={() => dispatch(playerActions.toggleMuted())}
                 className="box-border absolute top-0 right-0 w-10 h-10 p-2 mx-4 mt-8 text-white duration-200 bg-white border border-solid rounded-full text-opacity-30 opacity-30 hover:text-opacity-100 bg-opacity-5 hover:opacity-100 border-grey hover:border-white trnasition-all"
               >
                 <svg viewBox="0 0 24 24">

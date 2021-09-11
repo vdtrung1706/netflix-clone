@@ -1,7 +1,7 @@
 import { CROSS_SIGN, SEARCH_ICON } from '@assets';
 import useOutside from '@hooks/useOutside';
 import { SEARCH_ENDPOINT } from '@services/requests.service';
-import { fetchSearchResults, searchSlice } from '@store/devtools/searchSlice';
+import { fetchSearchResults, searchActions } from '@store/search/slice.search';
 import cx from 'classnames';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -33,13 +33,13 @@ export default function SearchBox() {
   };
 
   const handleRemoveSearchContent = () => {
-    dispatch(searchSlice.actions.removeSearchContent());
+    dispatch(searchActions.removeSearchContent());
     history.push(preLocation.current);
   };
 
   const handleChangeSearchContent = (e) => {
     const value = e.target.value;
-    dispatch(searchSlice.actions.changeSearchContent(value));
+    dispatch(searchActions.changeSearchContent(value));
 
     if (value) {
       dispatch(fetchSearchResults(SEARCH_ENDPOINT + value.toLowerCase()));

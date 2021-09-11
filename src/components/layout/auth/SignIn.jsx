@@ -1,9 +1,9 @@
 import { LoginInput } from '@components/forms';
-import { userSlice } from '@store/devtools/userSlice';
+import { authActions } from '@store/auth/slice.auth';
 import { loginFadeInVariants } from '@utils/motion.utils';
 import cx from 'classnames';
 import { motion } from 'framer-motion';
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { FaCheck } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 import { useDispatch } from 'react-redux';
@@ -25,7 +25,7 @@ export default function SignIn({ setIsSignIn }) {
   }, []);
 
   const hanldeSubmit = () => {
-    dispatch(userSlice.actions.signInEmailStart({ email, password }));
+    dispatch(authActions.signInEmailStart({ email, password }));
   };
 
   return (
@@ -103,7 +103,7 @@ export default function SignIn({ setIsSignIn }) {
       </div>
 
       <button
-        onClick={() => dispatch(userSlice.actions.signInGoogleStart())}
+        onClick={() => dispatch(authActions.signInGoogleStart())}
         className="flex items-center gap-2 mt-10 text-xs text-gray-400"
       >
         <FcGoogle className="w-6 h-6" />

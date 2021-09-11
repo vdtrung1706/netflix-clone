@@ -1,4 +1,4 @@
-import { selectCurrentUser } from '@store/selectors/userSelectors';
+import { selectCurrentUser } from '@store/auth/selectors.auth';
 import { navFadeInVariants } from '@utils/motion.utils';
 import cx from 'classnames';
 import { motion } from 'framer-motion';

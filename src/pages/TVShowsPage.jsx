@@ -1,6 +1,6 @@
 import { Billboard, SkeletonSliders, Slider } from '@components/layout';
 import useRetrieveData from '@hooks/useRetrieveData';
-import { tvshowsSlice } from '@store/devtools/tvshowsSlice';
+import { tvshowsActions } from '@store/tvshows/slice.tvshows';
 import { defaultPageFadeInVariants } from '@utils/motion.utils';
 import { motion } from 'framer-motion';
 import { useEffect } from 'react';
@@ -19,7 +19,7 @@ export default function TVShowsPage() {
       for (let key of keys) {
         if (key != 'loading' && genres[key].loading) return;
       }
-      if (genres.loading) dispatch(tvshowsSlice.actions.onFetchesSuccess());
+      if (genres.loading) dispatch(tvshowsActions.onFetchesSuccess());
     }
   }, [dispatch, genres]);
 

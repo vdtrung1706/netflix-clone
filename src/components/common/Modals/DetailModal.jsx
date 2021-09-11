@@ -1,19 +1,22 @@
 /* eslint-disable jsx-a11y/media-has-caption */
+import {
+  AddToMyListButton,
+  ToggleDislikedButton,
+  ToggleLikedButton,
+  ToggleSoundButton,
+} from '@components/buttons';
 import useDetailModal from '@hooks/useDetailModal';
 import { Modal } from '@material-ui/core';
 import Backdrop from '@material-ui/core/Backdrop';
 import { IMAGE_BASE } from '@services/axios.service';
 import { selectCurrentUser } from '@store/auth/selectors.auth';
 import { selectPlayer } from '@store/player/selectors.player';
-import { playerActions } from '@store/player/slice.player';
-import { selectUserLists } from '@store/user-lists/selectors.user-lists';
-import { includeObjectById } from '@utils/array.utils';
 import { truncate } from '@utils/convertor.utils';
 import { defaultEasing, defaultFadeInVariants } from '@utils/motion.utils';
 import cx from 'classnames';
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import PreModalRender from './PreModalRender';
 import PreviewPopperTip from './PreviewPopperTip';
 
@@ -24,9 +27,13 @@ function DetailModal({
   setPreviewVisible,
   handleClose,
   currentTime,
+  liked,
+  inMyList,
+  disliked,
   toggleDisliked,
   toggleLiked,
   toggleMyList,
+  toggleMuted,
 }) {
   const previewRect = previewRef.current?.getBoundingClientRect();
   const [expanded, setExpanded] = useState(false);
@@ -34,13 +41,8 @@ function DetailModal({
   const openTimeout = useRef(null);
   const transitionTimeout = useRef(null);
 
-  const dispatch = useDispatch();
   const { muted } = useSelector(selectPlayer);
   const currentUser = useSelector(selectCurrentUser);
-  const { myList, dislikedList, likedList } = useSelector(selectUserLists);
-  const liked = includeObjectById(likedList, movie.id);
-  const disliked = includeObjectById(dislikedList, movie.id);
-  const inMyList = includeObjectById(myList, movie.id);
 
   const { size, position, transform } = useDetailModal(
     expanded,
@@ -109,7 +111,7 @@ function DetailModal({
               currentTime={currentTime}
             />
           ) : (
-            <div className="flex flex-col w-full bg-black rounded-md">
+            <div className="flex flex-col w-full bg-black rounded-md box-shadow-full">
               <div className="w-full border-b border-opacity-50 border-solid border-black-pure">
                 {currentTime > 0 ? (
                   <video
@@ -154,7 +156,7 @@ function DetailModal({
                   <div className="flex items-center content-center justify-between mx-10">
                     <div className="flex items-center content-center align-middle h-9">
                       <button className="flex items-center justify-center px-3 mr-2 text-black bg-white border border-white border-solid rounded lg:px-6 max-w-max hover:bg-white-hover">
-                        <div className="box-border relative w-8 h-8 p-2 text-black">
+                        <div className="box-border relative w-8 h-8 text-black p-7px">
                           <svg viewBox="0 0 24 24">
                             <path
                               d="M6 4l15 8-15 8z"
@@ -172,24 +174,11 @@ function DetailModal({
                         }
                         placement="top"
                       >
-                        <button
+                        <AddToMyListButton
+                          inMyList={inMyList}
                           onClick={() => toggleMyList(movie, currentUser.uid)}
                           className="box-border p-2 mr-2 transition-all duration-200 bg-black bg-opacity-50 border border-white border-solid rounded-full hover:bg-opacity-40 hover:bg-black-lighter w-9 h-9 border-opacity-70 hover:border-opacity-100"
-                        >
-                          <svg viewBox="0 0 24 24">
-                            {inMyList ? (
-                              <path
-                                fill="currentColor"
-                                d="M3.707 12.293l-1.414 1.414L8 19.414 21.707 5.707l-1.414-1.414L8 16.586z"
-                              ></path>
-                            ) : (
-                              <path
-                                d="M13 11h8v2h-8v8h-2v-8H3v-2h8V3h2v8z"
-                                fill="currentColor"
-                              ></path>
-                            )}
-                          </svg>
-                        </button>
+                        />
                       </PreviewPopperTip>
                       <PreviewPopperTip
                         arrow
@@ -197,24 +186,11 @@ function DetailModal({
                         title={liked ? 'Rated' : 'I like this'}
                         placement="top"
                       >
-                        <button
+                        <ToggleLikedButton
+                          liked={liked}
                           onClick={() => toggleLiked(movie, currentUser.uid)}
                           className="box-border relative p-2 mr-2 text-white transition-all duration-200 bg-black bg-opacity-50 border border-white border-solid rounded-full hover:bg-opacity-40 hover:bg-black-lighter w-9 h-9 border-opacity-70 hover:border-opacity-100"
-                        >
-                          <svg viewBox="0 0 24 24" fill="currentColor">
-                            {liked ? (
-                              <path
-                                d="M19.583 20.488c0 1.055-.985 1.398-1.764 1.467l-5.798.023c-4.675 0-4.446-1.49-8.021-1.787v-7.173l2.544-1.444 3.094-5.592s.343-4.514.343-4.744c0 0 2.773-1.352 3.484 2.384.687 3.735.206 6.05.068 6.37h6.05c.802.092 1.788.482 1.788 1.559 0 1.031-.986 1.398-1.788 1.444l.62.023c.778.091 1.787.435 1.787 1.49 0 1.076-1.009 1.42-1.788 1.489l-1.214.023c.825.068 1.81.435 1.81 1.49 0 1.03-.985 1.42-1.81 1.466h-1.17c.78.092 1.765.458 1.765 1.512z"
-                                fill="currentColor"
-                              ></path>
-                            ) : (
-                              <path
-                                d="M15.167 8.994h3.394l.068.023c1.56.138 2.867.987 2.867 2.73 0 .275-.046.527-.092.78.367.435.596.986.596 1.72 0 .963-.39 1.52-1.032 1.978.023.183.023.252.023.39 0 .963-.39 1.784-1.009 2.243.023.206.023.275.023.39 0 1.743-1.33 2.591-2.89 2.73L12.21 22c-2.04 0-3.05-.252-4.563-.895-.917-.39-1.353-.527-2.27-.619L4 20.371v-8.234l2.476-1.445 2.27-4.427c0-.046.085-1.552.253-4.52l.871-.389c.092-.069.275-.138.505-.184.664-.206 1.398-.252 2.132 0 1.261.436 2.064 1.537 2.408 3.258.142.829.226 1.695.26 2.564l-.008 2zm-4.42-2.246l-2.758 5.376L6 13.285v5.26c.845.113 1.44.3 2.427.72 1.37.58 2.12.735 3.773.735l4.816-.023c.742-.078.895-.3 1.015-.542.201-.4.201-.876 0-1.425.558-.184.917-.479 1.078-.883.182-.457.182-.966 0-1.528.601-.228.901-.64.901-1.238s-.202-1.038-.608-1.32c.23-.46.26-.892.094-1.294-.168-.404-.298-.627-1.043-.738l-.172-.015h-5.207l.095-2.09c.066-1.448-.009-2.875-.216-4.082-.216-1.084-.582-1.58-1.096-1.758-.259-.09-.546-.086-.876.014-.003.06-.081 1.283-.235 3.67z"
-                                fill="currentColor"
-                              ></path>
-                            )}
-                          </svg>
-                        </button>
+                        />
                       </PreviewPopperTip>
                       <PreviewPopperTip
                         arrow
@@ -222,47 +198,22 @@ function DetailModal({
                         title={disliked ? 'Rated' : 'Not for me'}
                         placement="top"
                       >
-                        <button
+                        <ToggleDislikedButton
+                          disliked={disliked}
                           onClick={() => toggleDisliked(movie, currentUser.uid)}
                           className="box-border relative p-2 mr-2 text-white transition-all duration-200 bg-black bg-opacity-50 border border-white border-solid rounded-full hover:bg-opacity-40 hover:bg-black-lighter w-9 h-9 border-opacity-70 hover:border-opacity-100"
-                        >
-                          <svg viewBox="0 0 24 24">
-                            {disliked ? (
-                              <path
-                                d="M4.417 3.512c0-1.055.985-1.398 1.764-1.467l5.798-.023c4.675 0 4.446 1.49 8.021 1.787v7.173l-2.544 1.444-3.094 5.592s-.343 4.514-.343 4.744c0 0-2.773 1.352-3.484-2.384-.687-3.735-.206-6.05-.068-6.37h-6.05c-.802-.092-1.788-.482-1.788-1.559 0-1.031.986-1.398 1.788-1.444l-.62-.023c-.778-.091-1.787-.435-1.787-1.49 0-1.076 1.009-1.42 1.788-1.489l1.214-.023c-.825-.068-1.81-.435-1.81-1.49 0-1.03.985-1.42 1.81-1.466h1.17c-.78-.092-1.765-.458-1.765-1.512z"
-                                fill="currentColor"
-                              ></path>
-                            ) : (
-                              <path
-                                d="M8.833 15.006H5.44l-.068-.023c-1.56-.138-2.867-.987-2.867-2.73 0-.275.046-.527.092-.78C2.23 11.038 2 10.487 2 9.753c0-.963.39-1.52 1.032-1.978-.023-.183-.023-.252-.023-.39 0-.963.39-1.784 1.009-2.243-.023-.206-.023-.275-.023-.39 0-1.743 1.33-2.591 2.89-2.73L11.79 2c2.04 0 3.05.252 4.563.895.917.39 1.353.527 2.27.619L20 3.629v8.234l-2.476 1.445-2.27 4.427c0 .046-.085 1.552-.253 4.52l-.871.389c-.092.069-.275.138-.505.184-.664.206-1.398.252-2.132 0-1.261-.436-2.064-1.537-2.408-3.258a19.743 19.743 0 0 1-.26-2.564l.008-2zm4.42 2.246l2.758-5.376L18 10.715v-5.26c-.845-.113-1.44-.3-2.427-.72C14.203 4.156 13.453 4 11.8 4l-4.816.023c-.742.078-.895.3-1.015.542-.201.4-.201.876 0 1.425-.558.184-.917.479-1.078.883-.182.457-.182.966 0 1.528-.601.228-.901.64-.901 1.238s.202 1.038.608 1.32c-.23.46-.26.892-.094 1.294.168.404.298.627 1.043.738l.172.015h5.207l-.095 2.09c-.066 1.448.009 2.875.216 4.082.216 1.084.582 1.58 1.096 1.758.259.09.546.086.876-.014.003-.06.081-1.283.235-3.67z"
-                                fill="currentColor"
-                              ></path>
-                            )}
-                          </svg>
-                        </button>
+                        />
                       </PreviewPopperTip>
                     </div>
-                    <button
-                      onClick={() => dispatch(playerActions.toggleMuted())}
+
+                    <ToggleSoundButton
+                      muted={muted}
+                      onClick={toggleMuted}
                       className={cx(
                         'box-border p-2 transition-all duration-200 bg-black border border-white border-solid rounded-full opacity-30 bg-opacity-60 w-9 h-9 hover:opacity-100 border-opacity-70 hover:border-opacity-100',
                         { hidden: currentTime === 0 },
                       )}
-                    >
-                      <svg viewBox="0 0 24 24">
-                        {muted ? (
-                          <path
-                            d="M9 7.828L6.828 10H4v4h2.828L9 16.172V7.828zM11 21l-5-5H2V8h4l5-5v18zm6-10.414l3.293-3.293 1.414 1.414L18.414 12l3.293 3.293-1.414 1.414L17 13.414l-3.293 3.293-1.414-1.414L15.586 12l-3.293-3.293 1.414-1.414L17 10.586z"
-                            fill="currentColor"
-                          ></path>
-                        ) : (
-                          <path
-                            d="M9 7.828L6.828 10H4v4h2.828L9 16.172V7.828zM11 21l-5-5H2V8h4l5-5v18zm2.744-4.611l-1.414-1.414a4.161 4.161 0 0 0 0-5.885l1.414-1.414a6.161 6.161 0 0 1 0 8.713zm2.47 1.825L14.8 16.8a6.742 6.742 0 0 0 0-9.535l1.414-1.414a8.742 8.742 0 0 1 0 12.363zm2.47 1.825l-1.415-1.415a9.323 9.323 0 0 0 0-13.184l1.415-1.414c4.421 4.422 4.421 11.59 0 16.013z"
-                            fill="currentColor"
-                          ></path>
-                        )}
-                      </svg>
-                    </button>
+                    />
                   </div>
                 </motion.div>
               </div>

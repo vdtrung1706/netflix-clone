@@ -19,6 +19,9 @@
 }
 
 @layer utilities {
+  .box-shadow-full {
+    box-shadow: 0 0 8px #000;
+  }
   .text-shadow {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.45);
   }

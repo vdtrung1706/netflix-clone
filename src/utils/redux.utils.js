@@ -23,6 +23,6 @@ export function initStateAndFetchThunks(genres = {}, callback) {
   return [state, thunks];
 }
 
-export function conllectIdAndDocs(doc) {
+export function collectIdAndDocs(doc) {
   return { id: doc.id, ...doc.data() };
 }

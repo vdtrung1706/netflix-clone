@@ -1,3 +1,5 @@
+import AddToMyListButton from '@components/buttons/AddToMyListButton';
+import MoreInfoButton from '@components/buttons/MoreInfoButton';
 import { PreviewPopper } from '@components/common';
 import useVisibility from '@hooks/useVisibility';
 import { selectCurrentUser } from '@store/auth/selectors.auth';
@@ -6,7 +8,7 @@ import { userListsActions } from '@store/user-lists/slice.user-lists';
 import { includeObjectById } from '@utils/array.utils';
 import cx from 'classnames';
 import { AnimatePresence } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import BoxArt from './BoxArt';
 export default function SliderItem({
@@ -16,25 +18,34 @@ export default function SliderItem({
   transformOrigin,
   inSearchPage,
 }) {
+  const ref = useRef(null);
+  const popperRef = useRef(null);
+  const timeoutOpenRef = useRef(null);
+  const inMyList = useRef(null);
+  const liked = useRef(null);
+  const disliked = useRef(null);
+
   const [anchorEl, setAnchorEl] = useState(null);
   const [inViewport, setInViewport] = useState(false);
   const [zIndex, setZIndex] = useState(10);
   const [largeHover, setLargeHover] = useState(false);
-  const ref = useRef(null);
-  const popperRef = useRef(null);
-  const timeoutOpenRef = useRef(null);
-  let open = Boolean(anchorEl && !large && inViewport);
+
   const dispatch = useDispatch();
-  const { myList } = useSelector(selectUserLists);
   const currentUser = useSelector(selectCurrentUser);
-  var inMyList = includeObjectById(myList, movie.id);
+  const { myList, likedList, dislikedList } = useSelector(selectUserLists);
   var muted = false;
 
+  let open = Boolean(anchorEl && !large && inViewport);
+
   useEffect(() => {
+    inMyList.current = includeObjectById(myList, movie.id);
+    liked.current = includeObjectById(likedList, movie.id);
+    disliked.current = includeObjectById(dislikedList, movie.id);
+
     return () => {
       if (timeoutOpenRef.current) clearTimeout(timeoutOpenRef.current);
     };
-  }, []);
+  }, [dislikedList, likedList, movie.id, myList]);
 
   useVisibility(
     ref,
@@ -72,22 +83,48 @@ export default function SliderItem({
     popperRef.current = null;
   };
 
-  const hanldeMouseOver = () => {
-    setZIndex(15);
-  };
+  const toggleMyList = useCallback(
+    (userId) => {
+      dispatch(userListsActions.toggleMyList({ movie, userId }));
+    },
+    [dispatch, movie],
+  );
 
-  const handleMouseOut = () => {
-    setZIndex(0);
-  };
+  const toggleLiked = useCallback(
+    (userId) => {
+      dispatch(userListsActions.toggleLiked({ movie, userId }));
+    },
+    [dispatch, movie],
+  );
 
+  const toggleDisliked = useCallback(
+    (userId) => {
+      dispatch(userListsActions.toggleDisliked({ movie, userId }));
+    },
+    [dispatch, movie],
+  );
+
+  const popperProps = {
+    movie,
+    open,
+    anchorEl,
+    transformOrigin,
+    inMyList: inMyList.current,
+    liked: liked.current,
+    disliked: disliked.current,
+    handleClose: handlePopperClose,
+    toggleMyList,
+    toggleLiked,
+    toggleDisliked,
+  };
   return (
     <div
       ref={ref}
-      onMouseOver={hanldeMouseOver}
-      onFocus={hanldeMouseOver}
-      onMouseOut={handleMouseOut}
-      onBlur={handleMouseOut}
       data-id={movie.id}
+      onMouseOver={() => setZIndex(15)}
+      onFocus={() => setZIndex(15)}
+      onMouseOut={() => setZIndex(0)}
+      onBlur={() => setZIndex(0)}
       onMouseLeave={() => handleMouseLeave()}
       onMouseEnter={(event) => handleMouseEnter(event)}
       style={{
@@ -108,15 +145,7 @@ export default function SliderItem({
     >
       <BoxArt movie={movie} large={large} />
       <AnimatePresence>
-        {open && (
-          <PreviewPopper
-            movie={movie}
-            open={open}
-            handleClose={handlePopperClose}
-            anchorEl={anchorEl}
-            transformOrigin={transformOrigin}
-          />
-        )}
+        {open && <PreviewPopper {...popperProps} />}
       </AnimatePresence>
       {large && (
         <div
@@ -157,46 +186,17 @@ export default function SliderItem({
                     <path d="M6 4l15 8-15 8z" fill="currentColor"></path>
                   </svg>
                 </button>
-                <button
-                  onClick={() =>
-                    dispatch(
-                      userListsActions.toggleMyList({
-                        movie,
-                        userId: currentUser.uid,
-                      }),
-                    )
-                  }
+                <AddToMyListButton
+                  onClick={() => toggleMyList(currentUser.uid)}
                   className="w-8 h-8 p-2 mr-2 transition-all duration-200 border border-white border-opacity-50 border-solid rounded-full hover:bg-white hover:bg-opacity-5"
-                >
-                  <svg viewBox="0 0 24 24">
-                    {inMyList ? (
-                      <path
-                        fill="currentColor"
-                        d="M3.707 12.293l-1.414 1.414L8 19.414 21.707 5.707l-1.414-1.414L8 16.586z"
-                      ></path>
-                    ) : (
-                      <path
-                        d="M13 11h8v2h-8v8h-2v-8H3v-2h8V3h2v8z"
-                        fill="currentColor"
-                      ></path>
-                    )}
-                  </svg>
-                </button>
+                  inMyList={inMyList.current}
+                />
               </div>
               <div>
-                <button
+                <MoreInfoButton
                   onClick={() => {}}
                   className="w-8 h-8 p-1 transition-all duration-200 rounded-full bg-grey bg-opacity-60 hover:bg-grey-darker hover:bg-opacity-60"
-                >
-                  <svg
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 64 64"
-                    className="w-full h-full stroke-current"
-                  >
-                    <path strokeWidth="4" d="M20 26l11.994 14L44 26"></path>
-                  </svg>
-                </button>
+                />
               </div>
             </div>
 

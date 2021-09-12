@@ -102,7 +102,7 @@ function DetailModal({
         <div
           style={{ ...mainModalStyle }}
           className={cx('absolute rounded-md drop-shadow-2xl text-white', {
-            'transform-gpu transition-all duration-1200 mt-8': expanded,
+            'transition-all duration-1000 mt-8': expanded,
           })}
         >
           {!expanded ? (

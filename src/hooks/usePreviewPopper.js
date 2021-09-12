@@ -1,5 +1,5 @@
-import useViewport from './useViewport';
 import { defaultEasing } from '@utils/motion.utils';
+import useViewport from './useViewport';
 
 const usePreviewPopper = (transformOrigin, anchorEl, popperEl) => {
   const { width } = useViewport();
@@ -13,9 +13,10 @@ const usePreviewPopper = (transformOrigin, anchorEl, popperEl) => {
     return 0;
   };
 
+  const anchorRect = anchorEl?.getBoundingClientRect();
+  const popperRect = popperEl?.getBoundingClientRect();
+
   const getScale = () => {
-    const anchorRect = anchorEl?.getBoundingClientRect();
-    const popperRect = popperEl?.getBoundingClientRect();
     if (!anchorRect && !popperRect) return 0.7;
     if (!popperRect) return (anchorRect.width - 4) / 350;
     return (anchorRect.width - 4) / popperRect.width;
@@ -35,10 +36,11 @@ const usePreviewPopper = (transformOrigin, anchorEl, popperEl) => {
       scale: 1,
       translateX: getTranslateX(),
       translateY: '-66.666667%',
-      transition: { duration: 0.25, ease: defaultEasing },
+      transition: { duration: 0.65, ease: defaultEasing },
       willChange: 'opacity, transform',
     },
     exit: {
+      opacity: 0,
       transformOrigin,
       scale: getScale(),
       translateX: getTranslateX(),

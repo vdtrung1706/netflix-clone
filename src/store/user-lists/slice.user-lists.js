@@ -21,8 +21,6 @@ const userListsSlice = createSlice({
     setLikedList(state, action) {
       return { ...state, likedList: [...action.payload] };
     },
-
-    // update ui side, 'cause waiting for firebase clound update then auto render -> too long :(
     toggleMyList(state, action) {
       const { movie } = action.payload;
       if (includeObjectById(state.myList, movie.id)) {

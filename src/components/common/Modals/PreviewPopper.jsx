@@ -11,7 +11,6 @@ import { Popper } from '@material-ui/core';
 import { IMAGE_BASE } from '@services/axios.service';
 import { selectCurrentUser } from '@store/auth/selectors.auth';
 import { selectPlayer } from '@store/player/selectors.player';
-import { defaultEasing } from '@utils/motion.utils';
 import cx from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -86,16 +85,10 @@ export default function PreviewPopper({
         initial="initial"
         animate="animate"
         onMouseLeave={handlePreviewClose}
-        className="flex flex-col rounded-md cursor-pointer select-none w-350px box-shadow-full"
+        className="flex flex-col bg-black rounded-md cursor-pointer select-none w-350px box-shadow-full"
       >
         {/* Image Or Video */}
-        <motion.div
-          exit={{
-            opacity: 0.4,
-            transition: { duration: 0.3, ease: defaultEasing },
-          }}
-          className="relative w-full min-h-196.88px bg-black-light rounded-t-md"
-        >
+        <div className="relative w-full min-h-196.88px">
           {play ? (
             <>
               <video
@@ -125,16 +118,10 @@ export default function PreviewPopper({
               )}
             />
           )}
-        </motion.div>
+        </div>
 
         {/* Buttons */}
-        <motion.div
-          exit={{
-            opacity: 0,
-            transition: { delay: 0.1, duration: 0.4, ease: defaultEasing },
-          }}
-          className="p-4 cursor-pointer bg-black-light rounded-b-md"
-        >
+        <div className="p-4 cursor-pointer">
           <div className="flex items-center content-center justify-between align-middle">
             <div className="flex items-center content-center align-middle">
               <div className="box-border relative w-10 h-10 mr-2 text-black bg-white border border-white border-solid rounded-full p-7px hover:bg-white-hover">
@@ -202,7 +189,7 @@ export default function PreviewPopper({
             <span className="text-xs opacity-50">•</span>
             <div className="my-1">Thriller</div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Show Big Modal */}
         <AnimatePresence>

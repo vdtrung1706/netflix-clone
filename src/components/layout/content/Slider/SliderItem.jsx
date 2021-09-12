@@ -3,6 +3,8 @@ import MoreInfoButton from '@components/buttons/MoreInfoButton';
 import { PreviewPopper } from '@components/common';
 import useVisibility from '@hooks/useVisibility';
 import { selectCurrentUser } from '@store/auth/selectors.auth';
+import { selectPlayer } from '@store/player/selectors.player';
+import { playerActions } from '@store/player/slice.player';
 import { selectUserLists } from '@store/user-lists/selectors.user-lists';
 import { userListsActions } from '@store/user-lists/slice.user-lists';
 import { includeObjectById } from '@utils/array.utils';
@@ -11,7 +13,6 @@ import { AnimatePresence } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import BoxArt from './BoxArt';
-import { playerActions } from '@store/player/slice.player';
 
 export default function SliderItem({
   movie,
@@ -21,11 +22,7 @@ export default function SliderItem({
   inSearchPage,
 }) {
   const ref = useRef(null);
-  const popperRef = useRef(null);
   const timeoutOpenRef = useRef(null);
-  const inMyList = useRef(null);
-  const liked = useRef(null);
-  const disliked = useRef(null);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [inViewport, setInViewport] = useState(false);
@@ -35,15 +32,14 @@ export default function SliderItem({
   const dispatch = useDispatch();
   const currentUser = useSelector(selectCurrentUser);
   const { myList, likedList, dislikedList } = useSelector(selectUserLists);
-  var muted = false;
+  const { muted } = useSelector(selectPlayer);
 
-  let open = Boolean(anchorEl && !large && inViewport);
+  const open = Boolean(anchorEl && !large && inViewport);
+  const inMyList = includeObjectById(myList, movie.id);
+  const liked = includeObjectById(likedList, movie.id);
+  const disliked = includeObjectById(dislikedList, movie.id);
 
   useEffect(() => {
-    inMyList.current = includeObjectById(myList, movie.id);
-    liked.current = includeObjectById(likedList, movie.id);
-    disliked.current = includeObjectById(dislikedList, movie.id);
-
     return () => {
       if (timeoutOpenRef.current) clearTimeout(timeoutOpenRef.current);
     };
@@ -58,31 +54,32 @@ export default function SliderItem({
   const handleMouseEnter = (event) => {
     event.preventDefault();
     if (!inViewport) return;
-    if (large) setLargeHover(true);
     onHover(event);
-    setZIndex(20);
-    popperRef.current = event.currentTarget;
-    if (timeoutOpenRef.current) {
-      clearTimeout(timeoutOpenRef.current);
-    }
-    timeoutOpenRef.current = setTimeout(() => {
-      if (popperRef && !open) {
-        setAnchorEl(popperRef.current);
+    if (large) {
+      setLargeHover(true);
+      setZIndex(20);
+    } else {
+      if (timeoutOpenRef.current) {
+        clearTimeout(timeoutOpenRef.current);
       }
-    }, 700);
+      timeoutOpenRef.current = setTimeout(() => {
+        ref.current && !open && setAnchorEl(ref.current);
+      }, 800);
+    }
   };
 
   const handleMouseLeave = () => {
-    setZIndex(0);
-    if (large) setLargeHover(false);
-    if (timeoutOpenRef.current) {
-      clearTimeout(timeoutOpenRef.current);
+    if (large) {
+      setZIndex(0);
+      setLargeHover(false);
+    } else {
+      timeoutOpenRef.current && clearTimeout(timeoutOpenRef.current);
     }
   };
 
   const handlePopperClose = () => {
     setAnchorEl(null);
-    popperRef.current = null;
+    timeoutOpenRef.current && clearTimeout(timeoutOpenRef.current);
   };
 
   const toggleMyList = useCallback(
@@ -114,10 +111,10 @@ export default function SliderItem({
     <div
       ref={ref}
       data-id={movie.id}
-      onMouseOver={() => setZIndex(15)}
-      onFocus={() => setZIndex(15)}
-      onMouseOut={() => setZIndex(0)}
-      onBlur={() => setZIndex(0)}
+      onMouseOver={() => large && setZIndex(15)}
+      onFocus={() => large && setZIndex(15)}
+      onMouseOut={() => large && setZIndex(0)}
+      onBlur={() => large && setZIndex(0)}
       onMouseLeave={() => handleMouseLeave()}
       onMouseEnter={(event) => handleMouseEnter(event)}
       style={{
@@ -144,9 +141,9 @@ export default function SliderItem({
             open={open}
             anchorEl={anchorEl}
             transformOrigin={transformOrigin}
-            inMyList={inMyList.current}
-            liked={liked.current}
-            disliked={disliked.current}
+            inMyList={inMyList}
+            liked={liked}
+            disliked={disliked}
             handleClose={handlePopperClose}
             toggleMyList={toggleMyList}
             toggleLiked={toggleLiked}
@@ -194,7 +191,7 @@ export default function SliderItem({
                 <AddToMyListButton
                   onClick={() => toggleMyList(currentUser.uid)}
                   className="w-8 h-8 p-2 mr-2 transition-all duration-200 border border-white border-opacity-50 border-solid rounded-full hover:bg-white hover:bg-opacity-5"
-                  inMyList={inMyList.current}
+                  inMyList={inMyList}
                 />
               </div>
               <div>

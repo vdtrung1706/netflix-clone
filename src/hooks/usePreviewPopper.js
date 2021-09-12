@@ -28,7 +28,6 @@ const usePreviewPopper = (transformOrigin, anchorEl, popperEl) => {
       scale: getScale(),
       translateX: getTranslateX(),
       translateY: '-52%',
-      willChange: 'opacity, transform',
     },
     animate: {
       opacity: 1,
@@ -36,8 +35,7 @@ const usePreviewPopper = (transformOrigin, anchorEl, popperEl) => {
       scale: 1,
       translateX: getTranslateX(),
       translateY: '-66.666667%',
-      transition: { duration: 0.65, ease: defaultEasing },
-      willChange: 'opacity, transform',
+      transition: { duration: 0.5, ease: defaultEasing },
     },
     exit: {
       opacity: 0,
@@ -46,7 +44,6 @@ const usePreviewPopper = (transformOrigin, anchorEl, popperEl) => {
       translateX: getTranslateX(),
       translateY: '-52%',
       transition: { duration: 0.35, ease: defaultEasing },
-      willChange: 'opacity, transform',
     },
   };
 

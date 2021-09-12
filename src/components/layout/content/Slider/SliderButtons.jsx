@@ -12,9 +12,9 @@ function SliderButtons({ hasPre, hasNext, moveSection }) {
       {hasNext && (
         <button
           onClick={() => moveSection('RIGHT')}
-          className="hidden sm:flex opacity-0 group-hover:opacity-100 absolute top-0 bottom-0 right-0 z-20 w-4% text-center justify-center items-center bg-black bg-opacity-80 transition-all duration-300 delay-100 ease-in-out"
+          className="slider-btn hidden sm:flex opacity-0 absolute top-0 bottom-0 right-0 z-20 w-4% text-center justify-center items-center bg-black-pure bg-opacity-40 transition-all duration-25 hover:bg-opacity-75"
         >
-          <strong className="text-2xl lg:text-3xl">
+          <strong className="transition-all duration-25 lg:text-xl">
             <FontAwesomeIcon icon={faChevronRight} />
           </strong>
         </button>
@@ -23,9 +23,9 @@ function SliderButtons({ hasPre, hasNext, moveSection }) {
       {hasPre && (
         <button
           onClick={() => moveSection('LEFT')}
-          className="hidden sm:flex opacity-0 group-hover:opacity-100 absolute top-0 bottom-0 left-0 z-20 w-4% text-center justify-center items-center bg-black bg-opacity-80 transition-all duration-300 delay-100 ease-in-out"
+          className="slider-btn hidden sm:flex opacity-0 absolute top-0 bottom-0 left-0 z-20 w-4% text-center justify-center items-center bg-black-pure bg-opacity-40 transition-all duration-25 hover:bg-opacity-75"
         >
-          <strong className="text-2xl lg:text-3xl">
+          <strong className="transition-all duration-25 lg:text-xl">
             <FontAwesomeIcon icon={faChevronLeft} />
           </strong>
         </button>
@@ -34,9 +34,9 @@ function SliderButtons({ hasPre, hasNext, moveSection }) {
       {hasPre && hasNext === false ? (
         <button
           onClick={() => moveSection('RESET')}
-          className="hidden sm:flex opacity-0 group-hover:opacity-100 absolute top-0 bottom-0 right-0 z-20 w-4% text-center justify-center items-center bg-black bg-opacity-80 transition-all duration-300 delay-100 ease-in-out"
+          className="slider-btn hidden sm:flex opacity-0 absolute top-0 bottom-0 right-0 z-20 w-4% text-center justify-center items-center bg-black-pure bg-opacity-40 transition-all duration-25 hover:bg-opacity-75"
         >
-          <strong className="text-2xl lg:text-3xl">
+          <strong className="transition-all duration-25 lg:text-xl">
             <FontAwesomeIcon icon={faUndo} />
           </strong>
         </button>

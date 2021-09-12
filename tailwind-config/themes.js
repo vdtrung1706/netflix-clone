@@ -15,7 +15,6 @@ module.exports = {
     5: 5,
     25: 25,
     75: 75,
-    100: 100,
     1000: 1000,
   },
   lineHeight: {
@@ -25,8 +24,9 @@ module.exports = {
     0: '0ms',
     25: '25ms',
     50: '0ms',
-    1200: '1200ms',
-    3000: '3000ms',
+    1250: '1250ms',
+    1500: '1500ms',
+    1750: '1725ms',
   },
   transitionDelay: {
     850: '850ms',
@@ -35,16 +35,6 @@ module.exports = {
   },
   backgroundPosition: {
     'top-center': 'top center',
-    '0-0': '0px 0px',
-    '0-top': '0 top',
-  },
-  backgroundSize: {
-    '100-100': '100% 100%',
-  },
-  transitionProperty: {
-    width: 'width',
-    height: 'height',
-    spacing: 'margin, padding',
   },
   scale: {
     115: '1.15',

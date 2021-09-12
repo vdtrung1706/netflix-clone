@@ -1,8 +1,8 @@
 module.exports = {
-  margin: ['responsive', 'hover', 'first', 'last'],
+  margin: ['responsive', 'hover', 'first', 'last', 'group-hover'],
   padding: ['responsive', 'hover', 'first', 'last'],
   width: ['group-hover', 'group-focus'],
-  transitionProperty: ['responsive', 'motion-safe', 'motion-reduce'],
+  transitionProperty: ['responsive'],
   transformOrigin: ['hover', 'focus'],
   fontWeight: ['focus', 'hover'],
   fontSize: ['focus', 'hover', 'group-hover', 'group-focus', 'sibling-focus'],

@@ -9,6 +9,8 @@ import SliderButtons from './SliderButtons';
 import SliderItem from './SliderItem';
 import SliderTitle from './SliderTitle';
 
+import './slider.css';
+
 export default function Slider({ title, selector, large }) {
   const ref = useRef();
   const { width } = useViewport();
@@ -31,16 +33,16 @@ export default function Slider({ title, selector, large }) {
       initial="initial"
       animate="animate"
       exit="exit"
-      className="relative w-full my-3vw group z-1"
+      className="relative w-full my-3vw z-1 slider-container"
     >
       <SliderTitle title={title} genre={123} />
 
-      <div className="relative transition-transform duration-300 ease-in-out delay-100 select-none z-3">
+      <div className="relative select-none slider z-3">
         <div className="relative px-4% z-2">
           {error && <div>Error...</div>}
           {!loading && movies.length > 0 && (
             <>
-              <ul className="-mt-4 px-1 mb-0 list-none absolute top-0 right-4% opacity-0 transition-all duration-300 delay-100 group-hover:opacity-100">
+              <ul className="slider-page -mt-4 px-1 mb-0 list-none absolute top-0 right-4% opacity-0 transition-all duration-25">
                 {paginationIndicator()}
               </ul>
 
@@ -51,7 +53,7 @@ export default function Slider({ title, selector, large }) {
                   }}
                   ref={ref}
                   className={cx(
-                    'flex flex-shrink-0 duration-1000 delay-200 transform whitespace-nowrap',
+                    'flex flex-shrink-0 duration-1000 delay-200 transform-gpu whitespace-nowrap',
                     { 'h-96 md:h-116 2xl:h-124': large },
                   )}
                 >

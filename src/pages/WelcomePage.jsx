@@ -1,4 +1,5 @@
 import { HERO, HERO_1000, HERO_1500, HERO_1800, NETFLIX_LOGO } from '@assets';
+import Layout from '@components/common/Layout/Layout';
 import { defaultPageFadeInVariants } from '@utils/motion.utils';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
@@ -6,17 +7,19 @@ import { Link } from 'react-router-dom';
 
 export default function WelcomePage() {
   return (
-    <motion.div
-      variants={defaultPageFadeInVariants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      className="bg-black-pure"
-    >
-      <GreetingHeader />
-      <StoryCard />
-      <div>This is second card</div>
-    </motion.div>
+    <Layout title="Netflix - Watch TV Shows Online, Watch Movies Online">
+      <motion.div
+        variants={defaultPageFadeInVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        className="bg-black-pure"
+      >
+        <GreetingHeader />
+        <StoryCard />
+        <div>This is second card</div>
+      </motion.div>
+    </Layout>
   );
 }
 

@@ -1,10 +1,14 @@
+import Layout from '@components/common/Layout/Layout';
+
 const MyListPage = () => {
   return (
-    <div className="flex flex-col">
-      <div name="slidersWrapper" className="pt-16 slider-wrapper">
-        My list goes here
+    <Layout>
+      <div className="flex flex-col">
+        <div name="slidersWrapper" className="pt-16 slider-wrapper">
+          My list goes here
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

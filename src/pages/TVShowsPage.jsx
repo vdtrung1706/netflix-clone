@@ -1,3 +1,4 @@
+import Layout from '@components/common/Layout/Layout';
 import { Billboard, SkeletonSliders, Slider } from '@components/layout';
 import useRetrieveData from '@hooks/useRetrieveData';
 import { tvshowsActions } from '@store/tvshows/slice.tvshows';
@@ -24,29 +25,29 @@ export default function TVShowsPage() {
   }, [dispatch, genres]);
 
   return (
-    <motion.div
-      variants={defaultPageFadeInVariants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      className="flex flex-col"
-    >
-      {genres.loading && (
-        <div className="pt-20">
-          <SkeletonSliders />
-        </div>
-      )}
-
-      {!genres.loading && (
-        <>
-          <Billboard type="TVSHOW" />
-
-          <div className="pt-12 slider-wrapper">
-            {sliders &&
-              sliders.map((props) => <Slider key={props.id} {...props} />)}
+    <Layout title="TV Shows - Netflix">
+      <motion.div
+        variants={defaultPageFadeInVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        className="flex flex-col"
+      >
+        {genres.loading && (
+          <div className="pt-20">
+            <SkeletonSliders />
           </div>
-        </>
-      )}
-    </motion.div>
+        )}
+        {!genres.loading && (
+          <>
+            <Billboard type="TVSHOW" />
+            <div className="pt-12 slider-wrapper">
+              {sliders &&
+                sliders.map((props) => <Slider key={props.id} {...props} />)}
+            </div>
+          </>
+        )}
+      </motion.div>
+    </Layout>
   );
 }

@@ -1,3 +1,4 @@
+import { Layout } from '@components/common';
 import { SkeletonSliders, Slider } from '@components/layout';
 import useRetrieveData from '@hooks/useRetrieveData';
 import { latestActions } from '@store/latest/slice.latest';
@@ -25,27 +26,28 @@ export default function LatestPage() {
   }, [dispatch, genres]);
 
   return (
-    <motion.div
-      variants={defaultPageFadeInVariants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      className="flex flex-col"
-    >
-      {genres.loading && (
-        <div className="pt-20">
-          <SkeletonSliders />
-        </div>
-      )}
-
-      {!genres.loading && (
-        <>
-          <div className="pt-12 slider-wrapper">
-            {sliders &&
-              sliders.map((props) => <Slider key={props.id} {...props} />)}
+    <Layout>
+      <motion.div
+        variants={defaultPageFadeInVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        className="flex flex-col"
+      >
+        {genres.loading && (
+          <div className="pt-20">
+            <SkeletonSliders />
           </div>
-        </>
-      )}
-    </motion.div>
+        )}
+        {!genres.loading && (
+          <>
+            <div className="pt-12 slider-wrapper">
+              {sliders &&
+                sliders.map((props) => <Slider key={props.id} {...props} />)}
+            </div>
+          </>
+        )}
+      </motion.div>
+    </Layout>
   );
 }

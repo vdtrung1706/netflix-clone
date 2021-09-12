@@ -3,6 +3,8 @@ import PreModalRender from './Modals/PreModalRender';
 import PreviewPopper from './Modals/PreviewPopper';
 import PreviewPopperTip from './Modals/PreviewPopperTip';
 import SearchBox from './Search/SearchBox';
+import Seo from './Seo/Seo';
+import Layout from './Layout/Layout';
 
 export {
   SearchBox,
@@ -10,4 +12,6 @@ export {
   PreviewPopperTip,
   DetailModal,
   PreModalRender,
+  Seo,
+  Layout,
 };

@@ -1,3 +1,4 @@
+import { Layout } from '@components/common';
 import { Billboard, SkeletonSliders, Slider } from '@components/layout';
 import useRetrieveData from '@hooks/useRetrieveData';
 import { moviesActions } from '@store/movies/slice.movies';
@@ -24,29 +25,29 @@ export default function MoviesPage() {
   }, [dispatch, genres]);
 
   return (
-    <motion.div
-      variants={defaultPageFadeInVariants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      className="flex flex-col"
-    >
-      {genres.loading && (
-        <div className="pt-20">
-          <SkeletonSliders />
-        </div>
-      )}
-
-      {!genres.loading && (
-        <>
-          <Billboard type="MOVIE" />
-
-          <div className="pt-12 slider-wrapper">
-            {sliders &&
-              sliders.map((props) => <Slider key={props.id} {...props} />)}
+    <Layout title="Movies - Netflix">
+      <motion.div
+        variants={defaultPageFadeInVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        className="flex flex-col"
+      >
+        {genres.loading && (
+          <div className="pt-20">
+            <SkeletonSliders />
           </div>
-        </>
-      )}
-    </motion.div>
+        )}
+        {!genres.loading && (
+          <>
+            <Billboard type="MOVIE" />
+            <div className="pt-12 slider-wrapper">
+              {sliders &&
+                sliders.map((props) => <Slider key={props.id} {...props} />)}
+            </div>
+          </>
+        )}
+      </motion.div>
+    </Layout>
   );
 }

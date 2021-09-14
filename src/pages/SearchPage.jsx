@@ -49,7 +49,6 @@ export default function SearchPage() {
           )}
         </motion.div>
       </motion.div>
-      <div className="pt-20 h-96 px-4%">footer</div>
     </Layout>
   );
 }

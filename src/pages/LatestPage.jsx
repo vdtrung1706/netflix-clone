@@ -1,5 +1,5 @@
 import { Layout } from '@components/common';
-import { SkeletonSliders, Slider } from '@components/layout';
+import { Billboard, SkeletonSliders, Slider } from '@components/layout';
 import useRetrieveData from '@hooks/useRetrieveData';
 import { latestActions } from '@store/latest/slice.latest';
 import { defaultPageFadeInVariants } from '@utils/motion.utils';
@@ -41,6 +41,7 @@ export default function LatestPage() {
         )}
         {!genres.loading && (
           <>
+            <Billboard type="LATEST" />
             <div className="pt-12 slider-wrapper">
               {sliders &&
                 sliders.map((props) => <Slider key={props.id} {...props} />)}

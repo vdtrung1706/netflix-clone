@@ -20,6 +20,7 @@ const colors = {
   },
   grey: {
     DEFAULT: '#6d6d6d',
+    txt: '#808080',
     hover: '#626262',
     placeholder: '#8c8c8c',
     darker: '#4c4c4c',

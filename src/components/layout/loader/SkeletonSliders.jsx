@@ -1,6 +1,6 @@
 export default function SkeletonSliders() {
   return (
-    <div className={`animate-pulse flex flex-col gap-3 w-full`}>
+    <div className={`animate-pulse flex flex-col gap-3 w-full h-screen`}>
       <div className="mx-4% h-7 w-28 bg-black-light"></div>
       <div className="flex gap-1 px-4% h-32 md:h-36">
         <div className="w-1/2 h-full rounded-sm bg-black-lighter sm:w-2/6 lg:w-1/4 xl:w-1/5"></div>

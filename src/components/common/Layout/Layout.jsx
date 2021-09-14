@@ -1,3 +1,4 @@
+import { Footer } from '@components/layout';
 import Seo from '../Seo/Seo';
 
 function Layout({
@@ -7,11 +8,11 @@ function Layout({
   path = false,
 }) {
   return (
-    <>
+    <div className="overflow-hidden">
       <Seo title={title} description={description} path={path} />
-
       <main>{children}</main>
-    </>
+      <Footer />
+    </div>
   );
 }
 

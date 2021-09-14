@@ -41,6 +41,7 @@ export default function Homepage() {
         {!genres.loading && (
           <>
             <Billboard type="MOVIE" />
+
             <div className="pt-12 slider-wrapper">
               {sliders &&
                 sliders.map((props) => <Slider key={props.id} {...props} />)}

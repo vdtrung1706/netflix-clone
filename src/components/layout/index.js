@@ -14,6 +14,7 @@ import NavMenu from './nav/NavMenu';
 import NavMenuCollapse from './nav/NavMenuCollapse';
 import PrimaryNav from './nav/PrimaryNav';
 import SecondaryNav from './nav/SecondaryNav';
+import Footer from './footers/Footer';
 
 export {
   SignIn,
@@ -32,4 +33,5 @@ export {
   SecondaryNav,
   CircleLoading,
   SkeletonSliders,
+  Footer,
 };

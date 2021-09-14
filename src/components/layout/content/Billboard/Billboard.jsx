@@ -28,6 +28,9 @@ function Billboard({ type }) {
     if (!data && type === 'MOVIE') {
       dispatch(fetchBillboardMovie(moviesRequests.netflixOrignal.url));
     }
+    if (type === 'LATEST') {
+      dispatch(fetchBillboardMovie(moviesRequests.actionMovies.url));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, type]);
 

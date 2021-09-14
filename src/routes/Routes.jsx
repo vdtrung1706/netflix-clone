@@ -23,7 +23,7 @@ const Routes = () => {
 
   return (
     <div>
-      <AnimatePresence exitBeforeEnter>
+      <AnimatePresence>
         <Suspense
           fallback={
             <div className="pt-20">
@@ -75,57 +75,54 @@ const Routes = () => {
                 currentUser ? <KidsPage /> : <Redirect to="/welcome" />
               }
             />
+            <Route exact path="/" render={() => <Redirect to="/login" />} />
+            {/* <Route exact path="/" render={() => <Redirect to="/browse" />} /> */}
+            <Route
+              exact
+              path="/welcome"
+              render={() =>
+                currentUser ? <Redirect to="/browse" /> : <WelcomePage />
+              }
+            />
+            <Route
+              path="/search"
+              render={() =>
+                currentUser ? <SearchPage /> : <Redirect to="/login" />
+              }
+            />
+
+            <Route
+              exact
+              path="/profiles/manage"
+              render={() =>
+                currentUser ? <ProfilesPage /> : <Redirect to="/welcome" />
+              }
+            />
+            <Route
+              exact
+              path="/help-center"
+              render={() =>
+                currentUser ? <HelpCenterPage /> : <Redirect to="/welcome" />
+              }
+            />
+            <Route
+              exact
+              path="/your-account"
+              render={() =>
+                currentUser ? <AccountPage /> : <Redirect to="/welcome" />
+              }
+            />
+            <Route
+              exact
+              path="/login"
+              render={() =>
+                currentUser ? <Redirect to="/browse" /> : <AuthPage />
+              }
+            />
+            <Route path="*" redner={() => <Redirect to="/" />} />
           </Switch>
         </Suspense>
       </AnimatePresence>
-
-      <Switch location={location} key={location.pathname}>
-        <Route exact path="/" render={() => <Redirect to="/login" />} />
-        {/* <Route exact path="/" render={() => <Redirect to="/browse" />} /> */}
-        <Route
-          exact
-          path="/welcome"
-          render={() =>
-            currentUser ? <Redirect to="/browse" /> : <WelcomePage />
-          }
-        />
-        <Route
-          path="/search"
-          render={() =>
-            currentUser ? <SearchPage /> : <Redirect to="/login" />
-          }
-        />
-
-        <Route
-          exact
-          path="/profiles/manage"
-          render={() =>
-            currentUser ? <ProfilesPage /> : <Redirect to="/welcome" />
-          }
-        />
-        <Route
-          exact
-          path="/help-center"
-          render={() =>
-            currentUser ? <HelpCenterPage /> : <Redirect to="/welcome" />
-          }
-        />
-        <Route
-          exact
-          path="/your-account"
-          render={() =>
-            currentUser ? <AccountPage /> : <Redirect to="/welcome" />
-          }
-        />
-        <Route
-          exact
-          path="/login"
-          render={() =>
-            currentUser ? <Redirect to="/browse" /> : <AuthPage />
-          }
-        />
-        <Route path="*" redner={() => <Redirect to="/" />} />
-      </Switch>
     </div>
   );
 };

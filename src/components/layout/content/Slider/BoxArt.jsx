@@ -1,15 +1,11 @@
 import { memo } from 'react';
 import BoxArtImage from './BoxArtImage';
 
-function BoxArt({ movie, large }) {
+function BoxArt({ path, title }) {
   return (
     <div className="w-full h-full">
       <div className="relative w-full h-full overflow-hidden py-28.125%">
-        {large ? (
-          <BoxArtImage path={movie.poster_path} />
-        ) : (
-          <BoxArtImage path={movie.backdrop_path} />
-        )}
+        <BoxArtImage path={path} title={title} />
       </div>
     </div>
   );

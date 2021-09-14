@@ -1,49 +1,46 @@
 import AddToMyListButton from '@components/buttons/AddToMyListButton';
 import MoreInfoButton from '@components/buttons/MoreInfoButton';
-import { PreviewPopper } from '@components/common';
+import { DetailModal, PreviewPopper } from '@components/common';
+import useSliderItem from '@hooks/useSliderItem';
+import useViewport from '@hooks/useViewport';
 import useVisibility from '@hooks/useVisibility';
-import { selectCurrentUser } from '@store/auth/selectors.auth';
-import { selectPlayer } from '@store/player/selectors.player';
-import { playerActions } from '@store/player/slice.player';
-import { selectUserLists } from '@store/user-lists/selectors.user-lists';
-import { userListsActions } from '@store/user-lists/slice.user-lists';
-import { includeObjectById } from '@utils/array.utils';
+import { getBoundingClientRect } from '@utils/convertor.utils';
 import cx from 'classnames';
 import { AnimatePresence } from 'framer-motion';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useRef, useState } from 'react';
 import BoxArt from './BoxArt';
 
-export default function SliderItem({
-  movie,
-  large,
-  onHover,
-  transformOrigin,
-  inSearchPage,
-}) {
+export default function SliderItem({ movie, large, inSearchPage }) {
   const ref = useRef(null);
-  const timeoutOpenRef = useRef(null);
-
-  const [anchorEl, setAnchorEl] = useState(null);
+  const openTimeoutRef = useRef(null);
+  const currentTimeRef = useRef(0);
   const [inViewport, setInViewport] = useState(false);
   const [zIndex, setZIndex] = useState(10);
   const [largeHover, setLargeHover] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [origin, setOrigin] = useState('center');
+  const [translateX, setTranslateX] = useState(0);
+  const [previewRect, setPreviewRect] = useState({});
+  const [modalOpen, setModalOpen] = useState(false);
+  const previewOpen = Boolean(anchorEl && !large && inViewport);
+  const { width } = useViewport();
 
-  const dispatch = useDispatch();
-  const currentUser = useSelector(selectCurrentUser);
-  const { myList, likedList, dislikedList } = useSelector(selectUserLists);
-  const { muted } = useSelector(selectPlayer);
-
-  const open = Boolean(anchorEl && !large && inViewport);
-  const inMyList = includeObjectById(myList, movie.id);
-  const liked = includeObjectById(likedList, movie.id);
-  const disliked = includeObjectById(dislikedList, movie.id);
+  const {
+    muted,
+    inMyList,
+    liked,
+    disliked,
+    toggleDisliked,
+    toggleLiked,
+    toggleMuted,
+    toggleMyList,
+  } = useSliderItem(movie);
 
   useEffect(() => {
     return () => {
-      if (timeoutOpenRef.current) clearTimeout(timeoutOpenRef.current);
+      if (openTimeoutRef.current) clearTimeout(openTimeoutRef.current);
     };
-  }, [dislikedList, likedList, movie.id, myList]);
+  }, []);
 
   useVisibility(
     ref,
@@ -53,17 +50,28 @@ export default function SliderItem({
 
   const handleMouseEnter = (event) => {
     event.preventDefault();
-    if (!inViewport) return;
-    onHover(event);
+    if (!inViewport) {
+      return;
+    }
+    // update date transform origin base on screen width (padding 4%)
+    const rect = getBoundingClientRect(event.currentTarget);
+    if (rect.left + 4 >= width * 0.04 && rect.left + 4 <= width * 0.05) {
+      setOrigin('left');
+    } else if (rect.right >= width * 0.94 && rect.right <= width * 0.95) {
+      setOrigin('right');
+    } else {
+      setOrigin('center');
+    }
+
     if (large) {
       setLargeHover(true);
       setZIndex(20);
     } else {
-      if (timeoutOpenRef.current) {
-        clearTimeout(timeoutOpenRef.current);
+      if (openTimeoutRef.current) {
+        clearTimeout(openTimeoutRef.current);
       }
-      timeoutOpenRef.current = setTimeout(() => {
-        ref.current && !open && setAnchorEl(ref.current);
+      openTimeoutRef.current = setTimeout(() => {
+        ref.current && !previewOpen && setAnchorEl(ref.current);
       }, 800);
     }
   };
@@ -73,49 +81,44 @@ export default function SliderItem({
       setZIndex(0);
       setLargeHover(false);
     } else {
-      timeoutOpenRef.current && clearTimeout(timeoutOpenRef.current);
+      openTimeoutRef.current && clearTimeout(openTimeoutRef.current);
     }
   };
 
-  const handlePopperClose = () => {
+  const handlePreviewClose = () => {
     setAnchorEl(null);
-    timeoutOpenRef.current && clearTimeout(timeoutOpenRef.current);
+    openTimeoutRef.current && clearTimeout(openTimeoutRef.current);
   };
 
-  const toggleMyList = useCallback(
-    (userId) => {
-      dispatch(userListsActions.toggleMyList({ movie, userId }));
-    },
-    [dispatch, movie],
-  );
+  const handleMoreInfo = () => {
+    setAnchorEl(null);
+    setModalOpen(true);
+  };
 
-  const toggleLiked = useCallback(
-    (userId) => {
-      dispatch(userListsActions.toggleLiked({ movie, userId }));
-    },
-    [dispatch, movie],
-  );
+  const handleMouseOut = () => {
+    if (large) {
+      setZIndex(0);
+    }
+    if (openTimeoutRef.current) {
+      clearTimeout(openTimeoutRef.current);
+    }
+  };
 
-  const toggleDisliked = useCallback(
-    (userId) => {
-      dispatch(userListsActions.toggleDisliked({ movie, userId }));
-    },
-    [dispatch, movie],
-  );
-
-  const toggleMuted = useCallback(() => {
-    dispatch(playerActions.toggleMuted());
-  }, [dispatch]);
+  const handleMouseOver = () => {
+    if (large) {
+      setZIndex(15);
+    }
+  };
 
   return (
     <div
       ref={ref}
       data-id={movie.id}
-      onMouseOver={() => large && setZIndex(15)}
-      onFocus={() => large && setZIndex(15)}
-      onMouseOut={() => large && setZIndex(0)}
-      onBlur={() => large && setZIndex(0)}
-      onMouseLeave={() => handleMouseLeave()}
+      onMouseOver={handleMouseOver}
+      onFocus={handleMouseOver}
+      onMouseOut={handleMouseOut}
+      onBlur={handleMouseOut}
+      onMouseLeave={handleMouseLeave}
       onMouseEnter={(event) => handleMouseEnter(event)}
       style={{
         zIndex,
@@ -124,34 +127,63 @@ export default function SliderItem({
         'relative cursor-pointer inline-block box-border align-top overflow-hidden',
         'px-2px h-full min-w-1/2 sm:min-w-1/3 lg:min-w-1/4 xl:min-w-1/5 2xl:min-w-1/6',
         'transition-all ease-in-out duration-700',
-        `hover:origin-${transformOrigin}`,
+        `hover:origin-${origin}`,
         {
           'my-6': inSearchPage,
-          onScreen: inViewport,
           'hover:transform hover:scale-x-115 hover:scale-y-110 lg:hover:scale-y-115':
             large && inViewport,
         },
       )}
     >
-      <BoxArt movie={movie} large={large} />
+      <BoxArt
+        path={large ? movie.poster_path : movie.backdrop_path}
+        large={large}
+      />
       <AnimatePresence>
-        {open && (
+        {previewOpen && (
           <PreviewPopper
+            key={1}
             movie={movie}
-            open={open}
+            muted={muted}
+            currentTimeRef={currentTimeRef}
+            open={previewOpen}
             anchorEl={anchorEl}
-            transformOrigin={transformOrigin}
+            origin={origin}
             inMyList={inMyList}
             liked={liked}
             disliked={disliked}
-            handleClose={handlePopperClose}
+            handleClose={handlePreviewClose}
             toggleMyList={toggleMyList}
             toggleLiked={toggleLiked}
             toggleDisliked={toggleDisliked}
             toggleMuted={toggleMuted}
+            setTranslateX={setTranslateX}
+            setPreviewRect={setPreviewRect}
+            handleMoreInfo={handleMoreInfo}
+          />
+        )}
+        {modalOpen && (
+          <DetailModal
+            key={2}
+            open={modalOpen}
+            movie={movie}
+            muted={muted}
+            currentTimeRef={currentTimeRef}
+            transformOrigin={origin}
+            previewRect={previewRect}
+            translateX={translateX}
+            inMyList={inMyList}
+            liked={liked}
+            disliked={disliked}
+            toggleDisliked={toggleDisliked}
+            toggleLiked={toggleLiked}
+            toggleMyList={toggleMyList}
+            toggleMuted={toggleMuted}
+            closeModal={() => setModalOpen(false)}
           />
         )}
       </AnimatePresence>
+
       {large && (
         <div
           className={cx('w-full transition-opacity duration-700', {
@@ -189,7 +221,7 @@ export default function SliderItem({
                   </svg>
                 </button>
                 <AddToMyListButton
-                  onClick={() => toggleMyList(currentUser.uid)}
+                  onClick={toggleMyList}
                   className="w-8 h-8 p-2 mr-2 transition-all duration-200 border border-white border-opacity-50 border-solid rounded-full hover:bg-white hover:bg-opacity-5"
                   inMyList={inMyList}
                 />

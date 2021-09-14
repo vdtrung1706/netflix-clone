@@ -9,20 +9,19 @@ import {
 import usePreviewPopper from '@hooks/usePreviewPopper';
 import { Popper } from '@material-ui/core';
 import { IMAGE_BASE } from '@services/axios.service';
-import { selectCurrentUser } from '@store/auth/selectors.auth';
-import { selectPlayer } from '@store/player/selectors.player';
+import { getBoundingClientRect } from '@utils/convertor.utils';
 import cx from 'classnames';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
-import DetailModal from './DetailModal';
 import PreviewPopperTip from './PreviewPopperTip';
 
 export default function PreviewPopper({
   movie,
-  open,
   anchorEl,
-  transformOrigin,
+  muted,
+  open,
+  currentTimeRef,
+  origin,
   handleClose,
   inMyList,
   liked,
@@ -31,54 +30,49 @@ export default function PreviewPopper({
   toggleLiked,
   toggleDisliked,
   toggleMuted,
+  setTranslateX,
+  setPreviewRect,
+  handleMoreInfo,
 }) {
   const ref = useRef(null);
   const videoRef = useRef(null);
   const videoTimeout = useRef(null);
-  const [isBig, setIsBig] = useState(false);
-  const [play, setPlay] = useState(false);
-  const [visible, setVisible] = useState(true);
-  const [onClosing, setOnClosing] = useState(false);
-
-  const { muted } = useSelector(selectPlayer);
-  const currentUser = useSelector(selectCurrentUser);
+  const [played, setPlayed] = useState(false);
+  const { previewVariants, getTranslateX } = usePreviewPopper(origin, anchorEl);
 
   useEffect(() => {
-    if (!videoTimeout?.current) {
-      videoTimeout.current = setTimeout(() => setPlay(true), 2500);
+    setTranslateX(getTranslateX());
+    if (!videoTimeout.current && currentTimeRef.current === 0) {
+      videoTimeout.current = setTimeout(() => setPlayed(true), 2000);
     }
     return () => {
-      clearTimeout(videoTimeout.current);
+      if (videoTimeout.current) clearTimeout(videoTimeout.current);
     };
-  }, []);
-
-  const { previewVariants, getTranslateX } = usePreviewPopper(
-    transformOrigin,
-    anchorEl,
-    ref.current,
-  );
+  }, [currentTimeRef, getTranslateX, setTranslateX]);
 
   const handlePreviewClose = useCallback(() => {
-    if (isBig) return;
-    setOnClosing(true);
     if (videoTimeout.current) clearTimeout(videoTimeout.current);
-    videoTimeout.current = setTimeout(() => setPlay(false), 200);
+    videoTimeout.current = setTimeout(() => setPlayed(false), 100);
+    currentTimeRef.current = videoRef?.current?.currentTime || 0;
     handleClose();
-  }, [handleClose, isBig]);
+  }, [currentTimeRef, handleClose]);
 
-  const handleModalClose = useCallback(() => {
-    setIsBig(false);
-    handleClose();
-  }, [handleClose]);
+  const showMoreInfo = useCallback(() => {
+    if (videoTimeout.current) clearTimeout(videoTimeout.current);
+    setPreviewRect(getBoundingClientRect(ref.current));
+    currentTimeRef.current = videoRef?.current?.currentTime || 0;
+    handleMoreInfo();
+  }, [currentTimeRef, handleMoreInfo, setPreviewRect]);
+
+  const handleVideoMounted = (element) => {
+    if (element) {
+      videoRef.current = element;
+      element.currentTime = currentTimeRef.current;
+    }
+  };
 
   return (
-    <Popper
-      open={open}
-      anchorEl={anchorEl}
-      placement="bottom"
-      className={visible ? 'block' : 'hidden'}
-      ref={ref}
-    >
+    <Popper open={open} anchorEl={anchorEl} placement="bottom" ref={ref}>
       <motion.div
         variants={previewVariants}
         exit="exit"
@@ -89,32 +83,29 @@ export default function PreviewPopper({
       >
         {/* Image Or Video */}
         <div className="relative w-full min-h-196.88px">
-          {play ? (
+          {played || currentTimeRef.current > 0 ? (
             <>
               <video
-                ref={videoRef}
+                ref={handleVideoMounted}
                 muted={muted}
                 autoPlay
                 disableRemotePlayback
-                onEnded={() => setPlay(false)}
-                src="https://imdb-video.media-imdb.com/vi270974489/1434659607842-pgv4ql-1592298111084.mp4?Expires=1631347822&Signature=hAusBjXPGwAyj7wU0xRh2jj42-uycJh40jS37Ee2Tw95EJk4sPWNS~-2poIsmExmbOo3biqCUofvTorytt1xN6bMMcYO~6Let9b7jMFnmxjs65UJX7Yu5iMunf~RekPXPAj4lNigrB400RgIDAKKY2nqCDqurLI3ko~~uGWKplZeK2LzhFIyIe4MmHWcF2Hz4tjWUiwH5KfeCFh3rXZRW1ojwVijUlI9U6ArdSkoW2ao7kEsO8pYZ6Zr4VeqH4RXr1nECdiebHJiKec1iGlkKGDIrjF6c8bzc2Lsue64P9qY62xOlLcNxnmx~cObXN5CIxbXi5VsolTgNtFk4FO9Ig__&Key-Pair-Id=APKAIFLZBVQZ24NQH3KA"
+                onEnded={() => setPlayed(false)}
+                src="https://imdb-video.media-imdb.com/vi394707225/1434659607842-pgv4ql-1602090193929.mp4?Expires=1631689266&Signature=cAY4zSXyvVSa2ugMC3camRPrhkPhrUlleJP41FXzJmi1XyHlwXMUcBecipoJqVGJn-0dQBOV~SSxxQKLKV5hUuLAanKb9mPtt4odGFgrViD2usUyqokZdGpNAhWNQitQhbuzM7S6JFniYMV-AHVhatneDuchL8kq-LdWOOnu~3-unePpYYF8UCiKbFpjxxjhWHTkFeYLtL08WW-gOndSBFft2NITpGW-zT9FjN4M0kuYGcpwwMq6BnlupBRlrkIAE5EYPoPAJldZAjXjSYhh22Ni5rIa-d2RcmmW2WAbi9shHiNxXiwP2v4K0AfFoFURuIpAATWHERlKL7KEPsuQ3g__&Key-Pair-Id=APKAIFLZBVQZ24NQH3KA"
                 className="object-cover object-center w-full h-full rounded-t-md"
               />
               <ToggleSoundButton
                 muted={muted}
                 onClick={toggleMuted}
-                className="box-border absolute top-0 right-0 w-10 h-10 p-2 mx-4 mt-8 text-white duration-200 bg-white border border-solid rounded-full text-opacity-30 opacity-30 hover:text-opacity-100 bg-opacity-5 hover:opacity-100 border-grey hover:border-white trnasition-all"
+                className="box-border absolute top-0 right-0 w-10 h-10 p-2 mx-4 mt-8 text-white transition-all duration-200 bg-white border border-solid rounded-full text-opacity-40 opacity-40 hover:text-opacity-100 bg-opacity-5 hover:opacity-100 border-grey hover:border-white"
               />
             </>
           ) : (
-            <img
+            <motion.img
               src={`${IMAGE_BASE}/original${movie.backdrop_path}`}
               alt="small-preview-player"
               className={cx(
                 'object-cover object-center rounded-t-md w-full h-full',
-                {
-                  'rounded-md': onClosing,
-                },
               )}
             />
           )}
@@ -136,8 +127,8 @@ export default function PreviewPopper({
               >
                 <AddToMyListButton
                   inMyList={inMyList}
-                  onClick={() => toggleMyList(movie, currentUser.uid)}
-                  className="box-border w-10 h-10 p-2 mr-2 duration-200 bg-white border border-solid rounded-full bg-opacity-5 border-grey hover:border-white trnasition-all"
+                  onClick={() => toggleMyList()}
+                  className="box-border w-10 h-10 p-2 mr-2 transition-all duration-200 bg-white border border-solid rounded-full bg-opacity-5 border-grey hover:border-white"
                 />
               </PreviewPopperTip>
               <PreviewPopperTip
@@ -147,8 +138,8 @@ export default function PreviewPopper({
               >
                 <ToggleLikedButton
                   liked={liked}
-                  onClick={() => toggleLiked(movie, currentUser.uid)}
-                  className="box-border relative w-10 h-10 p-2 mr-2 text-white duration-200 bg-white border border-solid rounded-full bg-opacity-5 border-grey hover:border-white trnasition-all"
+                  onClick={toggleLiked}
+                  className="box-border relative w-10 h-10 p-2 mr-2 text-white transition-all duration-200 bg-white border border-solid rounded-full bg-opacity-5 border-grey hover:border-white"
                 />
               </PreviewPopperTip>
               <PreviewPopperTip
@@ -158,15 +149,15 @@ export default function PreviewPopper({
               >
                 <ToggleDislikedButton
                   disliked={disliked}
-                  onClick={() => toggleDisliked(movie, currentUser.uid)}
-                  className="box-border relative w-10 h-10 p-2 mr-2 text-white duration-200 bg-white border border-solid rounded-full bg-opacity-5 border-grey hover:border-white trnasition-all"
+                  onClick={toggleDisliked}
+                  className="box-border relative w-10 h-10 p-2 mr-2 text-white transition-all duration-200 bg-white border border-solid rounded-full bg-opacity-5 border-grey hover:border-white"
                 />
               </PreviewPopperTip>
             </div>
             <PreviewPopperTip arrow title="More info" placement="top">
               <MoreInfoButton
-                onClick={() => setIsBig(true)}
-                className="box-border relative w-10 h-10 p-1 duration-200 bg-white border border-solid rounded-full bg-opacity-5 border-grey hover:border-white trnasition-all"
+                onClick={() => showMoreInfo()}
+                className="box-border relative w-10 h-10 p-1 transition-all duration-200 bg-white border border-solid rounded-full bg-opacity-5 border-grey hover:border-white"
               />
             </PreviewPopperTip>
           </div>
@@ -190,28 +181,6 @@ export default function PreviewPopper({
             <div className="my-1">Thriller</div>
           </div>
         </div>
-
-        {/* Show Big Modal */}
-        <AnimatePresence>
-          {isBig && (
-            <DetailModal
-              previewRef={ref}
-              currentTime={videoRef.current ? videoRef.current.currentTime : 0}
-              movie={movie}
-              transformOrigin={transformOrigin}
-              translateX={getTranslateX()}
-              inMyList={inMyList}
-              liked={liked}
-              disliked={disliked}
-              toggleDisliked={toggleDisliked}
-              toggleLiked={toggleLiked}
-              toggleMyList={toggleMyList}
-              handleClose={handleModalClose}
-              setPreviewVisible={setVisible}
-              toggleMuted={toggleMuted}
-            />
-          )}
-        </AnimatePresence>
       </motion.div>
     </Popper>
   );

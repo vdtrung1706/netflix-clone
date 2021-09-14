@@ -4,6 +4,10 @@ const fontFamily = {
 };
 
 const fontSize = {
+  '0.3rem': '0.3rem',
+  '0.4rem': '0.4rem',
+  '0.5rem': '0.5rem',
+  '0.6rem': '0.6rem',
   '0.7rem': '0.7rem',
   '1.125rem': '1.125rem',
   '1.625rem': '1.625rem',

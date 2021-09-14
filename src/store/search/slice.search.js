@@ -25,10 +25,7 @@ const searchSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchSearchResults.fulfilled, (state, action) => {
-      const results = [...action.payload].filter(
-        (item) => item.backdrop_path || item.poster_path,
-      );
-      state.results = results;
+      state.results = action.payload;
       state.loading = false;
       state.error = '';
     });

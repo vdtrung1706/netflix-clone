@@ -23,7 +23,7 @@ const useDetailModal = (open, anchorRect, translateX) => {
 
     if (windowWidth < 570) {
       setSize((pre) => ({ ...pre, width: '96%' }));
-    } else if (windowWidth < 1024) {
+    } else if (windowWidth < 768) {
       setSize((pre) => ({ ...pre, width: 560 }));
     } else {
       setSize((pre) => ({ ...pre, width: 850 }));

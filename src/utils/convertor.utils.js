@@ -18,3 +18,10 @@ export function monthAgoDate() {
   date.setMonth(date.getMonth() - 1);
   return date.toJSON().slice(0, 10);
 }
+
+export function getBoundingClientRect(element) {
+  if (!element) return {};
+  const { top, right, bottom, left, width, height, x, y } =
+    element.getBoundingClientRect();
+  return { top, right, bottom, left, width, height, x, y };
+}

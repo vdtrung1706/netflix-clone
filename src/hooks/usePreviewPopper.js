@@ -1,51 +1,49 @@
 import { defaultEasing } from '@utils/motion.utils';
+import { useCallback, useMemo } from 'react';
 import useViewport from './useViewport';
 
-const usePreviewPopper = (transformOrigin, anchorEl, popperEl) => {
+const usePreviewPopper = (transformOrigin, anchorEl) => {
   const { width } = useViewport();
 
-  const getTranslateX = () => {
+  const getTranslateX = useCallback(() => {
     if (transformOrigin === 'right') {
       return `-${width * 0.04 - 4}px`;
     } else if (transformOrigin === 'left') {
       return `${width * 0.04 - 4}px`;
     }
     return 0;
-  };
+  }, [transformOrigin, width]);
 
-  const anchorRect = anchorEl?.getBoundingClientRect();
-  const popperRect = popperEl?.getBoundingClientRect();
+  const anchorRect = anchorEl.getBoundingClientRect();
 
-  const getScale = () => {
-    if (!anchorRect && !popperRect) return 0.7;
-    if (!popperRect) return (anchorRect.width - 4) / 350;
-    return (anchorRect.width - 4) / popperRect.width;
-  };
-
-  const previewVariants = {
-    initial: {
-      transformOrigin,
-      scale: getScale(),
-      translateX: getTranslateX(),
-      translateY: '-52%',
-    },
-    animate: {
-      opacity: 1,
-      transformOrigin,
-      scale: 1,
-      translateX: getTranslateX(),
-      translateY: '-66.666667%',
-      transition: { duration: 0.5, ease: defaultEasing },
-    },
-    exit: {
-      opacity: 0,
-      transformOrigin,
-      scale: getScale(),
-      translateX: getTranslateX(),
-      translateY: '-52%',
-      transition: { duration: 0.35, ease: defaultEasing },
-    },
-  };
+  const previewVariants = useMemo(
+    () => ({
+      initial: {
+        opacity: 1,
+        transformOrigin,
+        scale: (anchorRect.width - 4) / 350,
+        translateX: getTranslateX(),
+        translateY: '-52%',
+      },
+      animate: {
+        opacity: 1,
+        transformOrigin,
+        scale: 1,
+        translateX: getTranslateX(),
+        translateY: '-66.666667%',
+        transition: { duration: 0.4, ease: defaultEasing },
+      },
+      exit: {
+        opacity: 0,
+        transformOrigin,
+        scale: (anchorRect.width - 4) / 350,
+        translateX: getTranslateX(),
+        translateY: '-52%',
+        transition: { duration: 0.35, ease: defaultEasing },
+      },
+    }),
+    [anchorRect.width, getTranslateX, transformOrigin],
+  );
 
   return {
     previewVariants,

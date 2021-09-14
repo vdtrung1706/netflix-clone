@@ -15,15 +15,8 @@ export default function Slider({ title, selector, large }) {
   const ref = useRef();
   const { width } = useViewport();
   const { loading, error, data: movies } = useSelector(selector);
-  const {
-    hasPre,
-    hasNext,
-    itemsProps,
-    distance,
-    moveSection,
-    paginationIndicator,
-    onHover,
-  } = useSlider(ref, movies, width);
+  const { hasPre, hasNext, distance, moveSection, paginationIndicator } =
+    useSlider(ref, movies, width);
 
   useEffect(() => {}, [width]);
 
@@ -57,16 +50,9 @@ export default function Slider({ title, selector, large }) {
                     { 'h-96 md:h-116 2xl:h-124': large },
                   )}
                 >
-                  {itemsProps.map((item) => {
+                  {movies.map((movie) => {
                     return (
-                      <SliderItem
-                        key={item.movie.id}
-                        movie={item.movie}
-                        translate={item.translate}
-                        transformOrigin={item.transformOrigin}
-                        onHover={onHover}
-                        large={large}
-                      />
+                      <SliderItem key={movie.id} movie={movie} large={large} />
                     );
                   })}
                 </div>

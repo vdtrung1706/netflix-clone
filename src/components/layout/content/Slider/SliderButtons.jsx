@@ -12,7 +12,7 @@ function SliderButtons({ hasPre, hasNext, moveSection }) {
       {hasNext && (
         <button
           onClick={() => moveSection('RIGHT')}
-          className="slider-btn hidden sm:flex opacity-0 absolute top-0 bottom-0 right-0 z-20 w-4% text-center justify-center items-center bg-black-pure bg-opacity-40 transition-all duration-25 hover:bg-opacity-75"
+          className="slider-btn hidden sm:flex opacity-0 absolute rounded-l top-0 bottom-0 -right-2px z-20 w-4% text-center justify-center items-center bg-black-pure bg-opacity-40 transition-all duration-25 hover:bg-opacity-60"
         >
           <strong className="transition-all duration-25 lg:text-xl">
             <FontAwesomeIcon icon={faChevronRight} />
@@ -23,7 +23,7 @@ function SliderButtons({ hasPre, hasNext, moveSection }) {
       {hasPre && (
         <button
           onClick={() => moveSection('LEFT')}
-          className="slider-btn hidden sm:flex opacity-0 absolute top-0 bottom-0 left-0 z-20 w-4% text-center justify-center items-center bg-black-pure bg-opacity-40 transition-all duration-25 hover:bg-opacity-75"
+          className="slider-btn hidden sm:flex rounded-r opacity-0 absolute top-0 bottom-0 -left-2px z-20 w-4% text-center justify-center items-center bg-black-pure bg-opacity-40 transition-all duration-25 hover:bg-opacity-60"
         >
           <strong className="transition-all duration-25 lg:text-xl">
             <FontAwesomeIcon icon={faChevronLeft} />
@@ -34,7 +34,7 @@ function SliderButtons({ hasPre, hasNext, moveSection }) {
       {hasPre && hasNext === false ? (
         <button
           onClick={() => moveSection('RESET')}
-          className="slider-btn hidden sm:flex opacity-0 absolute top-0 bottom-0 right-0 z-20 w-4% text-center justify-center items-center bg-black-pure bg-opacity-40 transition-all duration-25 hover:bg-opacity-75"
+          className="slider-btn hidden sm:flex opacity-0 rounded-l absolute top-0 bottom-0 -right-2px z-20 w-4% text-center justify-center items-center bg-black-pure bg-opacity-40 transition-all duration-25 hover:bg-opacity-60"
         >
           <strong className="transition-all duration-25 lg:text-xl">
             <FontAwesomeIcon icon={faUndo} />

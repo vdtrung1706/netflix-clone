@@ -24,6 +24,8 @@ module.exports = {
     0: '0ms',
     25: '25ms',
     50: '0ms',
+    400: '400ms',
+    450: '450ms',
     1250: '1250ms',
     1500: '1500ms',
     1750: '1725ms',
@@ -35,6 +37,11 @@ module.exports = {
   },
   backgroundPosition: {
     'top-center': 'top center',
+  },
+  transitionProperty: {
+    width: 'width',
+    height: 'height',
+    spacing: 'margin, padding',
   },
   scale: {
     115: '1.15',

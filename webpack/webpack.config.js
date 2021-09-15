@@ -14,7 +14,6 @@ module.exports = {
     assetModuleFilename: 'images/[hash][ext][query]',
     publicPath: '/',
   },
-  entry: ['regenerator-runtime/runtime.js', './src/index.js'],
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.json', 'scss'],
     alias: {
@@ -33,7 +32,11 @@ module.exports = {
       chunkFilename: '[id].[contenthash].css',
     }),
     new HtmlWebpackPlugin({
+<<<<<<< Updated upstream
       template: path.join(root, 'src/index.html'),
+=======
+      template: path.resolve(root, 'src/index.html'),
+>>>>>>> Stashed changes
       inject: 'body',
       favicon: path.join(root, 'src/assets/icons/netflix_logo_n.ico'),
     }),

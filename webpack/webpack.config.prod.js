@@ -5,4 +5,5 @@ module.exports = {
   mode: 'production',
   target: 'browserslist',
   devtool: 'source-map',
+  entry: ['@babel/polyfill', './src/client.js'],
 };

@@ -1,4 +1,4 @@
-const { NODE_ENV } = process.env;
+// const { NODE_ENV } = process.env;
 
 const plugins = [
   [
@@ -9,9 +9,9 @@ const plugins = [
   ],
 ];
 
-if (NODE_ENV !== 'production') {
-  plugins.push('react-refresh/babel');
-}
+// if (NODE_ENV !== 'production') {
+//   plugins.push('react-refresh/babel');
+// }
 
 module.exports = {
   presets: [

@@ -1,25 +1,19 @@
-import { Nav } from '@components/layout';
-import useUserLists from '@hooks/useUserLists';
-import { selectUser } from '@store/auth/selectors.auth';
-import { authActions } from '@store/auth/slice.auth';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Routes from './routes/Routes';
+import * as React from 'react';
+import routes from './Routes';
+import { Route, Switch } from 'react-router-dom';
+import { Billboard } from '@components/layout';
+
+const C = Billboard.component;
 
 export default function App() {
-  const { currentUser } = useSelector(selectUser);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(authActions.checkUserSession());
-  }, [dispatch]);
-
-  useUserLists(currentUser?.uid);
-
   return (
-    <div className="w-full overflow-x-hidden">
-      <header>{currentUser && <Nav />}</header>
-      <Routes />
-    </div>
+    <React.Fragment>
+      <div className="container">
+        <Switch>
+          <Route path="/" exact render={() => <C />} />
+        </Switch>
+        <div>hello </div>
+      </div>
+    </React.Fragment>
   );
 }

@@ -1,13 +1,7 @@
 import { IMAGE_BASE } from '@services/axios.service';
-import { moviesRequests, tvshowsRequests } from '@services/requests.service';
-import {
-  selectBillboardMovie,
-  selectBillboardTVShow,
-} from '@store/billboard/billboard.selectors';
-import {
-  fetchBillboardMovie,
-  fetchBillboardTVShow,
-} from '@store/billboard/billboard.slice';
+import { tvshowsRequests } from '@services/requests.service';
+import { selectBillboardTVShow } from '@store/billboard/billboard.selectors';
+import { fetchBillboardTVShow } from '@store/billboard/billboard.slice';
 import { truncate } from '@utils/convertor.utils';
 import { defaultFadeInVariants, staggerOne } from '@utils/motion.utils';
 import cx from 'classnames';
@@ -15,24 +9,13 @@ import { motion } from 'framer-motion';
 import { memo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-function Billboard({ type }) {
+function Billboard() {
   const dispatch = useDispatch();
-  const { loading, error, data } = useSelector(
-    type === 'TVSHOW' ? selectBillboardTVShow : selectBillboardMovie,
-  );
+  const { loading, error, data } = useSelector(selectBillboardTVShow);
 
   useEffect(() => {
-    if (!data && type === 'TVSHOW') {
-      dispatch(fetchBillboardTVShow(tvshowsRequests.trendingSeries.url));
-    }
-    if (!data && type === 'MOVIE') {
-      dispatch(fetchBillboardMovie(moviesRequests.netflixOrignal.url));
-    }
-    if (type === 'LATEST') {
-      dispatch(fetchBillboardMovie(moviesRequests.actionMovies.url));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, type]);
+    dispatch(fetchBillboardTVShow(tvshowsRequests.trendingSeries.url));
+  }, [dispatch]);
 
   const billboardUrl =
     data?.backdrop_path && `${IMAGE_BASE}/original${data.backdrop_path}`;
@@ -118,4 +101,6 @@ function Billboard({ type }) {
   );
 }
 
-export default memo(Billboard);
+export default {
+  component: Billboard,
+};

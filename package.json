@@ -6,9 +6,9 @@
   "scripts": {
     "format": "prettier --write \"src/**/*.{js,jsx}\"",
     "lint": "eslint \"src/**/*.{js,jsx}\" --quiet",
-    "dev": "NODE_ENV=development webpack serve --progress",
+    "dev": "NODE_ENV=development webpack serve --config webpack/webpack.config.dev.js --progress",
     "watch": "webpack --watch",
-    "build:prod": "NODE_ENV=production webpack --progress",
+    "build:prod": "NODE_ENV=production webpack --config webpack/webpack.config.prod.js --progress",
     "build-dev": "webpack"
   },
   "author": "vdtrung",
@@ -39,6 +39,7 @@
     "@babel/core": "^7.15.0",
     "@babel/eslint-parser": "^7.15.0",
     "@babel/plugin-proposal-class-properties": "^7.14.5",
+    "@babel/plugin-transform-modules-commonjs": "^7.15.4",
     "@babel/preset-env": "^7.15.0",
     "@babel/preset-react": "^7.14.5",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",

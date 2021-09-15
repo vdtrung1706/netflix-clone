@@ -27,7 +27,11 @@
     "node": true
   },
   "settings": {
-    "import/resolver": "webpack",
+    "import/resolver": {
+      "webpack": {
+        "config": "./webpack/webpack.config.js"
+      }
+    },
     "react": {
       "version": "detect"
     }

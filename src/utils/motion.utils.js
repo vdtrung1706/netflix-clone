@@ -4,10 +4,6 @@ export const staggerHalf = {
   animate: { transition: { staggerChildren: 0.05 } },
 };
 
-export const staggerOne = {
-  animate: { transition: { staggerChildren: 0.1 } },
-};
-
 export const defaultPageFadeInVariants = {
   initial: {
     opacity: 0,

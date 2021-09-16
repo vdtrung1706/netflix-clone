@@ -1,26 +1,32 @@
 /* eslint-disable jsx-a11y/media-has-caption */
-import {
-  AddToMyListButton,
-  ToggleDislikedButton,
-  ToggleLikedButton,
-  ToggleSoundButton,
-} from '@components/buttons';
+import AddToMyListButton from '@components/buttons/AddToMyListButton';
+import ToggleDislikedButton from '@components/buttons/ToggleDislikedButton';
+import ToggleLikedButton from '@components/buttons/ToggleLikedButton';
+import ToggleSoundButton from '@components/buttons/ToggleSoundButton';
 import useDetailModal from '@hooks/useDetailModal';
+import useViewport from '@hooks/useViewport';
 import { Modal } from '@material-ui/core';
 import Backdrop from '@material-ui/core/Backdrop';
 import { IMAGE_BASE } from '@services/axios.service';
 import { truncate } from '@utils/convertor.utils';
 import { defaultEasing } from '@utils/motion.utils';
-import useViewport from '@hooks/useViewport';
 import cx from 'classnames';
 import { motion } from 'framer-motion';
-import { useEffect, useCallback, useState, useMemo, useRef } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  lazy,
+  Suspense,
+} from 'react';
 import PreviewPopperTip from './PreviewPopperTip';
-import ModalPlayer from './ModalPlayer';
+
+const ModalPlayer = lazy(() => import('./ModalPlayer'));
 
 function DetailModal({
   movie,
-  open,
   muted,
   previewRect,
   translateX,
@@ -111,7 +117,7 @@ function DetailModal({
 
   return (
     <Modal
-      open={open}
+      open={true}
       onClose={closeModal}
       BackdropComponent={Backdrop}
       BackdropProps={{ timeout: 25 }}
@@ -132,11 +138,13 @@ function DetailModal({
           <div className="flex flex-col w-full bg-black rounded-md box-shadow-full">
             <div className="w-full border-b border-opacity-50 border-solid border-black-pure">
               {modalStatus.played ? (
-                <ModalPlayer
-                  muted={muted}
-                  onEnded={handleVideoEnd}
-                  currentTime={currentTimeRef.current}
-                />
+                <Suspense fallback={null}>
+                  <ModalPlayer
+                    muted={muted}
+                    onEnded={handleVideoEnd}
+                    currentTime={currentTimeRef.current}
+                  />
+                </Suspense>
               ) : (
                 <img
                   src={`${IMAGE_BASE}/original${movie.backdrop_path}`}

@@ -4,7 +4,7 @@ import { playerActions } from '@store/player/slice.player';
 import { selectPlayer } from '@store/player/selectors.player';
 import { userListsActions } from '@store/user-lists/slice.user-lists';
 import { includeObjectById } from '@utils/array.utils';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 const useSliderItem = (movie) => {
@@ -12,9 +12,18 @@ const useSliderItem = (movie) => {
   const { uid } = useSelector(selectCurrentUser);
   const { muted } = useSelector(selectPlayer);
   const { myList, likedList, dislikedList } = useSelector(selectUserLists);
-  const inMyList = includeObjectById(myList, movie.id);
-  const liked = includeObjectById(likedList, movie.id);
-  const disliked = includeObjectById(dislikedList, movie.id);
+  const inMyList = useMemo(
+    () => includeObjectById(myList, movie.id),
+    [movie.id, myList],
+  );
+  const liked = useMemo(
+    () => includeObjectById(likedList, movie.id),
+    [likedList, movie.id],
+  );
+  const disliked = useMemo(
+    () => includeObjectById(dislikedList, movie.id),
+    [dislikedList, movie.id],
+  );
 
   const toggleMyList = useCallback(() => {
     dispatch(userListsActions.toggleMyList({ movie, uid }));

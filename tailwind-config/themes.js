@@ -27,13 +27,6 @@ module.exports = {
     400: '400ms',
     450: '450ms',
     1250: '1250ms',
-    1500: '1500ms',
-    1750: '1725ms',
-  },
-  transitionDelay: {
-    850: '850ms',
-    1200: '1200ms',
-    1500: '1500ms',
   },
   backgroundPosition: {
     'top-center': 'top center',

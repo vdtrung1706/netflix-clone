@@ -3,18 +3,18 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
-
 const root = process.cwd();
 const NODE_MODULES = path.join(root, 'node_modules');
 
 module.exports = {
+  entry: ['regenerator-runtime/runtime.js', './src/index.js'],
   output: {
     path: path.join(root, 'dist'),
-    filename: 'index.bundle.js',
+    filename: '[name].bundle.js',
+    chunkFilename: '[name].bundle.js',
     assetModuleFilename: 'images/[hash][ext][query]',
     publicPath: '/',
   },
-  entry: ['regenerator-runtime/runtime.js', './src/index.js'],
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.json', 'scss'],
     alias: {

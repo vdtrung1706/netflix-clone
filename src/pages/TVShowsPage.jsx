@@ -1,5 +1,7 @@
-import Layout from '@components/common/Layout/Layout';
-import { Billboard, SkeletonSliders, Slider } from '@components/layout';
+import Layout from '@components/common/Layout';
+import Billboard from '@components/layout/content/Billboard/Billboard';
+import Slider from '@components/layout/content/Slider/Slider';
+import SkeletonSliders from '@components/layout/loader/SkeletonSliders';
 import useRetrieveData from '@hooks/useRetrieveData';
 import { tvshowsActions } from '@store/tvshows/slice.tvshows';
 import { defaultPageFadeInVariants } from '@utils/motion.utils';

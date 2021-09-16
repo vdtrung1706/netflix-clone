@@ -1,10 +1,12 @@
 import { ARROW_POINT_DOWN, NETFLIX_LOGO } from '@assets';
 import useViewport from '@hooks/useViewport';
 import cx from 'classnames';
-import React, { useEffect, useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import NavMenu from './NavMenu';
-import NavMenuCollapse from './NavMenuCollapse';
+
+const NavMenuCollapse = lazy(() => import('./NavMenuCollapse'));
+const NavMenu = lazy(() => import('./NavMenu'));
 
 function PrimaryNav() {
   const { width } = useViewport();
@@ -24,27 +26,29 @@ function PrimaryNav() {
       <Link to="/" className="w-20 md:w-24">
         <img src={NETFLIX_LOGO} alt="Logo" />
       </Link>
-
-      <ul className="flex items-center gap-5 p-0 m-0 ml-5 text-shadow md:ml-7 md:text-sm lg:ml-12">
-        <li
-          className={cx(
-            'text-xs list-none list-item transition-all ease-linear duration-400',
-            { hidden: !smallScreen },
-          )}
-        >
-          <button
-            onClick={hanldeExpanded}
-            className="relative flex items-center h-full font-bold no-underline"
+      <Suspense fallback={null}>
+        <ul className="flex items-center gap-5 p-0 m-0 ml-5 text-shadow md:ml-7 md:text-sm lg:ml-12">
+          <li
+            className={cx(
+              'text-xs list-none list-item transition-all ease-linear duration-400',
+              { hidden: !smallScreen },
+            )}
           >
-            Browse
-            <img src={ARROW_POINT_DOWN} alt="browse" className="h-3 ml-1" />
-          </button>
+            <button
+              onClick={hanldeExpanded}
+              className="relative flex items-center h-full font-bold no-underline"
+            >
+              Browse
+              <img src={ARROW_POINT_DOWN} alt="browse" className="h-3 ml-1" />
+            </button>
+            <AnimatePresence>
+              {open && <NavMenuCollapse setOpen={setOpen} />}
+            </AnimatePresence>
+          </li>
 
-          <NavMenuCollapse open={open} setOpen={setOpen} />
-        </li>
-
-        <NavMenu additionClass={`${smallScreen ? 'hidden' : ''}`} />
-      </ul>
+          {!smallScreen && <NavMenu />}
+        </ul>
+      </Suspense>
     </div>
   );
 }

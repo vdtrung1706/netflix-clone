@@ -5,11 +5,10 @@ import cx from 'classnames';
 import { motion } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
+import './slider.css';
 import SliderButtons from './SliderButtons';
 import SliderItem from './SliderItem';
 import SliderTitle from './SliderTitle';
-
-import './slider.css';
 
 export default function Slider({ title, selector, large }) {
   const ref = useRef();

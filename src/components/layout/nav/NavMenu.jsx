@@ -1,8 +1,8 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-function NavMenu({ additionClass }) {
-  const className = `${additionClass} hover:text-gray-400 transition-colors duration-200 ease-linear focus:font-bold focus:text-white`;
+function NavMenu() {
+  const className = `hover:text-gray-400 transition-colors duration-200 ease-linear focus:font-bold focus:text-white`;
 
   const activeClassName = 'font-bold cursor-default';
 
@@ -18,7 +18,6 @@ function NavMenu({ additionClass }) {
           Home
         </NavLink>
       </li>
-
       <li>
         <NavLink
           exact
@@ -29,7 +28,6 @@ function NavMenu({ additionClass }) {
           TV Shows
         </NavLink>
       </li>
-
       <li>
         <NavLink
           exact
@@ -40,7 +38,6 @@ function NavMenu({ additionClass }) {
           Movies
         </NavLink>
       </li>
-
       <li>
         <NavLink
           exact
@@ -51,7 +48,6 @@ function NavMenu({ additionClass }) {
           New & Popular
         </NavLink>
       </li>
-
       <li>
         <NavLink
           exact

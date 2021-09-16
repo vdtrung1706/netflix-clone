@@ -1,5 +1,5 @@
 import { HERO, HERO_1000, HERO_1500, HERO_1800, NETFLIX_LOGO } from '@assets';
-import Layout from '@components/common/Layout/Layout';
+import Layout from '@components/common/Layout';
 import { defaultPageFadeInVariants } from '@utils/motion.utils';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
@@ -27,12 +27,12 @@ const GreetingHeader = () => {
   return (
     <div className="relative z-10 pt-5 text-base">
       <div className="flex flex-row flex-nowrap items-center mx-4% pt-2 relative justify-between">
-        <a
-          href="/"
+        <Link
+          to="/"
           className="w-logo-xs sm:w-logo-sm lg:w-logo-lg 2xl:w-logo-2xl"
         >
           <img src={NETFLIX_LOGO} alt="logo" />
-        </a>
+        </Link>
         <Link
           to="/login"
           className="px-3 text-sm rounded-sm bg-red py-2px sm:py-1 sm:text-base sm:px-4"

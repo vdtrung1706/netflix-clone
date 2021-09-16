@@ -1,5 +1,7 @@
-import { Layout } from '@components/common';
-import { Billboard, SkeletonSliders, Slider } from '@components/layout';
+import Layout from '@components/common/Layout';
+import Billboard from '@components/layout/content/Billboard/Billboard';
+import Slider from '@components/layout/content/Slider/Slider';
+import SkeletonSliders from '@components/layout/loader/SkeletonSliders';
 import useRetrieveData from '@hooks/useRetrieveData';
 import { moviesActions } from '@store/movies/slice.movies';
 import { defaultPageFadeInVariants } from '@utils/motion.utils';

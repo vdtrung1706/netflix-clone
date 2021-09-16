@@ -1,8 +1,10 @@
 import { PROFILE_DEFAULT } from '@assets';
 import { selectCurrentUser } from '@store/auth/selectors.auth';
-import { useState } from 'react';
+import { Suspense, useState, lazy } from 'react';
 import { useSelector } from 'react-redux';
-import ProfileMenu from './ProfileMenu';
+import { AnimatePresence } from 'framer-motion';
+
+const ProfileMenu = lazy(() => import('./ProfileMenu'));
 
 export default function Profile() {
   const currentUser = useSelector(selectCurrentUser);
@@ -28,8 +30,11 @@ export default function Profile() {
           }}
         ></span>
       </div>
-
-      <ProfileMenu currentUser={currentUser} open={open} setOpen={setOpen} />
+      <Suspense fallback={null}>
+        <AnimatePresence>
+          {open && <ProfileMenu currentUser={currentUser} setOpen={setOpen} />}
+        </AnimatePresence>
+      </Suspense>
     </div>
   );
 }

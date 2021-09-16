@@ -9,11 +9,13 @@ import {
   fetchBillboardTVShow,
 } from '@store/billboard/billboard.slice';
 import { truncate } from '@utils/convertor.utils';
-import { defaultFadeInVariants, staggerOne } from '@utils/motion.utils';
+import { defaultFadeInVariants } from '@utils/motion.utils';
 import cx from 'classnames';
 import { motion } from 'framer-motion';
 import { memo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
+console.log('bill boared');
 
 function Billboard({ type }) {
   const dispatch = useDispatch();
@@ -65,13 +67,7 @@ function Billboard({ type }) {
             </div>
           </div>
 
-          <motion.div
-            variants={staggerOne}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            className="absolute top-0 bottom-1/5 left-4% flex flex-col justify-end w-6/12 z-10 md:bottom-35% lg:bottom-40% lg:w-4/12"
-          >
+          <div className="absolute top-0 bottom-1/5 left-4% flex flex-col justify-end w-6/12 z-10 md:bottom-35% lg:bottom-40% lg:w-4/12">
             <div className="w-full">
               <div className="relative w-full">
                 <h1 className="w-full text-2xl font-bold sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-shadow">
@@ -111,7 +107,7 @@ function Billboard({ type }) {
                 </button>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       )}
     </motion.div>

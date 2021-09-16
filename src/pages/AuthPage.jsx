@@ -1,11 +1,14 @@
 import { HERO, HERO_1000, HERO_1500, HERO_1800, NETFLIX_LOGO } from '@assets';
-import { Layout } from '@components/common';
-import { CircleLoading, SignIn, SignUp } from '@components/layout';
+import Layout from '@components/common/Layout';
 import { selectUser } from '@store/auth/selectors.auth';
 import { defaultPageFadeInVariants } from '@utils/motion.utils';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { useSelector } from 'react-redux';
+import CircleLoading from '@components/layout/loader/CircleLoading';
+import SignIn from '@components/layout/auth/SignIn';
+
+const SignUp = lazy(() => import('@components/layout/auth/SignUp'));
 
 export default function AuthPage() {
   const [isSignIn, setIsSignIn] = useState(true);
@@ -20,11 +23,14 @@ export default function AuthPage() {
         exit="exit"
         className="relative z-0 min-h-full bg-black-pure md:min-h-full"
       >
-        {loading && (
-          <div className="absolute top-0 bottom-0 left-0 right-0 bg-black-pure bg-opacity-60 z-75">
-            <CircleLoading />
-          </div>
-        )}
+        <Suspense fallback={null}>
+          {loading && (
+            <div className="absolute top-0 bottom-0 left-0 right-0 bg-black-pure bg-opacity-60 z-75">
+              <CircleLoading />
+            </div>
+          )}
+        </Suspense>
+
         <div className="absolute hidden w-full h-full min-h-screen opacity-50 select-none -z-1 md:block">
           <img
             src={HERO}
@@ -40,11 +46,13 @@ export default function AuthPage() {
         </div>
         <div className="md:pb-10 md:m-auto md:min-h-660px md:max-w-md">
           <div className="flex flex-col pt-5 px-5% min-h-550px w-full pb-8 rounded box-border md:p-14 md:bg-black-pure md:bg-opacity-75">
-            {isSignIn ? (
-              <SignIn setIsSignIn={setIsSignIn} />
-            ) : (
-              <SignUp setIsSignIn={setIsSignIn} />
-            )}
+            <Suspense fallback={null}>
+              {isSignIn ? (
+                <SignIn setIsSignIn={setIsSignIn} />
+              ) : (
+                <SignUp setIsSignIn={setIsSignIn} />
+              )}
+            </Suspense>
           </div>
         </div>
       </motion.div>

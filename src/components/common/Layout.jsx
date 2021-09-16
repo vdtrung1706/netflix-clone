@@ -1,5 +1,5 @@
-import { Footer } from '@components/layout';
-import Seo from '../Seo/Seo';
+import Footer from '@components/layout/footers/Footer';
+import Seo from './Seo';
 
 function Layout({
   children,
@@ -10,7 +10,7 @@ function Layout({
   return (
     <div className="overflow-hidden">
       <Seo title={title} description={description} path={path} />
-      <main>{children}</main>
+      <main className="min-h-screen">{children}</main>
       <Footer />
     </div>
   );

@@ -1,16 +1,26 @@
 import AddToMyListButton from '@components/buttons/AddToMyListButton';
 import MoreInfoButton from '@components/buttons/MoreInfoButton';
-import { DetailModal, PreviewPopper } from '@components/common';
+import PreviewPopper from '@components/common/PreviewPopper';
 import useSliderItem from '@hooks/useSliderItem';
 import useViewport from '@hooks/useViewport';
 import useVisibility from '@hooks/useVisibility';
 import { getBoundingClientRect } from '@utils/convertor.utils';
 import cx from 'classnames';
 import { AnimatePresence } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import {
+  lazy,
+  memo,
+  Suspense,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import BoxArt from './BoxArt';
 
-export default function SliderItem({ movie, large, inSearchPage }) {
+const DetailModal = lazy(() => import('@components/common/DetailModal'));
+
+function SliderItem({ movie, large, inSearchPage }) {
   const ref = useRef(null);
   const openTimeoutRef = useRef(null);
   const currentTimeRef = useRef(0);
@@ -48,21 +58,32 @@ export default function SliderItem({ movie, large, inSearchPage }) {
     () => setInViewport(false),
   );
 
+  const getOrgin = useCallback(
+    (element) => {
+      // padding 4% --> if left > width*3% ... --> origin left
+      const { left, right, width: itemWidth } = getBoundingClientRect(element);
+      const toLeft = width * 0.02;
+      const toRight = width * 0.94;
+      if (
+        (left >= toLeft && left <= toLeft + itemWidth) ||
+        (right >= toLeft && right <= toLeft + itemWidth)
+      ) {
+        return 'left';
+      }
+      if (right >= toRight || left >= toRight) {
+        return 'right';
+      }
+      return 'center';
+    },
+    [width],
+  );
+
   const handleMouseEnter = (event) => {
     event.preventDefault();
     if (!inViewport) {
       return;
     }
-    // update date transform origin base on screen width (padding 4%)
-    const rect = getBoundingClientRect(event.currentTarget);
-    if (rect.left + 4 >= width * 0.04 && rect.left + 4 <= width * 0.05) {
-      setOrigin('left');
-    } else if (rect.right >= width * 0.94 && rect.right <= width * 0.95) {
-      setOrigin('right');
-    } else {
-      setOrigin('center');
-    }
-
+    setOrigin(getOrgin(event.currentTarget));
     if (large) {
       setLargeHover(true);
       setZIndex(20);
@@ -146,7 +167,6 @@ export default function SliderItem({ movie, large, inSearchPage }) {
             movie={movie}
             muted={muted}
             currentTimeRef={currentTimeRef}
-            open={previewOpen}
             anchorEl={anchorEl}
             origin={origin}
             inMyList={inMyList}
@@ -162,26 +182,27 @@ export default function SliderItem({ movie, large, inSearchPage }) {
             handleMoreInfo={handleMoreInfo}
           />
         )}
-        {modalOpen && (
-          <DetailModal
-            key={2}
-            open={modalOpen}
-            movie={movie}
-            muted={muted}
-            currentTimeRef={currentTimeRef}
-            transformOrigin={origin}
-            previewRect={previewRect}
-            translateX={translateX}
-            inMyList={inMyList}
-            liked={liked}
-            disliked={disliked}
-            toggleDisliked={toggleDisliked}
-            toggleLiked={toggleLiked}
-            toggleMyList={toggleMyList}
-            toggleMuted={toggleMuted}
-            closeModal={() => setModalOpen(false)}
-          />
-        )}
+        <Suspense fallback={null}>
+          {modalOpen && (
+            <DetailModal
+              key={2}
+              movie={movie}
+              muted={muted}
+              currentTimeRef={currentTimeRef}
+              transformOrigin={origin}
+              previewRect={previewRect}
+              translateX={translateX}
+              inMyList={inMyList}
+              liked={liked}
+              disliked={disliked}
+              toggleDisliked={toggleDisliked}
+              toggleLiked={toggleLiked}
+              toggleMyList={toggleMyList}
+              toggleMuted={toggleMuted}
+              closeModal={() => setModalOpen(false)}
+            />
+          )}
+        </Suspense>
       </AnimatePresence>
 
       {large && (
@@ -261,3 +282,5 @@ export default function SliderItem({ movie, large, inSearchPage }) {
     </div>
   );
 }
+
+export default memo(SliderItem);

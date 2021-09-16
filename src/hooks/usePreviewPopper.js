@@ -1,11 +1,11 @@
 import { defaultEasing } from '@utils/motion.utils';
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import useViewport from './useViewport';
 
 const usePreviewPopper = (transformOrigin, anchorEl) => {
   const { width } = useViewport();
 
-  const getTranslateX = useCallback(() => {
+  const translateX = useMemo(() => {
     if (transformOrigin === 'right') {
       return `-${width * 0.04 - 4}px`;
     } else if (transformOrigin === 'left') {
@@ -22,14 +22,14 @@ const usePreviewPopper = (transformOrigin, anchorEl) => {
         opacity: 1,
         transformOrigin,
         scale: (anchorRect.width - 4) / 350,
-        translateX: getTranslateX(),
+        translateX,
         translateY: '-52%',
       },
       animate: {
         opacity: 1,
         transformOrigin,
         scale: 1,
-        translateX: getTranslateX(),
+        translateX,
         translateY: '-66.666667%',
         transition: { duration: 0.4, ease: defaultEasing },
       },
@@ -37,17 +37,17 @@ const usePreviewPopper = (transformOrigin, anchorEl) => {
         opacity: 0,
         transformOrigin,
         scale: (anchorRect.width - 4) / 350,
-        translateX: getTranslateX(),
+        translateX,
         translateY: '-52%',
         transition: { duration: 0.35, ease: defaultEasing },
       },
     }),
-    [anchorRect.width, getTranslateX, transformOrigin],
+    [anchorRect.width, transformOrigin, translateX],
   );
 
   return {
     previewVariants,
-    getTranslateX,
+    translateX,
   };
 };
 

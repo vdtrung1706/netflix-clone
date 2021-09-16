@@ -1,5 +1,4 @@
 import { IMAGE_BASE } from '@services/axios.service';
-import React from 'react';
 
 function BoxArtImage({ path, title }) {
   return (
@@ -20,4 +19,4 @@ function BoxArtImage({ path, title }) {
   );
 }
 
-export default React.memo(BoxArtImage);
+export default BoxArtImage;

@@ -1,17 +1,19 @@
 import { CROSS_SIGN, SEARCH_ICON } from '@assets';
 import useOutside from '@hooks/useOutside';
 import { SEARCH_ENDPOINT } from '@services/requests.service';
+import { selectSearch } from '@store/search/selectors.search';
 import { fetchSearchResults, searchActions } from '@store/search/slice.search';
 import cx from 'classnames';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 
 export default function SearchBox() {
   const ref = useRef(null);
+  const inputRef = useRef(null);
   const preLocation = useRef(null);
   const [toggle, setToggle] = useState(false);
-  const { searchContent } = useSelector((state) => state.search);
+  const { searchContent } = useSelector(selectSearch);
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation();
@@ -21,6 +23,12 @@ export default function SearchBox() {
       preLocation.current = location.pathname;
     }
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (toggle && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [toggle]);
 
   useOutside(ref, () => {
     if (!searchContent) setToggle(false);
@@ -32,22 +40,24 @@ export default function SearchBox() {
     }
   };
 
-  const handleRemoveSearchContent = () => {
+  const handleRemoveSearchContent = useCallback(() => {
     dispatch(searchActions.removeSearchContent());
     history.push(preLocation.current);
-  };
+  }, [dispatch, history]);
 
-  const handleChangeSearchContent = (e) => {
-    const value = e.target.value;
-    dispatch(searchActions.changeSearchContent(value));
-
-    if (value) {
-      dispatch(fetchSearchResults(SEARCH_ENDPOINT + value.toLowerCase()));
-      history.push(`/search?q=${value}`);
-    } else {
-      history.push(preLocation.current);
-    }
-  };
+  const handleChangeSearchContent = useCallback(
+    (e) => {
+      const value = e.target.value;
+      dispatch(searchActions.changeSearchContent(value));
+      if (value) {
+        dispatch(fetchSearchResults(SEARCH_ENDPOINT + value.toLowerCase()));
+        history.push(`/search?q=${value}`);
+      } else {
+        history.push(preLocation.current);
+      }
+    },
+    [dispatch, history],
+  );
 
   return (
     <div
@@ -64,6 +74,7 @@ export default function SearchBox() {
       </button>
 
       <input
+        ref={inputRef}
         value={searchContent}
         onChange={(e) => handleChangeSearchContent(e)}
         className={cx(
@@ -75,17 +86,17 @@ export default function SearchBox() {
 
       <button
         onClick={() => handleRemoveSearchContent()}
-        className={cx('h-0 w-0 px-0 lg:h-0 lg:w-0', {
+        className={cx('h-0 w-0 px-0 lg:h-0 lg:w-0 cursor-default', {
           'h-3 w-3 px-2 lg:h-4 lg:w-3': toggle,
         })}
       >
         <img
-          className={cx(
-            'opacity-0 transition-opacity ease-linear duration-200',
-            { 'opacity-100': searchContent },
-          )}
+          className={cx('transition-opacity ease-linear duration-200', {
+            'opacity-100 cursor-pointer': searchContent,
+            'hidden opacity-0': !searchContent,
+          })}
           src={CROSS_SIGN}
-          alt="remove"
+          alt="clear"
         />
       </button>
     </div>

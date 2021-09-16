@@ -1,11 +1,9 @@
 /* eslint-disable jsx-a11y/media-has-caption */
-import {
-  AddToMyListButton,
-  MoreInfoButton,
-  ToggleDislikedButton,
-  ToggleLikedButton,
-  ToggleSoundButton,
-} from '@components/buttons';
+import AddToMyListButton from '@components/buttons/AddToMyListButton';
+import MoreInfoButton from '@components/buttons/MoreInfoButton';
+import ToggleDislikedButton from '@components/buttons/ToggleDislikedButton';
+import ToggleLikedButton from '@components/buttons/ToggleLikedButton';
+import ToggleSoundButton from '@components/buttons/ToggleSoundButton';
 import usePreviewPopper from '@hooks/usePreviewPopper';
 import { Popper } from '@material-ui/core';
 import { IMAGE_BASE } from '@services/axios.service';
@@ -19,7 +17,6 @@ export default function PreviewPopper({
   movie,
   anchorEl,
   muted,
-  open,
   currentTimeRef,
   origin,
   handleClose,
@@ -38,17 +35,17 @@ export default function PreviewPopper({
   const videoRef = useRef(null);
   const videoTimeout = useRef(null);
   const [played, setPlayed] = useState(false);
-  const { previewVariants, getTranslateX } = usePreviewPopper(origin, anchorEl);
+  const { previewVariants, translateX } = usePreviewPopper(origin, anchorEl);
 
   useEffect(() => {
-    setTranslateX(getTranslateX());
+    setTranslateX(translateX);
     if (!videoTimeout.current && currentTimeRef.current === 0) {
       videoTimeout.current = setTimeout(() => setPlayed(true), 2000);
     }
     return () => {
       if (videoTimeout.current) clearTimeout(videoTimeout.current);
     };
-  }, [currentTimeRef, getTranslateX, setTranslateX]);
+  }, [currentTimeRef, translateX, setTranslateX]);
 
   const handlePreviewClose = useCallback(() => {
     if (videoTimeout.current) clearTimeout(videoTimeout.current);
@@ -72,7 +69,7 @@ export default function PreviewPopper({
   };
 
   return (
-    <Popper open={open} anchorEl={anchorEl} placement="bottom" ref={ref}>
+    <Popper open={true} anchorEl={anchorEl} placement="bottom" ref={ref}>
       <motion.div
         variants={previewVariants}
         exit="exit"
@@ -91,7 +88,7 @@ export default function PreviewPopper({
                 autoPlay
                 disableRemotePlayback
                 onEnded={() => setPlayed(false)}
-                src="https://imdb-video.media-imdb.com/vi394707225/1434659607842-pgv4ql-1602090193929.mp4?Expires=1631689266&Signature=cAY4zSXyvVSa2ugMC3camRPrhkPhrUlleJP41FXzJmi1XyHlwXMUcBecipoJqVGJn-0dQBOV~SSxxQKLKV5hUuLAanKb9mPtt4odGFgrViD2usUyqokZdGpNAhWNQitQhbuzM7S6JFniYMV-AHVhatneDuchL8kq-LdWOOnu~3-unePpYYF8UCiKbFpjxxjhWHTkFeYLtL08WW-gOndSBFft2NITpGW-zT9FjN4M0kuYGcpwwMq6BnlupBRlrkIAE5EYPoPAJldZAjXjSYhh22Ni5rIa-d2RcmmW2WAbi9shHiNxXiwP2v4K0AfFoFURuIpAATWHERlKL7KEPsuQ3g__&Key-Pair-Id=APKAIFLZBVQZ24NQH3KA"
+                src="https://imdb-video.media-imdb.com/vi591642649/1434659607842-pgv4ql-1629798983356.mp4?Expires=1631870291&Signature=qE-mgX7KPQi09KuhI3MD0aguRY1cPdRA6btvlHN4LwQHG1cGUW~j2mAF5s~fHciUFwnUyTbDt0-mKdEjqzE6ABTfI~e1U9n5IW7dC8wG1eGkCSUw3kdlkqnQRKBCMoxRPP~gwzljCV9A7dtYCn3fBnI-3Mb-v9rVB13ySufLqX1VS8VfoRQ9DFp2AqTCODEkWoP2fJDxCOC64~wVEP3HD3JQhagVeJ~eIEIjzWXOsqf5WrCeaPkzkv4dGKWTV4WtOAn0CKOBMVI78vcQOQCzLKdCEyghGkPk79vtAtpTBCKTHxrPqD6Ta81z9GTJpSANg6ThxJMJoD7e9BKwEJUjcg__&Key-Pair-Id=APKAIFLZBVQZ24NQH3KA"
                 className="object-cover object-center w-full h-full rounded-t-md"
               />
               <ToggleSoundButton

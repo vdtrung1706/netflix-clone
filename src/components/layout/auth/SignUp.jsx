@@ -1,4 +1,4 @@
-import { LoginInput } from '@components/forms';
+import LoginInput from '@components/forms/LoginInput';
 import { authActions } from '@store/auth/slice.auth';
 import { loginFadeInVariants } from '@utils/motion.utils';
 import { motion } from 'framer-motion';

@@ -25,9 +25,6 @@ const colors = {
     placeholder: '#8c8c8c',
     darker: '#4c4c4c',
   },
-  blue: {
-    google: '#1356c7',
-  },
   orange: {
     error: '#e87c03',
   },

@@ -8,6 +8,12 @@ module.exports = {
   ...commonConfig,
   target: 'web',
   mode: 'development',
+  output: {
+    path: path.join(root, 'dist'),
+    filename: 'index.bundle.js',
+    assetModuleFilename: 'images/[hash][ext][query]',
+    publicPath: '/',
+  },
   plugins: [...commonConfig.plugins, new ReactRefreshWebpackPlugin()],
   devServer: {
     port: 3000,

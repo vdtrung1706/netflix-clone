@@ -1,7 +1,7 @@
 const { createSlice } = require('@reduxjs/toolkit');
 
 const initialState = {
-  muted: false,
+  muted: true,
   language: 'eu',
 };
 

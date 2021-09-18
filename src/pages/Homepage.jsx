@@ -1,16 +1,13 @@
 import Layout from '@components/common/Layout';
+import Billboard from '@components/layout/content/Billboard/Billboard';
+import Slider from '@components/layout/content/Slider/Slider';
 import SkeletonSliders from '@components/layout/loader/SkeletonSliders';
 import useRetrieveData from '@hooks/useRetrieveData';
 import { moviesActions } from '@store/movies/slice.movies';
 import { defaultPageFadeInVariants } from '@utils/motion.utils';
 import { motion } from 'framer-motion';
-import { lazy, Suspense, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
-const Slider = lazy(() => import('@components/layout/content/Slider/Slider'));
-const Billboard = lazy(() =>
-  import('@components/layout/content/Billboard/Billboard'),
-);
 
 export default function Homepage() {
   const sliders = useRetrieveData('MOVIES');
@@ -43,18 +40,16 @@ export default function Homepage() {
             <SkeletonSliders />
           </div>
         )}
-        <Suspense fallback={null}>
-          {!genres.loading && (
-            <>
-              <Billboard type="MOVIE" />
+        {!genres.loading && (
+          <>
+            <Billboard type="MOVIE" />
 
-              <div className="pt-12 slider-wrapper">
-                {sliders &&
-                  sliders.map((props) => <Slider key={props.id} {...props} />)}
-              </div>
-            </>
-          )}
-        </Suspense>
+            <div className="pt-12 slider-wrapper">
+              {sliders &&
+                sliders.map((props) => <Slider key={props.id} {...props} />)}
+            </div>
+          </>
+        )}
       </motion.div>
     </Layout>
   );

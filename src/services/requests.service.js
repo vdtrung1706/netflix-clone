@@ -103,3 +103,7 @@ export const latestRequests = {
     url: `/discover/movie?api_key=${API_KEY}&primary_release_date.gte=${monthAgoDate()}&language=en-US`,
   },
 };
+
+export const getMovieInfoUrl = (id) => {
+  return `/movie/${id}?api_key=${API_KEY}&append_to_response=images,credits,similar`;
+};

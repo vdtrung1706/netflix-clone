@@ -1,40 +1,31 @@
 import AddToMyListButton from '@components/buttons/AddToMyListButton';
 import MoreInfoButton from '@components/buttons/MoreInfoButton';
+import DetailModal from '@components/common/DetailModal';
 import PreviewPopper from '@components/common/PreviewPopper';
+import useFetch from '@hooks/useFetch';
 import useSliderItem from '@hooks/useSliderItem';
 import useViewport from '@hooks/useViewport';
 import useVisibility from '@hooks/useVisibility';
+import { getMovieInfoUrl } from '@services/requests.service';
 import { getBoundingClientRect } from '@utils/convertor.utils';
 import cx from 'classnames';
 import { AnimatePresence } from 'framer-motion';
-import {
-  lazy,
-  memo,
-  Suspense,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import BoxArt from './BoxArt';
-
-const DetailModal = lazy(() => import('@components/common/DetailModal'));
 
 function SliderItem({ movie, large, inSearchPage }) {
   const ref = useRef(null);
-  const openTimeoutRef = useRef(null);
-  const currentTimeRef = useRef(0);
+  const openPreviewTimeout = useRef(null);
+  const playTimeRef = useRef(0);
   const [inViewport, setInViewport] = useState(false);
   const [zIndex, setZIndex] = useState(10);
   const [largeHover, setLargeHover] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
   const [origin, setOrigin] = useState('center');
-  const [translateX, setTranslateX] = useState(0);
-  const [previewRect, setPreviewRect] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
-  const previewOpen = Boolean(anchorEl && !large && inViewport);
+  const [previewOpen, setPreviewOpen] = useState(false);
   const { width } = useViewport();
-
+  const videoSrc =
+    'https://movietrailers.apple.com/movies/fox/free-guy/free-guy-trailer-2_h1080p.mov';
   const {
     muted,
     inMyList,
@@ -45,10 +36,15 @@ function SliderItem({ movie, large, inSearchPage }) {
     toggleMuted,
     toggleMyList,
   } = useSliderItem(movie);
+  const {
+    response: { data },
+    loading,
+    error,
+  } = useFetch(getMovieInfoUrl(movie.id));
 
   useEffect(() => {
     return () => {
-      if (openTimeoutRef.current) clearTimeout(openTimeoutRef.current);
+      if (openPreviewTimeout.current) clearTimeout(openPreviewTimeout.current);
     };
   }, []);
 
@@ -63,7 +59,7 @@ function SliderItem({ movie, large, inSearchPage }) {
       // padding 4% --> if left > width*3% ... --> origin left
       const { left, right, width: itemWidth } = getBoundingClientRect(element);
       const toLeft = width * 0.02;
-      const toRight = width * 0.94;
+      const toRight = width * 0.93;
       if (
         (left >= toLeft && left <= toLeft + itemWidth) ||
         (right >= toLeft && right <= toLeft + itemWidth)
@@ -85,60 +81,62 @@ function SliderItem({ movie, large, inSearchPage }) {
     }
     setOrigin(getOrgin(event.currentTarget));
     if (large) {
+      setZIndex(50);
       setLargeHover(true);
-      setZIndex(20);
     } else {
-      if (openTimeoutRef.current) {
-        clearTimeout(openTimeoutRef.current);
+      if (openPreviewTimeout.current) {
+        clearTimeout(openPreviewTimeout.current);
       }
-      openTimeoutRef.current = setTimeout(() => {
-        ref.current && !previewOpen && setAnchorEl(ref.current);
+      openPreviewTimeout.current = setTimeout(() => {
+        setPreviewOpen(true);
       }, 800);
     }
   };
 
   const handleMouseLeave = () => {
     if (large) {
-      setZIndex(0);
       setLargeHover(false);
+      setZIndex(0);
     } else {
-      openTimeoutRef.current && clearTimeout(openTimeoutRef.current);
+      openPreviewTimeout.current && clearTimeout(openPreviewTimeout.current);
     }
   };
 
   const handlePreviewClose = () => {
-    setAnchorEl(null);
-    openTimeoutRef.current && clearTimeout(openTimeoutRef.current);
+    if (large) {
+      setLargeHover(false);
+      setZIndex(0);
+    } else {
+      setPreviewOpen(false);
+      openPreviewTimeout.current && clearTimeout(openPreviewTimeout.current);
+    }
   };
 
   const handleMoreInfo = () => {
-    setAnchorEl(null);
+    if (large) {
+      setLargeHover(false);
+      setZIndex(0);
+    } else {
+      setPreviewOpen(false);
+    }
     setModalOpen(true);
   };
 
-  const handleMouseOut = () => {
-    if (large) {
-      setZIndex(0);
-    }
-    if (openTimeoutRef.current) {
-      clearTimeout(openTimeoutRef.current);
-    }
-  };
-
-  const handleMouseOver = () => {
-    if (large) {
-      setZIndex(15);
-    }
-  };
+  const defaultGenres = [
+    {
+      id: Math.random(100),
+      name: 'Action',
+    },
+    {
+      id: Math.random(100),
+      name: 'Thriller',
+    },
+  ];
 
   return (
     <div
       ref={ref}
       data-id={movie.id}
-      onMouseOver={handleMouseOver}
-      onFocus={handleMouseOver}
-      onMouseOut={handleMouseOut}
-      onBlur={handleMouseOut}
       onMouseLeave={handleMouseLeave}
       onMouseEnter={(event) => handleMouseEnter(event)}
       style={{
@@ -146,28 +144,31 @@ function SliderItem({ movie, large, inSearchPage }) {
       }}
       className={cx(
         'relative cursor-pointer inline-block box-border align-top overflow-hidden',
-        'px-2px h-full min-w-1/2 sm:min-w-1/3 lg:min-w-1/4 xl:min-w-1/5 2xl:min-w-1/6',
+        'px-2px h-full min-w-1/2 sm:min-w-1/3 lg:min-w-1/4 xl:min-w-1/6',
         'transition-all ease-in-out duration-700',
         `hover:origin-${origin}`,
         {
           'my-6': inSearchPage,
-          'hover:transform hover:scale-x-115 hover:scale-y-110 lg:hover:scale-y-115':
+          'hover:transform hover:scale-125 md:hover:scale-117 lg:hover:scale-120 xl:hover:scale-125':
             large && inViewport,
         },
       )}
     >
       <BoxArt
         path={large ? movie.poster_path : movie.backdrop_path}
-        large={large}
+        title={movie.title || movie.name}
       />
       <AnimatePresence>
         {previewOpen && (
           <PreviewPopper
             key={1}
             movie={movie}
+            genres={data?.genres || defaultGenres}
+            runtime={data?.runtime || 112}
             muted={muted}
-            currentTimeRef={currentTimeRef}
-            anchorEl={anchorEl}
+            playedTimeRef={playTimeRef}
+            videoSrc={videoSrc}
+            anchorEl={ref.current}
             origin={origin}
             inMyList={inMyList}
             liked={liked}
@@ -177,34 +178,29 @@ function SliderItem({ movie, large, inSearchPage }) {
             toggleLiked={toggleLiked}
             toggleDisliked={toggleDisliked}
             toggleMuted={toggleMuted}
-            setTranslateX={setTranslateX}
-            setPreviewRect={setPreviewRect}
             handleMoreInfo={handleMoreInfo}
           />
         )}
-        <Suspense fallback={null}>
-          {modalOpen && (
-            <DetailModal
-              key={2}
-              movie={movie}
-              muted={muted}
-              currentTimeRef={currentTimeRef}
-              transformOrigin={origin}
-              previewRect={previewRect}
-              translateX={translateX}
-              inMyList={inMyList}
-              liked={liked}
-              disliked={disliked}
-              toggleDisliked={toggleDisliked}
-              toggleLiked={toggleLiked}
-              toggleMyList={toggleMyList}
-              toggleMuted={toggleMuted}
-              closeModal={() => setModalOpen(false)}
-            />
-          )}
-        </Suspense>
+        {modalOpen && !loading && (
+          <DetailModal
+            data={!error && data.title == movie.title ? data : movie}
+            key={2}
+            muted={muted}
+            playedTimeRef={playTimeRef}
+            videoSrc={videoSrc}
+            inMyList={inMyList}
+            liked={liked}
+            disliked={disliked}
+            toggleDisliked={toggleDisliked}
+            toggleLiked={toggleLiked}
+            toggleMyList={toggleMyList}
+            toggleMuted={toggleMuted}
+            closeModal={() => setModalOpen(false)}
+          />
+        )}
       </AnimatePresence>
 
+      {/* START OF LARGE ITEMS */}
       {large && (
         <div
           className={cx('w-full transition-opacity duration-700', {
@@ -232,7 +228,6 @@ function SliderItem({ movie, large, inSearchPage }) {
               </svg>
             </button>
           </div>
-
           <div className="absolute bottom-0 left-0 z-10 flex flex-col w-full px-2">
             <div className="flex items-center justify-between my-1">
               <div className="flex items-center">
@@ -249,36 +244,47 @@ function SliderItem({ movie, large, inSearchPage }) {
               </div>
               <div>
                 <MoreInfoButton
-                  onClick={() => {}}
+                  onClick={handleMoreInfo}
                   className="w-8 h-8 p-1 transition-all duration-200 rounded-full bg-grey bg-opacity-60 hover:bg-grey-darker hover:bg-opacity-60"
                 />
               </div>
             </div>
-
             <div className="text-base font-bold">
               {movie.title || movie.name}
             </div>
-
             <div className="flex items-center justify-start w-full text-xs">
-              <div className="font-semibold text-green">95% match</div>
-              <div className="px-1 mx-2 leading-tight border border-white border-solid border-opacity-60">
+              <div className="font-semibold text-green">
+                {Math.round(movie.vote_average * 10)}% Match
+              </div>
+              <div className="px-1 mx-2 leading-tight border border-white border-opacity-50 border-solid">
                 {movie.adult ? '18+' : '16+'}
               </div>
               <div>1 season</div>
             </div>
-
             <div className="flex flex-wrap items-center justify-start gap-1 mb-2 text-xs">
-              <div className="my-1">Action</div>
-              <span className="opacity-70 text-0.7rem">•</span>
-              <div className="my-1">Drama</div>
-              <span className="opacity-70 text-0.7rem">•</span>
-              <div className="my-1">Thriller</div>
+              {data?.genres.map((genre, idx) => {
+                if (idx === 0) {
+                  return (
+                    <div key={genre.id} className="my-1">
+                      {genre.name}
+                    </div>
+                  );
+                } else {
+                  return (
+                    <div key={genre.id}>
+                      <span className="opacity-70 text-0.7rem">•</span>
+                      <span className="my-1 ml-1">{genre.name}</span>
+                    </div>
+                  );
+                }
+              })}
             </div>
           </div>
 
           <div className="absolute left-0 right-0 z-0 rounded -bottom-10 mx-2px h-1/3 bg-gradient-to-t from-black-pure"></div>
         </div>
       )}
+      {/* END OF LARGE ITEMS */}
     </div>
   );
 }

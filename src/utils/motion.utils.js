@@ -75,3 +75,24 @@ export const navFadeInVariants = {
   initial: { opacity: 0, transition: { duration: 0.2 } },
   animate: { opacity: 1, transition: { duration: 0.2 } },
 };
+
+export const modalVariants = {
+  initial: {
+    opacity: 0,
+    scale: 0.6,
+    transition: { duration: 0.7, ease: defaultEasing },
+    willChange: 'opacity, transform',
+  },
+  animate: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.7, ease: defaultEasing },
+    willChange: 'opacity, transform',
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.7,
+    transition: { duration: 0.5, ease: defaultEasing },
+    willChange: 'opacity, transform',
+  },
+};

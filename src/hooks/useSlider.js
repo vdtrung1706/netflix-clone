@@ -13,7 +13,7 @@ const useSlider = (ref, movies = [], width) => {
   const hasNext = viewed + totalInViewport < movies.length;
 
   useEffect(() => {
-    if (ref.current && ref.current.firstChild && movies) {
+    if (ref.current && ref.current.firstChild) {
       const sliderWidth = ref.current.clientWidth;
       const itemWidth = ref.current.firstChild.clientWidth;
       const totalInViewport = Math.ceil(sliderWidth / itemWidth);
@@ -21,7 +21,7 @@ const useSlider = (ref, movies = [], width) => {
       setTotalInViewport(totalInViewport);
       setTotalPages(movies.length / totalInViewport);
     }
-  }, [ref, movies, width, distance, viewed, totalInViewport]);
+  }, [ref, width, distance, viewed, totalInViewport, movies.length]);
 
   const moveSection = useCallback(
     (type) => {
@@ -50,7 +50,7 @@ const useSlider = (ref, movies = [], width) => {
     return Array(Math.ceil(totalPages))
       .fill(0)
       .map((_, index) => {
-        const className = cx(`inline-block w-3 h-2px ml-1px`, {
+        const className = cx(`inline-block w-3 h-2px ml-px`, {
           'bg-white': currentPage == index,
           'bg-grey-darker': currentPage != index,
         });

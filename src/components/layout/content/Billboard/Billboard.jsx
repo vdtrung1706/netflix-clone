@@ -9,13 +9,9 @@ import {
   fetchBillboardTVShow,
 } from '@store/billboard/billboard.slice';
 import { truncate } from '@utils/convertor.utils';
-import { defaultFadeInVariants } from '@utils/motion.utils';
 import cx from 'classnames';
-import { motion } from 'framer-motion';
 import { memo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
-console.log('bill boared');
 
 function Billboard({ type }) {
   const dispatch = useDispatch();
@@ -40,11 +36,7 @@ function Billboard({ type }) {
     data?.backdrop_path && `${IMAGE_BASE}/original${data.backdrop_path}`;
 
   return (
-    <motion.div
-      variants={defaultFadeInVariants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
+    <div
       className={cx('pb-35% mb-5', { 'animate-pulse bg-black-light': loading })}
     >
       {error && <div>Billboard background error...</div>}
@@ -110,7 +102,7 @@ function Billboard({ type }) {
           </div>
         </div>
       )}
-    </motion.div>
+    </div>
   );
 }
 

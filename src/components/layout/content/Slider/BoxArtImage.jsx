@@ -10,10 +10,14 @@ function BoxArtImage({ path, title }) {
           alt={title}
         />
       ) : (
-        <img
-          className="absolute top-0 bottom-0 left-0 right-0 object-cover object-center w-full h-full rounded bg-black-pure"
+        <div
+          className="absolute top-0 bottom-0 left-0 right-0 table w-full h-full rounded bg-black-pure"
           alt={title}
-        />
+        >
+          <div className="table-cell text-xs font-thin text-center text-white align-middle">
+            {title}
+          </div>
+        </div>
       )}
     </>
   );

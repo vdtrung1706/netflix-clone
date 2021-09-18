@@ -12,15 +12,16 @@ const spacing = {
   '28.125%': '28.125%',
   '35%': '35%',
   '40%': '40%',
-  '1px': '1px',
   '2px': '2px',
   '7px': '7px',
   '17px': '17px',
   '50px': '50px',
   '350px': '350px',
   '640px': '640px',
-  116: '29rem',
+  116: '28.5rem',
+  120: '30rem',
   124: '31rem',
+  274: '68rem',
 };
 
 const minWidth = {
@@ -37,6 +38,8 @@ const minHeight = {
   '60px': '60px',
   '550px': '550px',
   '660px': '660px',
-  '196.88px': '196.88px',
+  80: '20rem',
+  120: '30rem',
 };
+
 module.exports = { spacing, minWidth, minHeight };

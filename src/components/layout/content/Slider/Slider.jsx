@@ -1,9 +1,7 @@
 import useSlider from '@hooks/useSlider';
 import useViewport from '@hooks/useViewport';
-import { defaultFadeInVariants } from '@utils/motion.utils';
 import cx from 'classnames';
-import { motion } from 'framer-motion';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { useSelector } from 'react-redux';
 import './slider.css';
 import SliderButtons from './SliderButtons';
@@ -14,18 +12,15 @@ export default function Slider({ title, selector, large }) {
   const ref = useRef();
   const { width } = useViewport();
   const { loading, error, data: movies } = useSelector(selector);
+
   const { hasPre, hasNext, distance, moveSection, paginationIndicator } =
     useSlider(ref, movies, width);
 
-  useEffect(() => {}, [width]);
-
   return (
-    <motion.section
-      variants={defaultFadeInVariants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      className="relative w-full my-3vw z-1 slider-container"
+    <section
+      className={cx('relative w-full my-3vw z-1 hover:z-50 slider-container', {
+        'py-2': large,
+      })}
     >
       <SliderTitle title={title} genre={123} />
 
@@ -37,16 +32,15 @@ export default function Slider({ title, selector, large }) {
               <ul className="slider-page -mt-4 px-1 mb-0 list-none absolute top-0 right-4% opacity-0 transition-all duration-25">
                 {paginationIndicator()}
               </ul>
-
-              <div className="overflow-x-scroll sm:overflow-x-visible">
+              <div className="overflow-x-visible">
                 <div
+                  ref={ref}
                   style={{
                     transform: `translate3d(${distance}px, 0, 0)`,
                   }}
-                  ref={ref}
                   className={cx(
-                    'flex flex-shrink-0 duration-1000 delay-200 transform-gpu whitespace-nowrap',
-                    { 'h-96 md:h-116 2xl:h-124': large },
+                    'flex flex-shrink-0 overflow-x-visible duration-700 delay-100 transform-gpu whitespace-nowrap',
+                    { 'h-96 md:h-116 lg:h-96': large },
                   )}
                 >
                   {movies.map((movie) => {
@@ -56,7 +50,6 @@ export default function Slider({ title, selector, large }) {
                   })}
                 </div>
               </div>
-
               <SliderButtons
                 hasPre={hasPre}
                 hasNext={hasNext}
@@ -66,6 +59,6 @@ export default function Slider({ title, selector, large }) {
           )}
         </div>
       </div>
-    </motion.section>
+    </section>
   );
 }

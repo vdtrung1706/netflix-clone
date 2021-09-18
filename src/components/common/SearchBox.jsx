@@ -78,7 +78,7 @@ export default function SearchBox() {
         value={searchContent}
         onChange={(e) => handleChangeSearchContent(e)}
         className={cx(
-          `outline-none w-0 text-xs lg:text-sm bg-transparent transition-width duration-300 ease-linear`,
+          `outline-none w-0 text-xs lg:text-sm bg-transparent transition-all duration-300 ease-linear`,
           { 'w-36 p-1 mr-1 lg:w-48 lg:p-2 lg:mr-2': toggle },
         )}
         placeholder="Title, people, genres"

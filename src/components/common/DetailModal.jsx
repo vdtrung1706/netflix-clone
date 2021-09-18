@@ -1,36 +1,28 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 import AddToMyListButton from '@components/buttons/AddToMyListButton';
+import MoreInfoButton from '@components/buttons/MoreInfoButton';
 import ToggleDislikedButton from '@components/buttons/ToggleDislikedButton';
 import ToggleLikedButton from '@components/buttons/ToggleLikedButton';
 import ToggleSoundButton from '@components/buttons/ToggleSoundButton';
-import useDetailModal from '@hooks/useDetailModal';
 import useViewport from '@hooks/useViewport';
 import { Modal } from '@material-ui/core';
 import Backdrop from '@material-ui/core/Backdrop';
 import { IMAGE_BASE } from '@services/axios.service';
+import { randomIndex } from '@utils/array.utils';
 import { truncate } from '@utils/convertor.utils';
-import { defaultEasing } from '@utils/motion.utils';
+import { modalVariants } from '@utils/motion.utils';
 import cx from 'classnames';
 import { motion } from 'framer-motion';
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  lazy,
-  Suspense,
-} from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import DetailPlayer from './DetailPlayer';
 import PreviewPopperTip from './PreviewPopperTip';
+import SimilarItems from './SimilarItems';
 
-const ModalPlayer = lazy(() => import('./ModalPlayer'));
-
-function DetailModal({
-  movie,
+const DetailModal = ({
+  data,
   muted,
-  previewRect,
-  translateX,
-  currentTimeRef,
+  playedTimeRef,
+  videoSrc,
   liked,
   inMyList,
   disliked,
@@ -39,123 +31,116 @@ function DetailModal({
   toggleMyList,
   toggleMuted,
   closeModal,
-}) {
-  const videoTimeout = useRef(null);
-  const [modalStatus, setModalStatus] = useState({
-    expanded: false,
-    onTransition: true,
-    played: false,
-  });
-  const { height } = useViewport();
+}) => {
+  const onTransitionTimeout = useRef(null);
+  const playedTimeout = useRef(null);
+  const [toggleMore, setToggleMore] = useState(false);
+  const [onTransition, setOnTransition] = useState(true);
+  const [played, setPlayed] = useState(false);
+  const { width: windowWidth } = useViewport();
 
-  const { size, position, transform } = useDetailModal(
-    modalStatus.expanded,
-    previewRect,
-    translateX,
-  );
-
-  const mainModalStyle = useMemo(
-    () => ({
-      top: position.top,
-      left: position.left,
-      right: position.right,
-      width: size.width,
-      height: size.height,
-      transform: transform,
-    }),
-    [
-      position.left,
-      position.right,
-      position.top,
-      size.height,
-      size.width,
-      transform,
-    ],
-  );
-
-  const fadeOutVariants = {
-    exit: {
-      scale: 0.8,
-      opacity: 0,
-      translateY: height * 0.2,
-      transition: { duration: 0.5, ease: defaultEasing },
-      willChange: 'opacity, transform',
-    },
+  const getModalSize = (windowWidth) => {
+    if (windowWidth < 570) return { height: '95%', width: '96%' };
+    if (windowWidth < 855) return { height: '95%', width: 560 };
+    return { height: '95%', width: 850 };
   };
 
+  const { width, height } = getModalSize(windowWidth);
+  const mainModalStyle = useMemo(
+    () => ({
+      width,
+      height,
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      transform: `translate(${(windowWidth - width) / 2}px, 0)`,
+    }),
+    [height, width, windowWidth],
+  );
+
   useEffect(() => {
-    if (currentTimeRef.current > 0) {
-      setModalStatus((pre) => ({
-        ...pre,
-        expanded: true,
-        onTransition: false,
-        played: true,
-      }));
+    if (playedTimeRef.current > 0) {
+      setPlayed(true);
     } else {
-      setModalStatus((pre) => ({
-        ...pre,
-        expanded: true,
-        onTransition: false,
-      }));
-      videoTimeout.current = setTimeout(
-        () => setModalStatus((pre) => ({ ...pre, played: true })),
-        2500,
-      );
+      playedTimeout.current = setTimeout(() => setPlayed(true), 2500);
     }
 
+    onTransitionTimeout.current = setTimeout(() => setOnTransition(false), 700);
     return () => {
-      if (videoTimeout.current) clearTimeout(videoTimeout.current);
+      if (playedTimeout.current) clearTimeout(playedTimeout.current);
+      if (onTransitionTimeout.current)
+        clearTimeout(onTransitionTimeout.current);
     };
-  }, [currentTimeRef]);
+  }, [playedTimeRef]);
 
-  const handleVideoEnd = useCallback(() => {
-    setModalStatus((pre) => ({
-      ...pre,
-      played: false,
-    }));
-  }, []);
+  const handleClose = () => {
+    setOnTransition(true);
+    closeModal();
+  };
+
+  const logoSrc = useMemo(() => {
+    if (!data) return null;
+    const logos = data.images?.logos;
+    if (logos?.length > 0) {
+      return `${IMAGE_BASE}/w300${logos[0].file_path}`;
+    }
+    return null;
+  }, [data]);
+
+  const backgroundSrc = useMemo(() => {
+    const backdrops = data.images?.backdrops;
+    if (backdrops?.length > 0) {
+      return `${IMAGE_BASE}/original${
+        backdrops[randomIndex(backdrops.length)].file_path
+      }`;
+    }
+    return `${IMAGE_BASE}/original${data.backdrop_path}`;
+  }, [data]);
 
   return (
     <Modal
       open={true}
-      onClose={closeModal}
+      onClose={handleClose}
       BackdropComponent={Backdrop}
       BackdropProps={{ timeout: 25 }}
-      className="absolute block h-auto overflow-x-hidden overflow-y-scroll"
+      className="absolute block h-auto overflow-x-hidden overflow-y-scroll select-none"
     >
       <motion.div
-        variants={fadeOutVariants}
+        variants={modalVariants}
+        initial="initial"
+        animate="animate"
         exit="exit"
-        className={cx('relative', { 'h-full': !modalStatus.expanded })}
+        className={`relative ${onTransition ? 'h-full' : ''}`}
       >
         <div
           style={{ ...mainModalStyle }}
-          className={cx('absolute rounded-md drop-shadow-2xl text-white', {
-            'transition-all duration-500 ease-linear mt-8':
-              modalStatus.expanded,
-          })}
+          className="absolute mt-8 text-white rounded-md"
         >
-          <div className="flex flex-col w-full bg-black rounded-md box-shadow-full">
-            <div className="w-full border-b border-opacity-50 border-solid border-black-pure">
-              {modalStatus.played ? (
-                <Suspense fallback={null}>
-                  <ModalPlayer
-                    muted={muted}
-                    onEnded={handleVideoEnd}
-                    currentTime={currentTimeRef.current}
-                  />
-                </Suspense>
-              ) : (
-                <img
-                  src={`${IMAGE_BASE}/original${movie.backdrop_path}`}
-                  alt="detail_bg"
-                  className="object-cover object-center rounded-t-md"
-                />
+          <div className="relative flex flex-col w-full rounded-md bg-black-light box-shadow-full">
+            <div
+              className={cx(
+                'relative w-full border-b border-opacity-50 border-solid border-black-pure align-middle',
+                {
+                  'h-auto': windowWidth < 560,
+                  'min-h-80': windowWidth < 855,
+                  'min-h-120': windowWidth >= 855,
+                },
               )}
-              <div className="absolute left-0 w-full h-48 -mt-48 bg-repeat-x bg-gradient-to-t from-black"></div>
+            >
+              {/* BEGIN OF PLAYER */}
+              <DetailPlayer
+                currentTime={playedTimeRef.current}
+                muted={muted}
+                videoSrc={videoSrc}
+                backgroundSrc={backgroundSrc}
+                played={played}
+                onEnded={() => setPlayed(false)}
+              />
+              <div className="absolute bottom-0 left-0 z-20 w-full h-56 bg-repeat-x bg-gradient-to-t from-black-light"></div>
               <button
-                onClick={closeModal}
-                className="box-border absolute top-0 right-0 w-8 h-8 p-2 mx-4 mt-6 rounded-full bg-black-pure bg-opacity-80"
+                onClick={handleClose}
+                className="box-border absolute top-0 right-0 z-20 w-8 h-8 p-2 mx-4 mt-6 rounded-full bg-black-pure bg-opacity-80"
               >
                 <svg viewBox="0 0 24 24" role="button">
                   <path
@@ -164,19 +149,18 @@ function DetailModal({
                   ></path>
                 </svg>
               </button>
-              {/* Buttons */}
-              <div
-                className={cx(
-                  'absolute transition-opacity duration-500 left-0 flex flex-col content-center justify-between w-full -mt-32 align-middle lg:-mt-36',
-                  {
-                    'opacity-0': !modalStatus.expanded,
-                    'opacity-100': modalStatus.expanded,
-                  },
-                )}
-              >
-                <h1 className="w-1/2 my-4 ml-10 text-xl font-bold lg:text-2xl lg:w-5/12">
-                  {movie.title || movie.name || movie.original_name}
-                </h1>
+              <div className="absolute left-0 z-20 flex flex-col content-center justify-between w-full align-middle transition-opacity duration-500 bottom-10">
+                <div className="w-1/2 my-4 ml-10 text-xl font-bold lg:text-2xl lg:w-5/12">
+                  {logoSrc != null ? (
+                    <img
+                      src={logoSrc}
+                      alt="movie_logo"
+                      className="object-cover object-center rounded-t-md"
+                    />
+                  ) : (
+                    <>{data.title || data.name || data.original_name}</>
+                  )}
+                </div>
                 <div className="flex items-center content-center justify-between mx-10">
                   <div className="flex items-center content-center align-middle h-9">
                     <button className="flex items-center justify-center px-3 mr-2 text-black bg-white border border-white border-solid rounded lg:px-6 max-w-max hover:bg-white-hover">
@@ -197,7 +181,7 @@ function DetailModal({
                     >
                       <AddToMyListButton
                         inMyList={inMyList}
-                        onClick={toggleMyList}
+                        onClick={() => toggleMyList(data)}
                         className="box-border p-2 mr-2 transition-all duration-200 bg-black bg-opacity-50 border border-white border-solid rounded-full hover:bg-opacity-40 hover:bg-black-lighter w-9 h-9 border-opacity-70 hover:border-opacity-100"
                       />
                     </PreviewPopperTip>
@@ -209,7 +193,7 @@ function DetailModal({
                     >
                       <ToggleLikedButton
                         liked={liked}
-                        onClick={toggleLiked}
+                        onClick={() => toggleLiked(data)}
                         className="box-border relative p-2 mr-2 text-white transition-all duration-200 bg-black bg-opacity-50 border border-white border-solid rounded-full hover:bg-opacity-40 hover:bg-black-lighter w-9 h-9 border-opacity-70 hover:border-opacity-100"
                       />
                     </PreviewPopperTip>
@@ -221,7 +205,7 @@ function DetailModal({
                     >
                       <ToggleDislikedButton
                         disliked={disliked}
-                        onClick={toggleDisliked}
+                        onClick={() => toggleDisliked(data)}
                         className="box-border relative p-2 mr-2 text-white transition-all duration-200 bg-black bg-opacity-50 border border-white border-solid rounded-full hover:bg-opacity-40 hover:bg-black-lighter w-9 h-9 border-opacity-70 hover:border-opacity-100"
                       />
                     </PreviewPopperTip>
@@ -231,84 +215,158 @@ function DetailModal({
                     onClick={toggleMuted}
                     className={cx(
                       'box-border p-2 transition-all duration-200 bg-black border border-white border-solid rounded-full opacity-40 bg-opacity-60 w-9 h-9 hover:opacity-100 border-opacity-70 hover:border-opacity-100',
-                      { hidden: !modalStatus.played },
+                      { hidden: !played },
                     )}
                   />
                 </div>
               </div>
             </div>
-            {/* Infor */}
-            <div
-              className={cx(
-                'transition-opacity duration-500 relative flex justify-between w-full my-3',
-                {
-                  'opacity-0': !modalStatus.expanded,
-                  'opacity-100': modalStatus.expanded,
-                },
-              )}
-            >
+            {/* END OF PLAYER */}
+
+            {/* BEGIN OF DESCRIPTION */}
+            <div className="relative flex justify-between w-full my-3 transition-opacity duration-500">
               <div className="flex flex-col w-2/3 pl-10">
                 <div className="flex flex-wrap items-center content-center text-sm">
                   <span className="mr-2 font-semibold text-green">
-                    98% match
+                    {Math.round(data.vote_average * 10)}% Match
                   </span>
                   <div className="flex items-center">
-                    <span>{movie.release_date?.split('-')?.[0] || null}</span>
+                    <span>{data.release_date?.split('-')?.[0] || null}</span>
                     <span className="px-2 mx-2 leading-tight border border-white border-opacity-50 border-solid">
                       18+
                     </span>
-                    <div>1h 42m</div>
+                    <div>
+                      {data.runtime
+                        ? `${parseInt(data.runtime / 60)}h${data.runtime % 60}m`
+                        : '1h17m'}
+                    </div>
                     <span className="px-1 mx-2 text-0.7rem font-light border border-white border-opacity-50 border-solid rounded leading-tight">
                       HD
                     </span>
                   </div>
                 </div>
                 <p className="mt-3 overflow-hidden text-base">
-                  {truncate(movie.overview, 140)}
+                  {truncate(data.overview, 140)}
                 </p>
               </div>
               <div className="flex flex-col w-1/3 gap-4 px-10 text-xs">
-                <div className="break-words">
-                  <span className="text-grey">Cast:</span>
-                  <span className="ml-1">Json Statham,</span>
-                  <span className="ml-1">Jenifer Lopez,</span>
-                  <span className="ml-1">Michael Chikspans,</span>
-                  <span className="ml-1">more</span>
-                </div>
-                <div className="break-normal">
-                  <span className="text-grey">Genres:</span>
-                  <span className="ml-1">US Movies,</span>
-                  <span className="ml-1">Movies Based on Books,</span>
-                  <span className="ml-1">Action & Adventure</span>
-                </div>
+                {data.credits ? (
+                  <div className="break-words">
+                    <span className="text-grey">Cast:</span>
+                    {data.credits.cast.slice(0, 4).map((cast) => (
+                      <span key={cast.cast_id} className="ml-1">
+                        {cast.name || cast.original_name},
+                      </span>
+                    )) || null}
+                    <span className="ml-1 hover:underline">more</span>
+                  </div>
+                ) : null}
+                {data.genres ? (
+                  <div className="break-normal">
+                    <span className="text-grey">Genres:</span>
+                    {data.genres.map((genre) => (
+                      <span key={genre.id} className="ml-1">
+                        {`${genre.name},`}
+                      </span>
+                    )) || null}
+                    <span className="ml-1 hover:underline">more</span>
+                  </div>
+                ) : null}
                 <div>
                   <span className="text-grey">This movie is: </span>
                   <span className="ml-1">Exciting</span>
                 </div>
               </div>
             </div>
+            {/* END OF DESCRIPTION */}
 
-            {/* More Info */}
-            {!modalStatus.onTransition && (
-              <div className="w-full">
-                <div className="px-10">
-                  <div className="text-xl font-bold">More Like This</div>
-                  <div>1</div>
-                  <div>2</div>
-                  <div>3</div>
-                  <div>4</div>
-                  <div>1</div>
-                  <div>2</div>
-                  <div>3</div>
-                  <div>4</div>
+            {/* BEGIN OF MORE INFO */}
+            {data.similar ? (
+              <div className="px-10 py-5">
+                <div className="relative">
+                  <div className="pb-5 text-xl font-bold">More Like This</div>
+                  <div
+                    className={cx('grid w-full gap-4 ', {
+                      'h-274 overflow-hidden': !toggleMore,
+                      'pb-16': toggleMore,
+                      'grid-cols-2': windowWidth < 855,
+                      'grid-cols-3': windowWidth >= 855,
+                    })}
+                  >
+                    <SimilarItems
+                      movies={data.similar?.results || []}
+                      toggleMyList={toggleMyList}
+                    />
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 z-50 h-px -mx-2 bg-black-light"></div>
+                  <div className="absolute bottom-0 left-0 right-0 h-px -mx-2 bg-white z-75 bg-opacity-10 "></div>
+                  <div className="absolute bottom-0 left-0 right-0 z-50 h-12 -mx-2 bg-gradient-to-t from-black-light"></div>
+                  <MoreInfoButton
+                    isMore={toggleMore}
+                    onClick={() => setToggleMore((pre) => !pre)}
+                    className="box-border absolute left-0 right-0 w-8 h-8 mx-auto text-white transition-all duration-200 border border-white border-opacity-50 border-solid rounded-full p-7px hover:bg-white hover:bg-opacity-5 z-75 -bottom-4"
+                  />
+                </div>
+                <div className="relative pt-10 pb-16 text-sm font-light">
+                  <div className="pb-5 text-xl font-bold">
+                    About {data.title || data.name}
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <div className="flex flex-wrap items-center gap-1">
+                      <span className="text-grey-txt">Director:</span>
+                      <span className="hover:underline">This Is Hihi</span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-1">
+                      <span className="text-grey-txt">Cast:</span>
+                      {data.credits.cast.map((cast) => (
+                        <span key={cast.cast_id} className="hover:underline">
+                          {cast.name || cast.original_name},
+                        </span>
+                      ))}
+                      <span className="hover:underline">Trunpyon Vu</span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-1">
+                      <span className="text-grey-txt">Writer:</span>
+                      <span className="hover:underline">This Is HaHa</span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-1">
+                      <span className="text-grey-txt">Grenes:</span>
+                      {data.genres.map((genre) => (
+                        <span key={genre.id} className="hover:underline">
+                          {genre.name},
+                        </span>
+                      ))}
+                      <span className="hover:underline">Comedies</span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-1">
+                      <span className="text-grey-txt">This movie is:</span>
+                      <span className="hover:underline">Adrenaline Rush,</span>
+                      <span className="hover:underline">Groofy,</span>
+                      <span className="hover:underline">Exciting</span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-1">
+                      <span className="text-grey-txt">Maturity rating:</span>
+                      <span className="px-2 mx-2 leading-tight border border-white border-opacity-50 border-solid">
+                        {data.adult ? '18+' : '13+'}
+                      </span>
+                      <span className="hover:underline">
+                        Recommemfor ages {data.adult ? '18' : '13'} and up
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
+            ) : (
+              <div className="p-10 text-red">
+                Loading more data errors. We truly sorry about this!
+              </div>
             )}
+            {/* END OF MORE INFO */}
           </div>
         </div>
       </motion.div>
     </Modal>
   );
-}
+};
 
 export default DetailModal;

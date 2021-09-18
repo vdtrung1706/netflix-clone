@@ -25,17 +25,26 @@ const useSliderItem = (movie) => {
     [dislikedList, movie.id],
   );
 
-  const toggleMyList = useCallback(() => {
-    dispatch(userListsActions.toggleMyList({ movie, uid }));
-  }, [dispatch, movie, uid]);
+  const toggleMyList = useCallback(
+    (movie) => {
+      dispatch(userListsActions.toggleMyList({ movie, uid }));
+    },
+    [dispatch, uid],
+  );
 
-  const toggleLiked = useCallback(() => {
-    dispatch(userListsActions.toggleLiked({ movie, uid }));
-  }, [dispatch, movie, uid]);
+  const toggleLiked = useCallback(
+    (movie) => {
+      dispatch(userListsActions.toggleLiked({ movie, uid }));
+    },
+    [dispatch, uid],
+  );
 
-  const toggleDisliked = useCallback(() => {
-    dispatch(userListsActions.toggleDisliked({ movie, uid }));
-  }, [dispatch, movie, uid]);
+  const toggleDisliked = useCallback(
+    (movie) => {
+      dispatch(userListsActions.toggleDisliked({ movie, uid }));
+    },
+    [dispatch, uid],
+  );
 
   const toggleMuted = useCallback(() => {
     dispatch(playerActions.toggleMuted());

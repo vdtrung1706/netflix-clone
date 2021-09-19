@@ -9,14 +9,14 @@ export const homepageRequests = {
     url: `/tv/on_the_air?api_key=${API_KEY}&language=en-US&page=1`,
   },
   popular: {
-    title: 'Popular',
+    title: 'Popular on Netflix',
     url: `/movie/popular?api_key=${API_KEY}&language=en-US&page=1`,
   },
   topRated: {
     title: 'Top Rated',
     url: `/tv/top_rated?api_key=${API_KEY}&language=en-US&page=1`,
   },
-  netflixOrignal: {
+  netflixOriginal: {
     title: 'Only on Netflix',
     url: `/discover/tv?api_key=${API_KEY}&with_networks=213&language=en-US`,
   },
@@ -29,7 +29,7 @@ export const homepageRequests = {
     url: `/discover/tv?api_key=${API_KEY}&with_genres=16&language=en-US`,
   },
   actionMovies: {
-    title: 'Action',
+    title: 'Action & SciFi',
     url: `/discover/movie?api_key=${API_KEY}&with_genres=28&language=en-US`,
   },
   familySeries: {
@@ -47,7 +47,7 @@ export const moviesRequests = {
     title: 'Popular on Netflix',
     url: `/movie/top_rated?api_key=${API_KEY}&language=en-US`,
   },
-  netflixOrignal: {
+  netflixOriginal: {
     title: 'Only on Netflix',
     url: `/discover/movie?api_key=${API_KEY}&with_networks=213&language=en-US`,
   },
@@ -132,6 +132,10 @@ export const latestRequests = {
   newRelease: {
     title: 'New Release',
     url: `/discover/movie?api_key=${API_KEY}&primary_release_date.gte=${monthAgoDate()}&language=en-US`,
+  },
+  latestShows: {
+    title: 'New Shows on Netflix',
+    url: `tv/on_the_air?api_key=${API_KEY}&language=en-US`,
   },
   upComing: {
     title: 'Up Comming on Netflix',

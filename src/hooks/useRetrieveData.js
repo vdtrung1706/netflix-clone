@@ -2,6 +2,7 @@ import {
   latestRequests,
   moviesRequests,
   tvshowsRequests,
+  homepageRequests,
 } from '@services/requests.service';
 import { latestSelectors } from '@store/latest/selectors.latest';
 import { latestActions, latestFetchThunks } from '@store/latest/slice.latest';
@@ -12,6 +13,11 @@ import {
   tvshowsActions,
   tvshowsFetchThunks,
 } from '@store/tvshows/slice.tvshows';
+import {
+  homepageActions,
+  homepageFetchThunks,
+} from '@store/homepage/slice.homepage';
+import { homepageSelectors } from '@store/homepage/selectors.homepage';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -20,14 +26,25 @@ function dataTemplate(id, thunk, selector, url, title, genre, large = false) {
   return { id, thunk, url, title, genre, selector, large, type };
 }
 
-const movies = Object.keys(moviesRequests).map((genre, index) => {
-  let large = false;
-  if (genre == 'netflixOrignal') {
-    large = true;
-  }
+const homepage = Object.keys(homepageRequests).map((genre, index) => {
+  const large = genre === 'netflixOriginal' ? true : false;
 
   return dataTemplate(
-    index * 2,
+    index,
+    homepageFetchThunks[genre],
+    homepageSelectors[index],
+    homepageRequests[genre].url,
+    homepageRequests[genre].title,
+    genre,
+    large,
+  );
+});
+
+const movies = Object.keys(moviesRequests).map((genre, index) => {
+  const large = genre === 'netflixOriginal' ? true : false;
+
+  return dataTemplate(
+    index,
     moviesFetchThunks[genre],
     moviesSelectors[index],
     moviesRequests[genre].url,
@@ -38,7 +55,7 @@ const movies = Object.keys(moviesRequests).map((genre, index) => {
 });
 
 const tvShows = Object.keys(tvshowsRequests).map((genre, index) => {
-  let large = genre === 'netflixOriginal' ? true : false;
+  const large = genre === 'netflixOriginal' ? true : false;
 
   return dataTemplate(
     index,
@@ -63,24 +80,34 @@ const latest = Object.keys(latestRequests).map((genre, index) => {
 });
 
 const fetchData = {
+  homepage,
   movies,
   tvShows,
   latest,
 };
 
 const useRetrieveData = (type) => {
-  const [sliders, setSliders] = useState();
+  const [slidersProps, setSlidersProps] = useState();
 
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (type === 'HOMEPAGE') {
+      dispatch(homepageActions.onFetches());
+      const sliders = fetchData.homepage.map((props) => {
+        dispatch(props.thunk(props.url));
+        return { ...props };
+      });
+      setSlidersProps(sliders);
+    }
+
     if (type === 'MOVIES') {
       dispatch(moviesActions.onFetches());
       const sliders = fetchData.movies.map((props) => {
         dispatch(props.thunk(props.url));
         return { ...props };
       });
-      setSliders(sliders);
+      setSlidersProps(sliders);
     }
 
     if (type === 'TVSHOWS') {
@@ -89,7 +116,7 @@ const useRetrieveData = (type) => {
         dispatch(props.thunk(props.url));
         return { ...props };
       });
-      setSliders(sliders);
+      setSlidersProps(sliders);
     }
 
     if (type === 'LATEST') {
@@ -98,11 +125,11 @@ const useRetrieveData = (type) => {
         dispatch(props.thunk(props.url));
         return { ...props };
       });
-      setSliders(sliders);
+      setSlidersProps(sliders);
     }
   }, [dispatch, type]);
 
-  return sliders;
+  return slidersProps;
 };
 
 export default useRetrieveData;

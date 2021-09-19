@@ -21,8 +21,8 @@ import SimilarItems from './SimilarItems';
 const DetailModal = ({
   data,
   muted,
-  playedTimeRef,
-  videoSrc,
+  playedTimeRef = { current: 0 },
+  videoSrc = 'https://movietrailers.apple.com/movies/fox/free-guy/free-guy-trailer-2_h1080p.mov',
   liked,
   inMyList,
   disliked,
@@ -83,7 +83,7 @@ const DetailModal = ({
     if (!data) return null;
     const logos = data.images?.logos;
     if (logos?.length > 0) {
-      return `${IMAGE_BASE}/w300${logos[0].file_path}`;
+      return `${IMAGE_BASE}/w185${logos[0].file_path}`;
     }
     return null;
   }, [data]);
@@ -91,11 +91,11 @@ const DetailModal = ({
   const backgroundSrc = useMemo(() => {
     const backdrops = data.images?.backdrops;
     if (backdrops?.length > 0) {
-      return `${IMAGE_BASE}/original${
+      return `${IMAGE_BASE}/w1280${
         backdrops[randomIndex(backdrops.length)].file_path
       }`;
     }
-    return `${IMAGE_BASE}/original${data.backdrop_path}`;
+    return `${IMAGE_BASE}/w1280${data.backdrop_path}`;
   }, [data]);
 
   return (
@@ -150,7 +150,7 @@ const DetailModal = ({
                 </svg>
               </button>
               <div className="absolute left-0 z-20 flex flex-col content-center justify-between w-full align-middle transition-opacity duration-500 bottom-10">
-                <div className="w-1/2 my-4 ml-10 text-xl font-bold lg:text-2xl lg:w-5/12">
+                <div className="w-1/2 my-4 ml-10 text-xl font-bold lg:text-2xl lg:w-3/12">
                   {logoSrc != null ? (
                     <img
                       src={logoSrc}
@@ -253,8 +253,8 @@ const DetailModal = ({
                 {data.credits ? (
                   <div className="break-words">
                     <span className="text-grey">Cast:</span>
-                    {data.credits.cast.slice(0, 4).map((cast) => (
-                      <span key={cast.cast_id} className="ml-1">
+                    {data.credits.cast.slice(0, 4).map((cast, idx) => (
+                      <span key={idx} className="ml-1">
                         {cast.name || cast.original_name},
                       </span>
                     )) || null}

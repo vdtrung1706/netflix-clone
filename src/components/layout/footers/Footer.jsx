@@ -1,12 +1,19 @@
 import { FB_LOGO } from '@assets/';
 import { INSTA_LOGO } from '@assets/';
 import { TWITTER_LOGO } from '@assets/';
+import { defaultFadeInVariants } from '@utils/motion.utils';
+import { motion } from 'framer-motion';
 import { PureComponent } from 'react';
 
 class Footer extends PureComponent {
   render() {
     return (
-      <section className="px-5% pt-10 flex flex-col">
+      <motion.section
+        variants={defaultFadeInVariants}
+        initial="initial"
+        animate="animate"
+        className="px-5% pt-10 flex flex-col"
+      >
         <div className="flex items-baseline gap-6">
           <a href="https://www.facebook.com/netflix/">
             <img src={FB_LOGO} alt="facebook" className="w-7" />
@@ -39,7 +46,7 @@ class Footer extends PureComponent {
         <div className="py-3 text-xs text-grey-txt">
           © 1977-{new Date().getFullYear()}, Inc. {'{hihi-haha-hihi-haha}'}
         </div>
-      </section>
+      </motion.section>
     );
   }
 }

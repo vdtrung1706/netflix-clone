@@ -36,7 +36,6 @@ export default function PreviewPopper({
   const videoTimeout = useRef(null);
   const [played, setPlayed] = useState(false);
   const { previewVariants, translateX } = usePreviewPopper(origin, anchorEl);
-
   useEffect(() => {
     if (!videoTimeout.current && playedTimeRef.current === 0) {
       videoTimeout.current = setTimeout(() => setPlayed(true), 2500);
@@ -100,7 +99,7 @@ export default function PreviewPopper({
             </>
           ) : (
             <img
-              src={`${IMAGE_BASE}/w500${movie.backdrop_path}`}
+              src={`${IMAGE_BASE}/w400${movie.backdrop_path}`}
               alt="small-preview-player"
               className={cx(
                 'absolute top-0 bottom-0 left-0 right-0 object-cover object-center rounded-t-md w-full h-full',

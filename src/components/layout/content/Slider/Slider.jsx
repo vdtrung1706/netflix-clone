@@ -1,6 +1,8 @@
 import useSlider from '@hooks/useSlider';
 import useViewport from '@hooks/useViewport';
+import { defaultFadeInVariants } from '@utils/motion.utils';
 import cx from 'classnames';
+import { motion } from 'framer-motion';
 import { useRef } from 'react';
 import { useSelector } from 'react-redux';
 import './slider.css';
@@ -8,7 +10,7 @@ import SliderButtons from './SliderButtons';
 import SliderItem from './SliderItem';
 import SliderTitle from './SliderTitle';
 
-export default function Slider({ title, selector, large }) {
+export default function Slider({ title, selector, large, isMovie = true }) {
   const ref = useRef();
   const { width } = useViewport();
   const { loading, error, data: movies } = useSelector(selector);
@@ -17,7 +19,10 @@ export default function Slider({ title, selector, large }) {
     useSlider(ref, movies, width);
 
   return (
-    <section
+    <motion.section
+      variants={defaultFadeInVariants}
+      initial="initial"
+      animate="animate"
       className={cx('relative w-full my-3vw z-1 hover:z-50 slider-container', {
         'py-2': large,
       })}
@@ -45,7 +50,12 @@ export default function Slider({ title, selector, large }) {
                 >
                   {movies.map((movie) => {
                     return (
-                      <SliderItem key={movie.id} movie={movie} large={large} />
+                      <SliderItem
+                        key={movie.id}
+                        movie={movie}
+                        large={large}
+                        isMovie={isMovie}
+                      />
                     );
                   })}
                 </div>
@@ -59,6 +69,6 @@ export default function Slider({ title, selector, large }) {
           )}
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

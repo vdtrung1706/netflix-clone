@@ -3,6 +3,9 @@ import Billboard from '@components/layout/content/Billboard/Billboard';
 import Slider from '@components/layout/content/Slider/Slider';
 import SkeletonSliders from '@components/layout/loader/SkeletonSliders';
 import useRetrieveData from '@hooks/useRetrieveData';
+import { moviesRequests } from '@services/requests.service';
+import { selectBillboardMovie } from '@store/billboard/billboard.selectors';
+import { fetchBillboardMovie } from '@store/billboard/billboard.slice';
 import { moviesActions } from '@store/movies/slice.movies';
 import { defaultPageFadeInVariants } from '@utils/motion.utils';
 import { motion } from 'framer-motion';
@@ -13,6 +16,14 @@ export default function Homepage() {
   const sliders = useRetrieveData('MOVIES');
   const dispatch = useDispatch();
   const genres = useSelector((state) => state.movies);
+  const { loading: billboardLoading, data: billboardData } =
+    useSelector(selectBillboardMovie);
+
+  useEffect(() => {
+    if (!billboardData) {
+      dispatch(fetchBillboardMovie(moviesRequests.adventureMovies.url));
+    }
+  }, [billboardData, dispatch]);
 
   useEffect(() => {
     handleLoading();
@@ -32,22 +43,23 @@ export default function Homepage() {
         variants={defaultPageFadeInVariants}
         initial="initial"
         animate="animate"
-        exit="exit"
         className="flex flex-col"
       >
-        {genres.loading && (
+        {genres.loading || billboardLoading ? (
           <div className="py-20">
             <SkeletonSliders />
           </div>
-        )}
-        {!genres.loading && (
+        ) : null}
+        {!genres.loading && !billboardLoading && billboardData && (
           <>
-            <Billboard type="MOVIE" />
-
-            <div className="pt-12 slider-wrapper">
-              {sliders &&
-                sliders.map((props) => <Slider key={props.id} {...props} />)}
-            </div>
+            <Billboard data={billboardData} />
+            {sliders && (
+              <div className="pt-12 slider-wrapper">
+                {sliders.map((props) => (
+                  <Slider key={props.id} {...props} isMovie={true} />
+                ))}
+              </div>
+            )}
           </>
         )}
       </motion.div>

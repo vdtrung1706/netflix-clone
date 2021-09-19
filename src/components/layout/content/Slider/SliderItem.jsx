@@ -6,14 +6,14 @@ import useFetch from '@hooks/useFetch';
 import useSliderItem from '@hooks/useSliderItem';
 import useViewport from '@hooks/useViewport';
 import useVisibility from '@hooks/useVisibility';
-import { getMovieInfoUrl } from '@services/requests.service';
+import { getMovieInfoUrl, getTVShowInfoUrl } from '@services/requests.service';
 import { getBoundingClientRect } from '@utils/convertor.utils';
 import cx from 'classnames';
 import { AnimatePresence } from 'framer-motion';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import BoxArt from './BoxArt';
 
-function SliderItem({ movie, large, inSearchPage }) {
+function SliderItem({ movie, large, inSearchPage, isMovie }) {
   const ref = useRef(null);
   const openPreviewTimeout = useRef(null);
   const playTimeRef = useRef(0);
@@ -40,11 +40,14 @@ function SliderItem({ movie, large, inSearchPage }) {
     response: { data },
     loading,
     error,
-  } = useFetch(getMovieInfoUrl(movie.id));
+  } = useFetch(
+    isMovie ? getMovieInfoUrl(movie.id) : getTVShowInfoUrl(movie.id),
+  );
 
   useEffect(() => {
     return () => {
       if (openPreviewTimeout.current) clearTimeout(openPreviewTimeout.current);
+      playTimeRef.current = null;
     };
   }, []);
 
@@ -88,8 +91,10 @@ function SliderItem({ movie, large, inSearchPage }) {
         clearTimeout(openPreviewTimeout.current);
       }
       openPreviewTimeout.current = setTimeout(() => {
-        setPreviewOpen(true);
-      }, 800);
+        if (!modalOpen) {
+          setPreviewOpen(true);
+        }
+      }, 1000);
     }
   };
 
@@ -183,7 +188,7 @@ function SliderItem({ movie, large, inSearchPage }) {
         )}
         {modalOpen && !loading && (
           <DetailModal
-            data={!error && data.title == movie.title ? data : movie}
+            data={!error ? data : movie}
             key={2}
             muted={muted}
             playedTimeRef={playTimeRef}
@@ -208,10 +213,10 @@ function SliderItem({ movie, large, inSearchPage }) {
             'opacity-100': largeHover,
           })}
         >
-          <div className="absolute top-0 right-0">
+          <div className="absolute top-0 right-0 z-10">
             <button
               onClick={toggleMuted}
-              className="absolute top-0 right-0 w-8 h-8 p-2 m-2 text-white text-opacity-50 transition-all duration-200 border border-white border-opacity-50 border-solid rounded-full hover:bg-white hover:bg-opacity-5"
+              className="w-8 h-8 p-2 m-2 text-white text-opacity-50 transition-all duration-200 border border-white border-opacity-50 border-solid rounded-full hover:bg-white hover:bg-opacity-5"
             >
               <svg viewBox="0 0 24 24">
                 {muted ? (
@@ -245,7 +250,7 @@ function SliderItem({ movie, large, inSearchPage }) {
               <div>
                 <MoreInfoButton
                   onClick={handleMoreInfo}
-                  className="w-8 h-8 p-1 transition-all duration-200 rounded-full bg-grey bg-opacity-60 hover:bg-grey-darker hover:bg-opacity-60"
+                  className="w-8 h-8 p-2 transition-all duration-200 rounded-full bg-grey bg-opacity-60 hover:bg-grey-darker hover:bg-opacity-60"
                 />
               </div>
             </div>
@@ -261,8 +266,8 @@ function SliderItem({ movie, large, inSearchPage }) {
               </div>
               <div>1 season</div>
             </div>
-            <div className="flex flex-wrap items-center justify-start gap-1 mb-2 text-xs">
-              {data?.genres.map((genre, idx) => {
+            <div className="flex flex-wrap items-center justify-start gap-1 mb-2 text-0.7rem">
+              {data?.genres.slice(0, 3).map((genre, idx) => {
                 if (idx === 0) {
                   return (
                     <div key={genre.id} className="my-1">
@@ -280,8 +285,7 @@ function SliderItem({ movie, large, inSearchPage }) {
               })}
             </div>
           </div>
-
-          <div className="absolute left-0 right-0 z-0 rounded -bottom-10 mx-2px h-1/3 bg-gradient-to-t from-black-pure"></div>
+          <div className="absolute bottom-0 left-0 right-0 z-0 rounded mx-2px opacity-70 h-44 bg-gradient-to-t from-black-pure"></div>
         </div>
       )}
       {/* END OF LARGE ITEMS */}

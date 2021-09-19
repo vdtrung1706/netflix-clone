@@ -3,10 +3,45 @@ import { API_KEY } from './axios.service';
 
 export const SEARCH_ENDPOINT = `/search/multi?api_key=${API_KEY}&language=en-US&query=`;
 
+export const homepageRequests = {
+  trendingToday: {
+    title: 'Trending Shows Today',
+    url: `/tv/on_the_air?api_key=${API_KEY}&language=en-US&page=1`,
+  },
+  popular: {
+    title: 'Popular',
+    url: `/movie/popular?api_key=${API_KEY}&language=en-US&page=1`,
+  },
+  topRated: {
+    title: 'Top Rated',
+    url: `/tv/top_rated?api_key=${API_KEY}&language=en-US&page=1`,
+  },
+  netflixOrignal: {
+    title: 'Only on Netflix',
+    url: `/discover/tv?api_key=${API_KEY}&with_networks=213&language=en-US`,
+  },
+  comedyMovies: {
+    title: 'Comedy movies',
+    url: `/discover/movie?api_key=${API_KEY}&with_genres=35&language=en-US`,
+  },
+  animationSeries: {
+    title: 'Animation',
+    url: `/discover/tv?api_key=${API_KEY}&with_genres=16&language=en-US`,
+  },
+  actionMovies: {
+    title: 'Action',
+    url: `/discover/movie?api_key=${API_KEY}&with_genres=28&language=en-US`,
+  },
+  familySeries: {
+    title: 'Binge-watch with Family',
+    url: `/discover/tv?api_key=${API_KEY}&with_genres=10751&language=en-US`,
+  },
+};
+
 export const moviesRequests = {
   trending: {
     title: 'Trending',
-    url: `/trending/all/week?api_key=${API_KEY}&language=en-US`,
+    url: `/trending/movie/week?api_key=${API_KEY}&language=en-US`,
   },
   topRated: {
     title: 'Popular on Netflix',
@@ -14,7 +49,7 @@ export const moviesRequests = {
   },
   netflixOrignal: {
     title: 'Only on Netflix',
-    url: `/discover/tv?api_key=${API_KEY}&with_networks=213&language=en-US`,
+    url: `/discover/movie?api_key=${API_KEY}&with_networks=213&language=en-US`,
   },
   adventureMovies: {
     title: 'Adventure',
@@ -100,10 +135,14 @@ export const latestRequests = {
   },
   upComing: {
     title: 'Up Comming on Netflix',
-    url: `/discover/movie?api_key=${API_KEY}&primary_release_date.gte=${monthAgoDate()}&language=en-US`,
+    url: `/movie/upcoming?api_key=${API_KEY}&language=en-US&page=1`,
   },
 };
 
 export const getMovieInfoUrl = (id) => {
   return `/movie/${id}?api_key=${API_KEY}&append_to_response=images,credits,similar`;
+};
+
+export const getTVShowInfoUrl = (id) => {
+  return `/tv/${id}?api_key=${API_KEY}&append_to_response=images,credits,similar`;
 };

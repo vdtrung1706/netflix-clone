@@ -53,16 +53,14 @@ export default function LatestPage() {
             <SkeletonSliders />
           </div>
         ) : null}
-        {!genres.loading && !billboardLoading && billboardData && (
+        {!genres.loading && !billboardLoading && billboardData && sliders && (
           <>
             <Billboard data={billboardData} />
-            {sliders && (
-              <div className="pt-12 slider-wrapper">
-                {sliders.map((props) => (
-                  <Slider key={props.id} {...props} isMovie={true} />
-                ))}
-              </div>
-            )}
+            <div className="pt-12 slider-wrapper">
+              {sliders.map((props) => (
+                <Slider key={props.id} {...props} />
+              ))}
+            </div>
           </>
         )}
       </motion.div>

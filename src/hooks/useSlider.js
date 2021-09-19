@@ -45,7 +45,7 @@ const useSlider = (ref, movies = [], width) => {
   );
 
   const paginationIndicator = useCallback(() => {
-    if (totalPages <= 0) return;
+    if (totalPages <= 1) return;
 
     return Array(Math.ceil(totalPages))
       .fill(0)

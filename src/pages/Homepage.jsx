@@ -50,16 +50,27 @@ export default function Homepage() {
             <SkeletonSliders />
           </div>
         ) : null}
-        {!genres.loading && !billboardLoading && billboardData && (
+        {!genres.loading && !billboardLoading && billboardData && sliders && (
           <>
             <Billboard data={billboardData} />
-            {sliders && (
-              <div className="pt-12 slider-wrapper">
-                {sliders.map((props) => (
-                  <Slider key={props.id} {...props} isMovie={true} />
-                ))}
-              </div>
-            )}
+            <div className="pt-12 slider-wrapper">
+              {sliders.map((props, idx) => {
+                if (idx == 1) {
+                  return (
+                    <div key={props.id}>
+                      <Slider
+                        {...props}
+                        isMyList={true}
+                        type="MYLIST"
+                        title="My List"
+                      />
+                      <Slider {...props} />
+                    </div>
+                  );
+                }
+                return <Slider key={props.id} {...props} />;
+              })}
+            </div>
           </>
         )}
       </motion.div>

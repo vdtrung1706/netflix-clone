@@ -16,7 +16,8 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 function dataTemplate(id, thunk, selector, url, title, genre, large = false) {
-  return { id, thunk, url, title, genre, selector, large };
+  let type = url.includes('movie') ? 'MOVIES' : 'TVSHOWS';
+  return { id, thunk, url, title, genre, selector, large, type };
 }
 
 const movies = Object.keys(moviesRequests).map((genre, index) => {
@@ -26,7 +27,7 @@ const movies = Object.keys(moviesRequests).map((genre, index) => {
   }
 
   return dataTemplate(
-    index,
+    index * 2,
     moviesFetchThunks[genre],
     moviesSelectors[index],
     moviesRequests[genre].url,
@@ -75,27 +76,27 @@ const useRetrieveData = (type) => {
   useEffect(() => {
     if (type === 'MOVIES') {
       dispatch(moviesActions.onFetches());
-      const sliders = fetchData.movies.map((genre) => {
-        dispatch(genre.thunk(genre.url));
-        return { ...genre };
+      const sliders = fetchData.movies.map((props) => {
+        dispatch(props.thunk(props.url));
+        return { ...props };
       });
       setSliders(sliders);
     }
 
     if (type === 'TVSHOWS') {
       dispatch(tvshowsActions.onFetches());
-      const sliders = fetchData.tvShows.map((genre) => {
-        dispatch(genre.thunk(genre.url));
-        return { ...genre };
+      const sliders = fetchData.tvShows.map((props) => {
+        dispatch(props.thunk(props.url));
+        return { ...props };
       });
       setSliders(sliders);
     }
 
     if (type === 'LATEST') {
       dispatch(latestActions.onFetches());
-      const sliders = fetchData.latest.map((genre) => {
-        dispatch(genre.thunk(genre.url));
-        return { ...genre };
+      const sliders = fetchData.latest.map((props) => {
+        dispatch(props.thunk(props.url));
+        return { ...props };
       });
       setSliders(sliders);
     }

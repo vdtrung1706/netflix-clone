@@ -21,7 +21,7 @@ function NavMenu() {
       <li>
         <NavLink
           exact
-          to="/browse/tvshows"
+          to="/browse/tv"
           className={className}
           activeClassName={activeClassName}
         >
@@ -31,7 +31,7 @@ function NavMenu() {
       <li>
         <NavLink
           exact
-          to="/browse/movies"
+          to="/browse/movie"
           className={className}
           activeClassName={activeClassName}
         >

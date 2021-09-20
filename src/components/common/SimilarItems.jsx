@@ -20,11 +20,18 @@ const SimilarItems = ({ movies, toggleMyList }) => {
               key={movie.id}
               className="relative z-50 rounded bg-grey-bg h-96"
             >
-              <img
-                src={`${IMAGE_BASE}/w300/${movie.backdrop_path}`}
-                alt="similar_movie"
-                className="object-cover object-center w-full rounded-t h-44 lg:h-36 z-1"
-              />
+              {movie.backdrop_path ? (
+                <img
+                  src={`${IMAGE_BASE}/w300/${movie.backdrop_path}`}
+                  alt="similar_movie"
+                  className="object-cover object-center w-full rounded-t h-44 lg:h-36 z-1"
+                />
+              ) : (
+                <div className="table-cell w-full text-xs font-thin text-center text-white align-middle rounded-t z-2 bg-black-pure h-44 lg:h-36">
+                  {movie.title}
+                </div>
+              )}
+
               <div className="absolute top-0 right-0 z-20 p-2">1h17m</div>
               <div className="absolute top-0 right-0 z-10 w-full h-24 rounded bg-gradient-to-bl from-black via-transparent"></div>
               <div className="flex items-stretch justify-between mx-3 mt-5">

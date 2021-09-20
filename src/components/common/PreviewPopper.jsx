@@ -68,7 +68,13 @@ export default function PreviewPopper({
   );
 
   return (
-    <Popper open={true} anchorEl={anchorEl} placement="bottom" ref={ref}>
+    <Popper
+      open={true}
+      anchorEl={anchorEl}
+      placement="bottom"
+      ref={ref}
+      className="z-1000"
+    >
       <motion.div
         variants={previewVariants}
         exit="exit"

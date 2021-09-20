@@ -4,6 +4,7 @@ import { AnimatePresence } from 'framer-motion';
 import { lazy, Suspense } from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
+import ExtendedPage from '../pages/ExtendedPage';
 
 const AccountPage = lazy(() => import('../pages/AccountPage'));
 const AuthPage = lazy(() => import('../pages/AuthPage'));
@@ -32,17 +33,18 @@ const Routes = () => {
             render={() =>
               currentUser ? <Homepage /> : <Redirect to="/login" />
             }
-          />
+          ></Route>
+          <Route exact path="/browse/genre/:id" component={ExtendedPage} />
           <Route
             exact
-            path="/browse/movies"
+            path="/browse/movie"
             render={() =>
               currentUser ? <MoviesPage /> : <Redirect to="/welcome" />
             }
           />
           <Route
             exact
-            path="/browse/tvshows"
+            path="/browse/tv"
             render={() =>
               currentUser ? <TVShowsPage /> : <Redirect to="/welcome" />
             }
@@ -68,7 +70,17 @@ const Routes = () => {
               currentUser ? <KidsPage /> : <Redirect to="/welcome" />
             }
           />
-          <Route exact path="/" render={() => <Redirect to="/browse" />} />
+          <Route
+            exact
+            path="/"
+            render={() =>
+              currentUser ? (
+                <Redirect to="/browse" />
+              ) : (
+                <Redirect to="/welcome" />
+              )
+            }
+          />
           <Route
             exact
             path="/welcome"

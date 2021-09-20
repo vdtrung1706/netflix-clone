@@ -3,7 +3,7 @@ import useViewport from '@hooks/useViewport';
 import { defaultFadeInVariants } from '@utils/motion.utils';
 import cx from 'classnames';
 import { motion } from 'framer-motion';
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import './slider.css';
 import SliderButtons from './SliderButtons';
@@ -16,19 +16,21 @@ export default function Slider({
   selector,
   large,
   isMyList = false,
+  url,
   type,
+  genre,
 }) {
   const ref = useRef();
   const { width } = useViewport();
   const { error, data } = useSelector(selector);
   const myList = useSelector(selectMyList);
 
-  let movies = isMyList ? myList : data;
-  if (type === 'MOVIES' && isMyList) {
-    movies = movies.filter((movie) => movie.media_type === 'movie');
-  } else if (type === 'TVSHOWS' && isMyList) {
-    movies = movies.filter((movie) => movie.media_type === 'tv');
-  }
+  const movies = useMemo(() => {
+    if (!isMyList) return data;
+    if (type === 'HOMEPAGE') return myList;
+    const media_type = type === 'MOVIE_PAGE' ? 'movie' : 'tv';
+    return myList.filter((movie) => movie.media_type === media_type);
+  }, [data, isMyList, myList, type]);
 
   const { hasPre, hasNext, distance, moveSection, paginationIndicator } =
     useSlider(ref, movies, width);
@@ -47,7 +49,12 @@ export default function Slider({
             },
           )}
         >
-          <SliderTitle title={title} genre={123} />
+          <SliderTitle
+            title={title}
+            genre={genre}
+            url={url}
+            isMyList={isMyList}
+          />
           <div className="relative select-none slider z-3">
             <div className="relative px-4% z-2">
               {error && <div>Error...</div>}
@@ -72,7 +79,7 @@ export default function Slider({
                         key={movie.id}
                         movie={movie}
                         large={large}
-                        type={type}
+                        url={url}
                       />
                     );
                   })}

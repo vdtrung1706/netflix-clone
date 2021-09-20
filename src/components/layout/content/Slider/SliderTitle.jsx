@@ -5,11 +5,14 @@ import { Link } from 'react-router-dom';
 
 class SliderTitle extends PureComponent {
   render() {
-    const { title, genreId } = this.props;
+    const { title, genre, url, isMyList } = this.props;
 
     return (
       <Link
-        to={`/browse?genre=${genreId}`}
+        to={{
+          pathname: isMyList ? '/browse/my-list' : `/browse/genre/${genre}`,
+          state: { title, url },
+        }}
         className="mx-4% px-1 mb-1 lg:mb-2 flex items-baseline cursor-pointer whitespace-nowrap w-max group"
       >
         <h1 className="font-bold md:text-sm lg:text-base xl:text-xl">

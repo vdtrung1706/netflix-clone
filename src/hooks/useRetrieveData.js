@@ -22,60 +22,60 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 function dataTemplate(id, thunk, selector, url, title, genre, large = false) {
-  let type = url.includes('movie') ? 'MOVIES' : 'TVSHOWS';
+  let type = url.includes('movie') ? 'MOVIE_PAGE' : 'TV_PAGE';
   return { id, thunk, url, title, genre, selector, large, type };
 }
 
-const homepage = Object.keys(homepageRequests).map((genre, index) => {
-  const large = genre === 'netflixOriginal' ? true : false;
+const homepage = Object.keys(homepageRequests).map((key, index) => {
+  const large = key === 'netflixOriginal' ? true : false;
 
   return dataTemplate(
     index,
-    homepageFetchThunks[genre],
+    homepageFetchThunks[key],
     homepageSelectors[index],
-    homepageRequests[genre].url,
-    homepageRequests[genre].title,
-    genre,
+    homepageRequests[key].url,
+    homepageRequests[key].title,
+    homepageRequests[key].genre,
     large,
   );
 });
 
-const movies = Object.keys(moviesRequests).map((genre, index) => {
-  const large = genre === 'netflixOriginal' ? true : false;
+const movies = Object.keys(moviesRequests).map((key, index) => {
+  const large = key === 'netflixOriginal' ? true : false;
 
   return dataTemplate(
     index,
-    moviesFetchThunks[genre],
+    moviesFetchThunks[key],
     moviesSelectors[index],
-    moviesRequests[genre].url,
-    moviesRequests[genre].title,
-    genre,
+    moviesRequests[key].url,
+    moviesRequests[key].title,
+    moviesRequests[key].genre,
     large,
   );
 });
 
-const tvShows = Object.keys(tvshowsRequests).map((genre, index) => {
-  const large = genre === 'netflixOriginal' ? true : false;
+const tvShows = Object.keys(tvshowsRequests).map((key, index) => {
+  const large = key === 'netflixOriginal' ? true : false;
 
   return dataTemplate(
     index,
-    tvshowsFetchThunks[genre],
+    tvshowsFetchThunks[key],
     tvshowsSelectors[index],
-    tvshowsRequests[genre].url,
-    tvshowsRequests[genre].title,
-    genre,
+    tvshowsRequests[key].url,
+    tvshowsRequests[key].title,
+    tvshowsRequests[key].genre,
     large,
   );
 });
 
-const latest = Object.keys(latestRequests).map((genre, index) => {
+const latest = Object.keys(latestRequests).map((key, index) => {
   return dataTemplate(
     index,
-    latestFetchThunks[genre],
+    latestFetchThunks[key],
     latestSelectors[index],
-    latestRequests[genre].url,
-    latestRequests[genre].title,
-    genre,
+    latestRequests[key].url,
+    latestRequests[key].title,
+    latestRequests[key].genre,
   );
 });
 

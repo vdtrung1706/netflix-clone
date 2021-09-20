@@ -11,6 +11,7 @@ const Sliders = ({ slidersProps = [], type = 'MOVIES' }) => {
               <Slider
                 {...props}
                 isMyList={true}
+                large={false}
                 type="MYLIST"
                 title="My List"
               />

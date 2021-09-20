@@ -1,8 +1,9 @@
+import { forwardRef } from 'react';
 import { SPINNER } from '@assets';
 
-export default function CircleLoading({ className }) {
+const CircleLoading = forwardRef(({ className }, ref) => {
   return (
-    <div className={className}>
+    <div ref={ref} className={className}>
       <img
         className="w-full bg-center bg-no-repeat bg-cover motion-safe:animate-spin"
         src={SPINNER}
@@ -10,4 +11,8 @@ export default function CircleLoading({ className }) {
       />
     </div>
   );
-}
+});
+
+CircleLoading.displayName = 'CircleLoading';
+
+export default CircleLoading;

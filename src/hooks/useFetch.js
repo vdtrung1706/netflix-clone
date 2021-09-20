@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { axios } from '@services/axios.service';
 
 const useFetch = (url) => {
-  const [response, setReponse] = useState([]);
+  const [response, setReponse] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 

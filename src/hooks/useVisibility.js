@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const useVisibility = (ref, callbackOn, callbackOff) => {
+const useVisibility = (ref, callbackOn = () => {}, callbackOff = () => {}) => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {

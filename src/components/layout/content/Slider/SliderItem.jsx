@@ -13,7 +13,7 @@ import { AnimatePresence } from 'framer-motion';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import BoxArt from './BoxArt';
 
-function SliderItem({ movie, large, inSearchPage, type }) {
+function SliderItem({ movie, large, inSearchPage, url }) {
   const ref = useRef(null);
   const openPreviewTimeout = useRef(null);
   const playTimeRef = useRef(0);
@@ -37,11 +37,9 @@ function SliderItem({ movie, large, inSearchPage, type }) {
     toggleMyList,
   } = useSliderItem(movie);
 
-  const getUrl = (type, movieId, movieType, getMovieFn, getTVShowFn) => {
-    if (type === 'TVSHOWS' || movieType === 'tv') {
-      return getTVShowFn(movieId);
-    }
-    return getMovieFn(movieId);
+  const getUrl = (url, movieId, movieType, getMovieFn, getTVShowFn) => {
+    const isTV = url?.includes('tv') || movieType === 'tv';
+    return isTV ? getTVShowFn(movieId) : getMovieFn(movieId);
   };
 
   const {
@@ -49,7 +47,7 @@ function SliderItem({ movie, large, inSearchPage, type }) {
     loading,
     error,
   } = useFetch(
-    getUrl(type, movie.id, movie.media_type, getMovieInfoUrl, getTVShowInfoUrl),
+    getUrl(url, movie.id, movie.media_type, getMovieInfoUrl, getTVShowInfoUrl),
   );
 
   useEffect(() => {

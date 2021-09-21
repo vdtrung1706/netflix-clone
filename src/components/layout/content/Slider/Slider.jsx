@@ -72,7 +72,6 @@ export default function Slider({
                     { 'h-96 md:h-116 lg:h-96': large },
                   )}
                 >
-                  {}
                   {movies.map((movie) => {
                     return (
                       <SliderItem

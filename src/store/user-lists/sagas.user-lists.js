@@ -3,9 +3,10 @@ import { firestore } from '../../firebase';
 import { userListsActions } from './slice.user-lists';
 
 export function* toggleMyListSync(action) {
-  const { movie, userId } = action.payload;
+  const { movie, uid } = action.payload;
+
   try {
-    const movieRef = yield firestore.doc(`users/${userId}/my-list/${movie.id}`);
+    const movieRef = yield firestore.doc(`users/${uid}/my-list/${movie.id}`);
     const snapshot = yield movieRef.get();
     if (snapshot.exists) {
       yield movieRef.delete();
@@ -17,20 +18,18 @@ export function* toggleMyListSync(action) {
   }
 }
 
-export function* toggleLikedSync({ payload: { movie, userId } }) {
+export function* toggleLikedSync({ payload: { movie, uid } }) {
   try {
     // check if it's in disliked list.
     const dislikedMovieRef = yield firestore.doc(
-      `users/${userId}/disliked/${movie.id}`,
+      `users/${uid}/disliked/${movie.id}`,
     );
     const dislikedSnapshot = yield dislikedMovieRef.get();
     if (dislikedSnapshot.exists) {
       yield dislikedMovieRef.delete();
     }
     // toggle liked.
-    const likedMovieRef = yield firestore.doc(
-      `users/${userId}/liked/${movie.id}`,
-    );
+    const likedMovieRef = yield firestore.doc(`users/${uid}/liked/${movie.id}`);
     const likedSnapshot = yield likedMovieRef.get();
     if (likedSnapshot.exists) {
       yield likedMovieRef.delete();
@@ -42,19 +41,17 @@ export function* toggleLikedSync({ payload: { movie, userId } }) {
   }
 }
 
-export function* toggleDislikedSync({ payload: { movie, userId } }) {
+export function* toggleDislikedSync({ payload: { movie, uid } }) {
   try {
     // check if it's in liked list.
-    const likedMovieRef = yield firestore.doc(
-      `users/${userId}/liked/${movie.id}`,
-    );
+    const likedMovieRef = yield firestore.doc(`users/${uid}/liked/${movie.id}`);
     const likedSnapshot = yield likedMovieRef.get();
     if (likedSnapshot.exists) {
       yield likedMovieRef.delete();
     }
     // toggle disliked.
     const dislikedMovieRef = yield firestore.doc(
-      `users/${userId}/disliked/${movie.id}`,
+      `users/${uid}/disliked/${movie.id}`,
     );
     const dislikedSnapshot = yield dislikedMovieRef.get();
     if (dislikedSnapshot.exists) {

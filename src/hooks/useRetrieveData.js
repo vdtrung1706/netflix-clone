@@ -101,7 +101,7 @@ const useRetrieveData = (type) => {
       setSlidersProps(sliders);
     }
 
-    if (type === 'MOVIES') {
+    if (type === 'MOVIE_PAGE') {
       dispatch(moviesActions.onFetches());
       const sliders = fetchData.movies.map((props) => {
         dispatch(props.thunk(props.url));
@@ -110,7 +110,7 @@ const useRetrieveData = (type) => {
       setSlidersProps(sliders);
     }
 
-    if (type === 'TVSHOWS') {
+    if (type === 'TV_PAGE') {
       dispatch(tvshowsActions.onFetches());
       const sliders = fetchData.tvShows.map((props) => {
         dispatch(props.thunk(props.url));
@@ -119,7 +119,7 @@ const useRetrieveData = (type) => {
       setSlidersProps(sliders);
     }
 
-    if (type === 'LATEST') {
+    if (type === 'LATEST_PAGE') {
       dispatch(latestActions.onFetches());
       const sliders = fetchData.latest.map((props) => {
         dispatch(props.thunk(props.url));

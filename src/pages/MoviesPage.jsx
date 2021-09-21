@@ -9,7 +9,7 @@ class MoviesPage extends PureComponent {
   render() {
     return (
       <PageTemplate
-        type="MOVIES"
+        type="MOVIE_PAGE"
         title="Movies - Netflix"
         genresSelector={(state) => state.movies}
         billboardUrl={moviesRequests.horrorMovies.url}

@@ -9,7 +9,7 @@ class TVShowsPage extends PureComponent {
   render() {
     return (
       <PageTemplate
-        type="TVSHOWS"
+        type="TV_PAGE"
         title="TV Shows - Netflix"
         genresSelector={(state) => state.tvshows}
         billboardSelector={selectBillboardTVShow}

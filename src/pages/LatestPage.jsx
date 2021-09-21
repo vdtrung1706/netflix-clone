@@ -9,7 +9,7 @@ class LatestPage extends PureComponent {
   render() {
     return (
       <PageTemplate
-        type="LATEST"
+        type="LATEST_PAGE"
         title="Latest - Netflix"
         genresSelector={(state) => state.latest}
         billboardSelector={selectBillboardLatest}

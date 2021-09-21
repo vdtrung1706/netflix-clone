@@ -9,7 +9,7 @@ import { memo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 const PageTemplate = ({
-  type = 'MOVIES',
+  type = 'MOVIE_PAGE',
   title = 'Netflix',
   billboardUrl = '',
   genresSelector = (state) => state.movies,

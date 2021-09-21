@@ -248,7 +248,7 @@ function SliderItem({ movie, large, inSearchPage, url }) {
                   </svg>
                 </button>
                 <AddToMyListButton
-                  onClick={toggleMyList}
+                  onClick={() => toggleMyList(data ? data : movie)}
                   className="w-8 h-8 p-2 mr-2 transition-all duration-200 border border-white border-opacity-50 border-solid rounded-full hover:bg-white hover:bg-opacity-5"
                   inMyList={inMyList}
                 />
@@ -276,13 +276,13 @@ function SliderItem({ movie, large, inSearchPage, url }) {
               {data?.genres.slice(0, 3).map((genre, idx) => {
                 if (idx === 0) {
                   return (
-                    <div key={genre.id} className="my-1">
+                    <div key={idx} className="my-1">
                       {genre.name}
                     </div>
                   );
                 } else {
                   return (
-                    <div key={genre.id}>
+                    <div key={idx}>
                       <span className="opacity-70 text-0.7rem">•</span>
                       <span className="my-1 ml-1">{genre.name}</span>
                     </div>

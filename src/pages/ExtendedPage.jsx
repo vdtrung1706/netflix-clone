@@ -1,38 +1,20 @@
 import Layout from '@components/common/Layout';
 import SliderItem from '@components/layout/content/Slider/SliderItem';
+import CircleLoading from '@components/layout/loader/CircleLoading';
+import useFetchPage from '@hooks/useFetchPage';
 import { defaultPageFadeInVariants } from '@utils/motion.utils';
+import cx from 'classnames';
 import { motion } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router';
-import cx from 'classnames';
-import { axios } from '@services/axios.service';
-import CircleLoading from '@components/layout/loader/CircleLoading';
 
 function ExtendedPage() {
   const loader = useRef(null);
-  const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const [error, setError] = useState('');
   const location = useLocation();
   const { url, title } = location.state;
 
-  const getMovies = useCallback(
-    (page) => {
-      setLoading(true);
-      axios
-        .get(url + `&page=${page}`)
-        .then((res) => {
-          setMovies((pre) => [...pre, ...res.data.results]);
-          setLoading(false);
-        })
-        .catch((error) => {
-          setLoading(false);
-          setError(error.message);
-        });
-    },
-    [url],
-  );
+  const { loading, error, results } = useFetchPage(url, page);
 
   const handleObserver = useCallback((entries) => {
     const target = entries[0];
@@ -42,16 +24,12 @@ function ExtendedPage() {
   }, []);
 
   useEffect(() => {
-    getMovies(page);
-  }, [getMovies, page]);
-
-  useEffect(() => {
-    const option = {
+    const options = {
       root: null,
-      rootMargin: '20px',
+      rootMargin: '64px',
       threshold: 0,
     };
-    const observer = new IntersectionObserver(handleObserver, option);
+    const observer = new IntersectionObserver(handleObserver, options);
     if (loader.current) observer.observe(loader.current);
 
     return () => {
@@ -67,16 +45,12 @@ function ExtendedPage() {
         animate="animate"
         className="px-4% relative pt-16"
       >
-        <div
-          className={cx(
-            'fixed top-16 left-0 right-0 z-50 h-12 font-bold bg-black md:text-sm lg:text-base xl:text-xl',
-          )}
-        >
+        <div className="fixed left-0 right-0 z-50 h-12 font-bold bg-black top-16 md:text-sm lg:text-base xl:text-xl">
           <div className="px-4% flex items-center h-full ml-2px">{title}</div>
         </div>
         <div className="flex flex-wrap pt-12 items-centers">
-          {movies.length > 0 &&
-            movies.map((movie, idx) => {
+          {results &&
+            results.map((movie, idx) => {
               return (
                 <SliderItem
                   key={idx}
@@ -89,7 +63,7 @@ function ExtendedPage() {
         </div>
 
         {loading && <CircleLoading className={cx('w-10 h-10 pt-12 mx-auto')} />}
-        {error && <div className="text-sm text-red">Erorr</div>}
+        {error && <div className="text-sm text-red">{error}</div>}
         <div ref={loader}></div>
       </motion.div>
     </Layout>

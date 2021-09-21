@@ -1,11 +1,7 @@
 import { CROSS_SIGN, SEARCH_ICON } from '@assets';
 import useOutside from '@hooks/useOutside';
-import { SEARCH_ENDPOINT } from '@services/requests.service';
-import { selectSearch } from '@store/search/selectors.search';
-import { fetchSearchResults, searchActions } from '@store/search/slice.search';
 import cx from 'classnames';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 
 export default function SearchBox() {
@@ -13,16 +9,16 @@ export default function SearchBox() {
   const inputRef = useRef(null);
   const preLocation = useRef(null);
   const [toggle, setToggle] = useState(false);
-  const { searchContent } = useSelector(selectSearch);
-  const dispatch = useDispatch();
+  const [query, setQuery] = useState('');
+
   const history = useHistory();
-  const location = useLocation();
+  const { pathname } = useLocation();
 
   useEffect(() => {
     if (location.pathname != '/search') {
-      preLocation.current = location.pathname;
+      preLocation.current = pathname;
     }
-  }, [location.pathname]);
+  }, [pathname]);
 
   useEffect(() => {
     if (toggle && inputRef.current) {
@@ -31,37 +27,48 @@ export default function SearchBox() {
   }, [toggle]);
 
   useOutside(ref, () => {
-    if (!searchContent) setToggle(false);
+    if (!query) setToggle(false);
   });
 
   const handleToggle = () => {
-    if (!searchContent) {
-      setToggle(!toggle);
+    if (!query) {
+      setToggle((pre) => !pre);
     }
   };
 
   const handleRemoveSearchContent = useCallback(() => {
-    dispatch(searchActions.removeSearchContent());
-    history.push(preLocation.current);
-  }, [dispatch, history]);
+    setQuery('');
+    history.replace(preLocation.current);
+  }, [history]);
 
   const handleChangeSearchContent = useCallback(
     (e) => {
       const value = e.target.value;
-      dispatch(searchActions.changeSearchContent(value));
+      setQuery(value);
       if (value) {
-        dispatch(fetchSearchResults(SEARCH_ENDPOINT + value.toLowerCase()));
-        history.push(`/search?q=${value}`);
+        history.replace(`/search?query=${value}`);
       } else {
-        history.push(preLocation.current);
+        history.replace(preLocation.current);
       }
     },
-    [dispatch, history],
+    [history],
+  );
+
+  const handleKeydown = useCallback(
+    (event) => {
+      if (event.key === 'Enter') {
+        history.replace(`/search?query=${query}`);
+      }
+    },
+    [history, query],
   );
 
   return (
     <div
       ref={ref}
+      role="searchbox"
+      tabIndex="-1"
+      onKeyDown={(event) => handleKeydown(event)}
       className={cx('flex items-center bg-opacity-90', {
         'bg-black border-white border border-solid': toggle,
       })}
@@ -75,7 +82,7 @@ export default function SearchBox() {
 
       <input
         ref={inputRef}
-        value={searchContent}
+        value={query}
         onChange={(e) => handleChangeSearchContent(e)}
         className={cx(
           `outline-none w-0 text-xs lg:text-sm bg-transparent transition-all duration-300 ease-linear`,
@@ -92,8 +99,8 @@ export default function SearchBox() {
       >
         <img
           className={cx('transition-opacity ease-linear duration-200', {
-            'opacity-100 cursor-pointer': searchContent,
-            'hidden opacity-0': !searchContent,
+            'opacity-100 cursor-pointer': query,
+            'hidden opacity-0': !query,
           })}
           src={CROSS_SIGN}
           alt="clear"

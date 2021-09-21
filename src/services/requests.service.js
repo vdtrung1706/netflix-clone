@@ -1,7 +1,7 @@
 import { monthAgoDate } from '@utils/convertor.utils';
 import { API_KEY } from './axios.service';
 
-export const SEARCH_ENDPOINT = `/search/multi?api_key=${API_KEY}&query=`;
+export const SEARCH_ENDPOINT = `/search/multi?api_key=${API_KEY}&include_adult=true&query=`;
 
 export const homepageRequests = {
   trendingToday: {

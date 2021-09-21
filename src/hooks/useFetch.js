@@ -7,17 +7,24 @@ const useFetch = (url) => {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    var isMounted = true;
     setLoading(true);
     axios
       .get(url)
       .then((res) => {
+        if (!isMounted) return;
         setReponse(res);
         setLoading(false);
       })
       .catch((err) => {
+        if (!isMounted) return;
         setError(true, err);
         setLoading(false);
       });
+
+    return () => {
+      isMounted = false;
+    };
   }, [url]);
 
   return { response, loading, error };

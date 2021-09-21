@@ -27,7 +27,7 @@ const NavMenuCollapse = ({ setOpen }) => {
         <img src={ARROW_POINT_UP} alt={'browse'} />
       </div>
       <ul className="h-auto p-0 border-t-2 border-white border-solid">
-        <NavMenu additionClass="flex items-center justify-around leading-6 w-64 h-12" />
+        <NavMenu className="flex items-center justify-around w-64 h-12 leading-6" />
       </ul>
     </motion.div>
   );

@@ -1,8 +1,8 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-function NavMenu() {
-  const className = `hover:text-gray-400 transition-colors duration-200 ease-linear focus:font-bold focus:text-white`;
+function NavMenu({ className }) {
+  const commonClass = `${className} hover:text-gray-400 transition-colors duration-200 ease-linear focus:font-bold focus:text-white`;
 
   const activeClassName = 'font-bold cursor-default';
 
@@ -12,7 +12,7 @@ function NavMenu() {
         <NavLink
           exact
           to="/browse"
-          className={className}
+          className={commonClass}
           activeClassName={activeClassName}
         >
           Home
@@ -22,7 +22,7 @@ function NavMenu() {
         <NavLink
           exact
           to="/browse/tv"
-          className={className}
+          className={commonClass}
           activeClassName={activeClassName}
         >
           TV Shows
@@ -32,7 +32,7 @@ function NavMenu() {
         <NavLink
           exact
           to="/browse/movie"
-          className={className}
+          className={commonClass}
           activeClassName={activeClassName}
         >
           Movies
@@ -42,7 +42,7 @@ function NavMenu() {
         <NavLink
           exact
           to="/latest"
-          className={className}
+          className={commonClass}
           activeClassName={activeClassName}
         >
           New & Popular
@@ -52,7 +52,7 @@ function NavMenu() {
         <NavLink
           exact
           to="/browse/my-list"
-          className={className}
+          className={commonClass}
           activeClassName={activeClassName}
         >
           My List

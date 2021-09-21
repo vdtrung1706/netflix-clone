@@ -264,8 +264,8 @@ const DetailModal = ({
                 {data.genres ? (
                   <div className="break-normal">
                     <span className="text-grey">Genres:</span>
-                    {data.genres.map((genre) => (
-                      <span key={genre.id} className="ml-1">
+                    {data.genres.map((genre, idx) => (
+                      <span key={idx} className="ml-1">
                         {`${genre.name},`}
                       </span>
                     )) || null}
@@ -318,8 +318,8 @@ const DetailModal = ({
                     </div>
                     <div className="flex flex-wrap items-center gap-1">
                       <span className="text-grey-txt">Cast:</span>
-                      {data.credits.cast.map((cast) => (
-                        <span key={cast.cast_id} className="hover:underline">
+                      {data.credits.cast.map((cast, idx) => (
+                        <span key={idx} className="hover:underline">
                           {cast.name || cast.original_name},
                         </span>
                       ))}
@@ -331,8 +331,8 @@ const DetailModal = ({
                     </div>
                     <div className="flex flex-wrap items-center gap-1">
                       <span className="text-grey-txt">Grenes:</span>
-                      {data.genres.map((genre) => (
-                        <span key={genre.id} className="hover:underline">
+                      {data.genres.map((genre, idx) => (
+                        <span key={idx} className="hover:underline">
                           {genre.name},
                         </span>
                       ))}

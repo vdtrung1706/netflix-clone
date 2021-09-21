@@ -5,7 +5,6 @@ import { homepageReducer } from './homepage/slice.homepage';
 import { latestReducer } from './latest/slice.latest';
 import { moviesReducer } from './movies/slice.movies';
 import { playerReducer } from './player/slice.player';
-import { searchReducer } from './search/slice.search';
 import { tvshowsReducer } from './tvshows/slice.tvshows';
 import { userListsReducer } from './user-lists/slice.user-lists';
 
@@ -16,7 +15,6 @@ const rootReducer = combineReducers({
   movies: moviesReducer,
   tvshows: tvshowsReducer,
   latest: latestReducer,
-  search: searchReducer,
   player: playerReducer,
   userLists: userListsReducer,
 });

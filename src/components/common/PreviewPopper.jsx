@@ -5,7 +5,7 @@ import ToggleDislikedButton from '@components/buttons/ToggleDislikedButton';
 import ToggleLikedButton from '@components/buttons/ToggleLikedButton';
 import ToggleSoundButton from '@components/buttons/ToggleSoundButton';
 import usePreviewPopper from '@hooks/usePreviewPopper';
-import { Popper } from '@material-ui/core';
+import Popper from '@mui/material/Popper';
 import { IMAGE_BASE } from '@services/axios.service';
 import cx from 'classnames';
 import { motion } from 'framer-motion';

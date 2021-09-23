@@ -1,110 +1,387 @@
-// import { HERO_1000 } from '@assets/';
+/* eslint-disable jsx-a11y/media-has-caption */
+import { Forward10Icon } from '@assets/';
+import { PlayIcon } from '@assets/';
+import { QuestionIcon } from '@assets/';
+import { FullScreenIcon } from '@assets/';
+import { SpeedIcon } from '@assets/';
+import { SubtitleIcon } from '@assets/';
+import { SoundIcon } from '@assets/';
+import { Backward10Icon } from '@assets/';
+import { ArrowBackIcon } from '@assets/';
 import AudioAndSubtitles from '@components/common/AudioAndSubtitles';
+import CurrentTimeSlider from '@components/common/CurrentTimeSlider';
 import SpeedAdjustment from '@components/common/SpeedAdjustment';
-import TimeAdjustment from '@components/common/TimeAdjustment';
-import VolumeAdjustment from '@components/common/VolumeAdjustment';
+import VolumeSlider from '@components/common/VolumeSlider';
 import WatchPageTip from '@components/common/WatchPageTip';
+import CircleLoading from '@components/layout/loader/CircleLoading';
 import { convertHMS } from '@utils/convertor.utils';
-import { useState } from 'react';
+import cx from 'classnames';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 
 const WatchPage = () => {
-  const [timePosition, setTimePosition] = useState(20);
-  const time = 5300;
+  const videoRef = useRef(null);
+  const duration = useRef(0);
+  const isOnChangeCurrentTime = useRef(false);
+  const interactiveTimeout = useRef(null);
+  const pausedOverlayTimeout = useRef(null);
+  const [pausedOverlay, setPausedOverlay] = useState(true);
+  const [paused, setPaused] = useState(true);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [muted, setMuted] = useState(false);
+  const [volume, setVolume] = useState(100);
+  const [interactive, setInteractive] = useState(false);
+  const [visibleCurrentTime, setVisibleCurrent] = useState(true);
+  const videoSrc =
+    'https://movietrailers.apple.com/movies/marvel/eternals/eternals-trailer-2_a720p.m4v';
+
+  const history = useHistory();
+  const {
+    state: { movie },
+  } = useLocation();
+
+  useEffect(() => {
+    return () => {
+      if (interactiveTimeout.current) {
+        clearTimeout(interactiveTimeout.current);
+      }
+      if (pausedOverlayTimeout.current) {
+        clearTimeout(pausedOverlayTimeout.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    function handleKeyDown(event) {
+      event.preventDefault();
+      if (event.code == 'Space') {
+        togglePlay();
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [togglePlay]);
+
+  //------------------------FUNCS-----------------------------
+  function forward10() {
+    if (!videoRef.current) return;
+    const currentTime = videoRef.current.currentTime;
+    if (currentTime + 10 >= duration) {
+      videoRef.current.currentTime = duration;
+    } else {
+      videoRef.current.currentTime = currentTime + 10;
+    }
+  }
+
+  function backward10() {
+    if (!videoRef.current) return;
+    const currentTime = videoRef.current.currentTime;
+    if (currentTime - 10 <= 0) {
+      videoRef.current.currentTime = 0;
+    } else {
+      videoRef.current.currentTime = currentTime - 10;
+    }
+  }
+
+  function toggleFullscreen() {
+    const el = document.documentElement;
+    if (
+      !document.fullscreenElement &&
+      !document.mozFullScreenElement &&
+      !document.webkitFullscreenElement &&
+      !document.msFullscreenElement
+    ) {
+      if (el.requestFullscreen) {
+        el.requestFullscreen();
+      } else if (el.msRequestFullscreen) {
+        el.msRequestFullscreen();
+      } else if (el.mozRequestFullScreen) {
+        el.mozRequestFullScreen();
+      } else if (el.webkitRequestFullscreen) {
+        el.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+      }
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      }
+    }
+  }
+
+  function pausedOverlayOnClick() {
+    setPausedOverlay(false);
+    togglePlay();
+  }
+
+  function handleVolumeChange(value) {
+    if (videoRef.current) {
+      setVolume(value);
+      setMuted(false);
+      videoRef.current.volume = value / 100;
+    }
+  }
+
+  function onChangeTimeSlider(_, value) {
+    isOnChangeCurrentTime.current = true;
+    setCurrentTime(value);
+  }
+
+  function onChangeCommittedSlider(_, value) {
+    if (videoRef.current) {
+      videoRef.current.currentTime = value;
+      isOnChangeCurrentTime.current = false;
+    }
+  }
+
+  const onMouseMoveContainer = useCallback(
+    (event) => {
+      event.preventDefault();
+      if (
+        !videoRef.current ||
+        videoRef.current.readyState !== 4 ||
+        loading ||
+        pausedOverlay
+      ) {
+        return;
+      }
+      if (pausedOverlayTimeout.current) {
+        clearTimeout(pausedOverlayTimeout.current);
+      }
+      if (paused) {
+        pausedOverlayTimeout.current = setTimeout(() => {
+          setPausedOverlay(true);
+        }, 15000);
+      }
+      setInteractive(true);
+
+      var targetClassName = event.target.className;
+      if (typeof targetClassName !== 'string') {
+        targetClassName = event.target.className.baseVal;
+      }
+      if (interactiveTimeout.current) clearTimeout(interactiveTimeout.current);
+      interactiveTimeout.current = setTimeout(() => {
+        if (targetClassName?.includes('onHide')) setInteractive(false);
+      }, 3000);
+    },
+    [loading, paused, pausedOverlay],
+  );
+
+  function isPlaying(videoEl) {
+    return !!(
+      videoEl &&
+      videoEl.currentTime > 0 &&
+      !videoEl.paused &&
+      !videoEl.ended &&
+      videoEl.readyState > 2
+    );
+  }
+
+  function onCanPlay() {
+    duration.current = parseInt(videoRef.current.duration);
+    setLoading(false);
+  }
+
+  const togglePlay = useCallback(() => {
+    if (isPlaying(videoRef.current)) {
+      videoRef.current.pause();
+      handlePaused(true);
+    } else {
+      const promise = videoRef.current.play();
+      if (promise !== undefined) {
+        promise
+          .then(() => {})
+          .catch((error) => alert(`Video Source error: ${error.message}`));
+      }
+    }
+  }, [handlePaused]);
+
+  const handlePaused = useCallback(
+    (value) => {
+      setPaused(value);
+      if (value) {
+        pausedOverlayTimeout.current = setTimeout(() => {
+          if (!interactive) {
+            setPausedOverlay(true);
+          }
+        }, 15000);
+      }
+    },
+    [interactive],
+  );
+
+  function onTimeUpdate() {
+    if (!isOnChangeCurrentTime.current) {
+      setCurrentTime(videoRef.current.currentTime);
+    }
+  }
+
+  const onPlaying = useCallback(() => {
+    setPausedOverlay(false);
+    setLoading(false);
+    handlePaused(false);
+  }, [handlePaused]);
+
+  const onMouseDown = useCallback(
+    (event) => {
+      if (event.button === 0) {
+        togglePlay();
+      }
+    },
+    [togglePlay],
+  );
 
   return (
-    <div className="absolute top-0 left-0 w-full h-full bg-black-pure">
-      <div className="absolute top-0 left-0 w-full h-full">
-        <div className="absolute top-0 left-0 right-0 z-10 flex items-center h-24 px-2">
-          <button className="p-1 pl-0 mx-2 w-9 h-9">
-            <svg
-              viewBox="0 0 24 24"
-              className="transition-transform duration-200 transform hover:scale-120"
-            >
-              <path
-                d="M6.357 11H21v2H6.357l4.585 5.35-1.518 1.3L2.866 12l6.558-7.65 1.518 1.3L6.357 11z"
-                fill="currentColor"
-              ></path>
-            </svg>
+    <div
+      onMouseMove={onMouseMoveContainer}
+      className={cx(
+        'absolute top-0 left-0 w-full h-full bg-black-pure onHide overflow-hidden',
+        {
+          'cursor-none': !interactive && !loading && !pausedOverlay,
+        },
+      )}
+    >
+      <div className="absolute top-0 left-0 w-full h-full onHide">
+        {loading && !pausedOverlay && (
+          <div className="absolute top-0 bottom-0 z-10 flex items-center w-full max-h-full bg-opacity-30 onHide bg-black-pure">
+            <CircleLoading className="w-10 h-10 m-auto" />
+          </div>
+        )}
+
+        {pausedOverlay && (
+          <div
+            role="button"
+            tabIndex="0"
+            onMouseDown={onMouseDown}
+            className="absolute top-0 bottom-0 left-0 right-0 z-20 w-full h-full my-auto cursor-default bg-opacity-30 bg-black-pure"
+          >
+            <div className="relative w-full h-full">
+              <div className="p-20 text-base sm:text-xl lg:text-2xl">
+                {movie?.name || movie.title || movie.originalName}
+              </div>
+              <div className="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center">
+                <button
+                  onClick={pausedOverlayOnClick}
+                  className="p-1 my-auto border-2 border-white rounded-full border-opacity-40 hover:border-opacity-100 h-9 w-9"
+                >
+                  <PlayIcon />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="absolute top-0 bottom-0 left-0 right-0 flex items-center w-full max-h-full z-5 onHide">
+          <video
+            onMouseDown={onMouseDown}
+            ref={videoRef}
+            src={videoSrc}
+            muted={muted}
+            preload="auto"
+            type="video/mp4"
+            onCanPlay={onCanPlay}
+            onPlaying={onPlaying}
+            onTimeUpdate={onTimeUpdate}
+            onEnded={() => handlePaused(true)}
+            onLoadStart={() => setLoading(true)}
+            onWaiting={() => setLoading(true)}
+            className="object-cover object-center w-full max-h-full my-auto onHide"
+          />
+        </div>
+
+        <div
+          className={cx(
+            'transition-opacity duration-300 absolute top-0 left-0 right-0 z-10 flex items-center h-28 px-2 onHide',
+            {
+              'opacity-0 invisible': !interactive,
+            },
+          )}
+        >
+          <button
+            onClick={history.goBack}
+            className="p-1 pb-4 pl-0 mx-1 my-auto transition-transform duration-300 w-7 h-7 sm:w-8 sm:h-8 md:mx-2 lg:h-9 lg:w-9"
+          >
+            <ArrowBackIcon className="svg-hover-scale" />
           </button>
         </div>
 
-        <div className="absolute top-0 bottom-0 flex items-center w-full max-h-full z-5">
-          {/* <img src={HERO_1000} className="w-full max-h-full my-auto" alt="" /> */}
-        </div>
-
-        <div className="absolute bottom-0 left-0 right-0 z-10 flex flex-col h-24">
-          <div className="flex items-center mx-2">
+        <div
+          className={cx(
+            'transition-opacity duration-300 pb-3 absolute bottom-0 left-0 right-0 z-10 flex flex-col h-28 cursor-auto onHide',
+            {
+              'opacity-0 invisible': !interactive,
+            },
+          )}
+        >
+          <div
+            className={cx(
+              'flex items-center mx-2 transition-opacity duration-300',
+              {
+                'opacity-0 invisible': !visibleCurrentTime || !interactive,
+              },
+            )}
+          >
             <div className="w-full">
-              <TimeAdjustment
+              <CurrentTimeSlider
                 min={0}
-                max={time}
-                value={timePosition}
-                onChange={(_, value) => setTimePosition(value)}
+                max={duration.current}
+                value={currentTime}
+                onChange={onChangeTimeSlider}
+                onChangeCommitted={onChangeCommittedSlider}
               />
             </div>
             <div className="text-sm text-right w-14">
-              {convertHMS(time - timePosition)}
+              {convertHMS(duration.current - currentTime)}
             </div>
           </div>
-          <div className="flex items-center justify-between h-full px-2">
-            <div className="flex">
-              <button className="p-1 pl-0 mx-2 w-9 h-9">
-                <svg
-                  viewBox="0 0 24 24"
-                  className="transition-transform duration-200 transform hover:scale-120"
-                >
-                  <g id="play">
-                    <polygon
-                      fill="currentColor"
-                      points="6 4 21 12 6 20"
-                    ></polygon>
-                  </g>
-                </svg>
+
+          <div className="flex items-center justify-between h-full px-2 onHide">
+            <div className="flex items-center">
+              <button onClick={togglePlay} className="pl-0 btn-watchpage">
+                <PlayIcon playing={!paused} className="svg-hover-scale" />
               </button>
-              <button className="p-1 mx-2 w-9 h-9">
-                <svg
-                  viewBox="0 0 24 24"
-                  className="transition-transform duration-200 transform hover:scale-120"
-                >
-                  <g id="back-10">
-                    <path
-                      fill="currentColor"
-                      d="M12.4521632,5.01256342 L13.8137335,6.91876181 L12.1862665,8.08123819 L9.27109639,4 L12.1862665,-0.0812381937 L13.8137335,1.08123819 L12.4365066,3.0093558 C17.7568368,3.23786247 22,7.6234093 22,13 C22,18.5228475 17.5228475,23 12,23 C6.4771525,23 2,18.5228475 2,13 C2,11.0297737 2.57187523,9.14190637 3.62872363,7.52804389 L5.30188812,8.6237266 C4.4566948,9.91438076 4,11.4220159 4,13 C4,17.418278 7.581722,21 12,21 C16.418278,21 20,17.418278 20,13 C20,8.73346691 16.6600802,5.24701388 12.4521632,5.01256342 Z M8.47,17 L8.47,11.41 L6.81,11.92 L6.81,10.75 L9.79,9.91 L9.79,17 L8.47,17 Z M14.31,17.15 C13.7499972,17.15 13.2600021,17.0016682 12.84,16.705 C12.4199979,16.4083319 12.0950011,15.9883361 11.865,15.445 C11.6349988,14.901664 11.52,14.2600037 11.52,13.52 C11.52,12.786663 11.6349988,12.1466694 11.865,11.6 C12.0950011,11.0533306 12.4199979,10.6316682 12.84,10.335 C13.2600021,10.0383319 13.7499972,9.89 14.31,9.89 C14.8700028,9.89 15.3599979,10.0383319 15.78,10.335 C16.2000021,10.6316682 16.5249988,11.0533306 16.755,11.6 C16.9850012,12.1466694 17.1,12.786663 17.1,13.52 C17.1,14.2600037 16.9850012,14.901664 16.755,15.445 C16.5249988,15.9883361 16.2000021,16.4083319 15.78,16.705 C15.3599979,17.0016682 14.8700028,17.15 14.31,17.15 Z M14.31,15.97 C14.7500022,15.97 15.1016653,15.7533355 15.365,15.32 C15.6283346,14.8866645 15.76,14.2866705 15.76,13.52 C15.76,12.7533295 15.6283346,12.1533355 15.365,11.72 C15.1016653,11.2866645 14.7500022,11.07 14.31,11.07 C13.8699978,11.07 13.5183346,11.2866645 13.255,11.72 C12.9916653,12.1533355 12.86,12.7533295 12.86,13.52 C12.86,14.2866705 12.9916653,14.8866645 13.255,15.32 C13.5183346,15.7533355 13.8699978,15.97 14.31,15.97 Z M7.72890361,4 L9.81373347,6.91876181 L8.18626653,8.08123819 L5.27109639,4 L8.18626653,-0.0812381937 L9.81373347,1.08123819 L7.72890361,4 Z"
-                    ></path>
-                  </g>
-                </svg>
+              <button onClick={backward10} className="btn-watchpage">
+                <Forward10Icon className="svg-hover-scale" />
               </button>
-              <button className="p-1 mx-2 w-9 h-9">
-                <svg
-                  viewBox="0 0 24 24"
-                  className="transition-transform duration-200 transform hover:scale-120"
-                >
-                  <g id="forward-10">
-                    <path
-                      fill="currentColor"
-                      d="M11.8291288,3.00143042 L10.4575629,1.08123819 L12.0850299,-0.0812381937 L15.0002,4 L12.0850299,8.08123819 L10.4575629,6.91876181 L11.8267943,5.0018379 C7.48849327,5.09398699 4,8.63960287 4,13 C4,17.418278 7.581722,21 12,21 C16.418278,21 20,17.418278 20,13 C20,11.4220159 19.5433052,9.91438076 18.6981119,8.6237266 L20.3712764,7.52804389 C21.4281248,9.14190637 22,11.0297737 22,13 C22,18.5228475 17.5228475,23 12,23 C6.4771525,23 2,18.5228475 2,13 C2,7.53422249 6.38510184,3.09264039 11.8291288,3.00143042 Z M8.56,17 L8.56,11.41 L6.9,11.92 L6.9,10.75 L9.88,9.91 L9.88,17 L8.56,17 Z M14.4,17.15 C13.8399972,17.15 13.3500021,17.0016682 12.93,16.705 C12.5099979,16.4083318 12.1850012,15.988336 11.955,15.445 C11.7249989,14.9016639 11.61,14.2600037 11.61,13.52 C11.61,12.786663 11.7249989,12.1466694 11.955,11.6 C12.1850012,11.0533306 12.5099979,10.6316681 12.93,10.335 C13.3500021,10.0383318 13.8399972,9.89 14.4,9.89 C14.9600028,9.89 15.4499979,10.0383318 15.87,10.335 C16.2900021,10.6316681 16.6149988,11.0533306 16.845,11.6 C17.0750012,12.1466694 17.19,12.786663 17.19,13.52 C17.19,14.2600037 17.0750012,14.9016639 16.845,15.445 C16.6149988,15.988336 16.2900021,16.4083318 15.87,16.705 C15.4499979,17.0016682 14.9600028,17.15 14.4,17.15 Z M14.4,15.97 C14.8400022,15.97 15.1916654,15.7533355 15.455,15.32 C15.7183347,14.8866645 15.85,14.2866705 15.85,13.52 C15.85,12.7533295 15.7183347,12.1533355 15.455,11.72 C15.1916654,11.2866645 14.8400022,11.07 14.4,11.07 C13.9599978,11.07 13.6083346,11.2866645 13.345,11.72 C13.0816654,12.1533355 12.95,12.7533295 12.95,13.52 C12.95,14.2866705 13.0816654,14.8866645 13.345,15.32 C13.6083346,15.7533355 13.9599978,15.97 14.4,15.97 Z M14.4575629,6.91876181 L16.5423928,4 L14.4575629,1.08123819 L16.0850299,-0.0812381937 L19.0002,4 L16.0850299,8.08123819 L14.4575629,6.91876181 Z"
-                    ></path>
-                  </g>
-                </svg>
+              <button onClick={forward10} className="btn-watchpage">
+                <Backward10Icon className="svg-hover-scale" />
               </button>
 
-              <WatchPageTip describeChild title={<VolumeAdjustment />}>
-                <button className="p-1 mx-2 w-9 h-9">
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="transition-transform duration-200 transform hover:scale-120"
-                  >
-                    <g id="volume-off">
-                      <path
-                        fill="currentColor"
-                        d="M9,7.82842712 L6.82842712,10 L4,10 L4,14 L6.82842712,14 L9,16.1715729 L9,7.82842712 Z M11,21 L6,16 L2,16 L2,8 L6,8 L11,3 L11,21 Z M17,10.5857864 L20.2928932,7.29289322 L21.7071068,8.70710678 L18.4142136,12 L21.7071068,15.2928932 L20.2928932,16.7071068 L17,13.4142136 L13.7071068,16.7071068 L12.2928932,15.2928932 L15.5857864,12 L12.2928932,8.70710678 L13.7071068,7.29289322 L17,10.5857864 Z"
-                      ></path>
-                    </g>
-                  </svg>
+              <WatchPageTip
+                describeChild
+                title={
+                  <VolumeSlider
+                    volume={volume}
+                    setVolume={handleVolumeChange}
+                  />
+                }
+                onOpen={() => setVisibleCurrent(false)}
+                onClose={() => setVisibleCurrent(true)}
+              >
+                <button
+                  onClick={() => setMuted((pre) => !pre)}
+                  className="btn-watchpage"
+                >
+                  <SoundIcon
+                    muted={muted}
+                    volume={volume}
+                    className="svg-hover-scale"
+                  />
                 </button>
               </WatchPageTip>
             </div>
-            <div>Shadow and Bone</div>
+
+            <div className="text-sm cursor-default md:text-base">
+              {movie?.name || movie.title || movie.originalName}
+            </div>
 
             <div className="flex gap-2">
               <WatchPageTip
@@ -114,66 +391,35 @@ const WatchPage = () => {
                     Something wrong? Tell us.
                   </div>
                 }
+                onOpen={() => setVisibleCurrent(false)}
+                onClose={() => setVisibleCurrent(true)}
               >
-                <button className="p-1 mx-2 w-9 h-9">
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="transition-transform duration-200 transform hover:scale-120"
-                  >
-                    <g id="question">
-                      <path
-                        fill="currentColor"
-                        d="M22,12 C22,17.5232847 17.5232847,22 12,22 C6.47671525,22 2,17.5232847 2,12 C2,6.47671525 6.47671525,2 12,2 C17.5232847,2 22,6.47671525 22,12 Z M20,12 C20,7.58128475 16.4187153,4 12,4 C7.58128475,4 4,7.58128475 4,12 C4,16.4187153 7.58128475,20 12,20 C16.4187153,20 20,16.4187153 20,12 Z M10.656,13.946 L10.656,13.61 C10.656,13.0126637 10.7653322,12.5113354 10.984,12.106 C11.2026678,11.7006646 11.6319968,11.3113352 12.272,10.938 C12.8160027,10.6179984 13.1706658,10.3593343 13.336,10.162 C13.5013342,9.96466568 13.584,9.74866784 13.584,9.514 C13.584,9.23666528 13.450668,8.99933432 13.184,8.802 C12.917332,8.60466568 12.5600022,8.506 12.112,8.506 C11.6426643,8.506 11.2640014,8.60733232 10.976,8.81 C10.6879986,9.01266768 10.506667,9.26866512 10.432,9.578 L8,9.578 C8.08533376,8.94866352 8.30933152,8.38333584 8.672,7.882 C9.03466848,7.38066416 9.51999696,6.9833348 10.128,6.69 C10.736003,6.3966652 11.4506626,6.25 12.272,6.25 C13.0293371,6.25 13.7013304,6.38599864 14.288,6.658 C14.8746696,6.93000136 15.3333317,7.30866424 15.664,7.794 C15.9946683,8.27933576 16.16,8.84733008 16.16,9.498 C16.16,10.0953363 16.0000016,10.6073312 15.68,11.034 C15.3599984,11.4606688 14.8853365,11.8606648 14.256,12.234 C13.7546642,12.5326682 13.4293341,12.7966655 13.28,13.026 C13.1306659,13.2553345 13.056,13.4926654 13.056,13.738 L13.056,13.946 L10.656,13.946 Z M11.968,17.882 C11.5519979,17.882 11.1946682,17.7326682 10.896,17.434 C10.5973318,17.1353318 10.448,16.7726688 10.448,16.346 C10.448,15.9193312 10.5973318,15.5566682 10.896,15.258 C11.1946682,14.9593318 11.5519979,14.81 11.968,14.81 C12.3946688,14.81 12.7573318,14.9593318 13.056,15.258 C13.3546682,15.5566682 13.504,15.9193312 13.504,16.346 C13.504,16.7726688 13.3546682,17.1353318 13.056,17.434 C12.7573318,17.7326682 12.3946688,17.882 11.968,17.882 Z"
-                      ></path>
-                    </g>
-                  </svg>
+                <button className="btn-watchpage">
+                  <QuestionIcon className="svg-hover-scale" />
                 </button>
               </WatchPageTip>
-
-              <WatchPageTip describeChild title={<AudioAndSubtitles />}>
-                <button className="p-1 mx-2 w-9 h-9">
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="transition-transform duration-200 transform hover:scale-120"
-                  >
-                    <g id="audio-subtitles">
-                      <path
-                        fill="currentColor"
-                        d="M5,15 L5,13 L12,13 L12,15 L5,15 Z M14,15 L14,13 L19,13 L19,15 L14,15 Z M10,9 L10,11 L5,11 L5,9 L10,9 Z M11.9998571,11 L12.0001429,9.00000001 L19.0001429,9.00100001 L18.9998571,11.001 L11.9998571,11 Z M17,17 L21,17 L21,5 L3,5 L3,17 L12.9968832,17 L17,19.4392488 L17,17 Z M1,3 L23,3 L23,19 L19,19 L19,22.9999671 L12.4355463,19 L1,19 L1,3 Z"
-                      ></path>
-                    </g>
-                  </svg>
+              <WatchPageTip
+                describeChild
+                title={<AudioAndSubtitles />}
+                onOpen={() => setVisibleCurrent(false)}
+                onClose={() => setVisibleCurrent(true)}
+              >
+                <button className="btn-watchpage">
+                  <SubtitleIcon className="svg-hover-scale" />
                 </button>
               </WatchPageTip>
-
-              <WatchPageTip describeChild title={<SpeedAdjustment />}>
-                <button className="p-1 mx-2 w-9 h-9">
-                  <svg
-                    viewBox="3 3 28 28"
-                    className="transition-transform duration-200 transform hover:scale-120"
-                  >
-                    <g id="speed">
-                      <path
-                        fill="currentColor"
-                        d="M19.8023846,13.7111538 L22.0437692,15.0580769 L19.2865317,19.6534728 C19.4959852,20.029472 19.6153846,20.4622373 19.6153846,20.9224231 C19.6153846,22.3648077 18.4423846,23.5378077 17,23.5378077 C15.5576154,23.5378077 14.3846154,22.3648077 14.3846154,20.9224231 C14.3846154,19.4800385 15.5576154,18.3070385 17,18.3070385 C17.0149054,18.3070385 17.0297821,18.3071637 17.044629,18.3074133 L19.8023846,13.7111538 Z M28.7025597,25.4286405 C27.4615385,24.8461538 27.4615385,24.8461538 26.3609633,24.2636672 C27.0809129,22.8165686 27.4611462,21.2406017 27.4611462,19.6153846 C27.4611462,13.8370647 22.7779276,9.15384615 16.9996077,9.15384615 C11.2221213,9.15384615 6.53806923,13.8375388 6.53806923,19.6153846 C6.53806923,21.2391793 6.91888033,22.8151015 7.63955975,24.2636672 C6.53846154,24.8461538 6.53846154,24.8461538 5.29796333,25.4286405 C4.39964336,23.6230174 3.92268462,21.6492043 3.92268462,19.6153846 C3.92268462,12.3930568 9.77772922,6.53846154 16.9996077,6.53846154 C24.2223647,6.53846154 30.0765308,12.3926276 30.0765308,19.6153846 C30.0765308,21.6502951 29.600283,23.6242168 28.7025597,25.4286405 Z"
-                      ></path>
-                    </g>
-                  </svg>
+              <WatchPageTip
+                describeChild
+                title={<SpeedAdjustment />}
+                onOpen={() => setVisibleCurrent(false)}
+                onClose={() => setVisibleCurrent(true)}
+              >
+                <button className="btn-watchpage">
+                  <SpeedIcon className="svg-hover-scale" />
                 </button>
               </WatchPageTip>
-
-              <button className="p-1 mx-2 w-9 h-9">
-                <svg
-                  viewBox="0 0 24 24"
-                  className="transition-transform duration-200 transform hover:scale-120"
-                >
-                  <g id="fullscreen-on">
-                    <path
-                      fill="currentColor"
-                      d="M4,6 L4,10 L2,10 L2,4 L8,4 L8,6 L4,6 Z M4,18 L8,18 L8,20 L2,20 L2,14 L4,14 L4,18 Z M6,8 L18,8 L18,16 L6,16 L6,8 Z M20,6 L16,6 L16,4 L22,4 L22,10 L20,10 L20,6 Z M20,18 L20,14 L22,14 L22,20 L16,20 L16,18 L20,18 Z"
-                    ></path>
-                  </g>
-                </svg>
+              <button onClick={toggleFullscreen} className="btn-watchpage">
+                <FullScreenIcon className="svg-hover-scale" />
               </button>
             </div>
           </div>

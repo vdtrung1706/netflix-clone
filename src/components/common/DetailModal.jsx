@@ -17,6 +17,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import DetailPlayer from './DetailPlayer';
 import PreviewPopperTip from './PreviewPopperTip';
 import SimilarItems from './SimilarItems';
+import { Link } from 'react-router-dom';
 
 const DetailModal = ({
   data,
@@ -163,14 +164,20 @@ const DetailModal = ({
                 </div>
                 <div className="flex items-center content-center justify-between mx-10">
                   <div className="flex items-center content-center align-middle h-9">
-                    <button className="flex items-center justify-center px-3 mr-2 text-black bg-white border border-white border-solid rounded lg:px-6 max-w-max hover:bg-white-hover">
+                    <Link
+                      to={{
+                        pathname: '/watch',
+                        state: { movie: data },
+                      }}
+                      className="flex items-center justify-center px-3 mr-2 text-black bg-white border border-white border-solid rounded lg:px-6 max-w-max hover:bg-white-hover"
+                    >
                       <div className="box-border relative w-8 h-8 text-black p-7px">
                         <svg viewBox="0 0 24 24">
                           <path d="M6 4l15 8-15 8z" fill="currentColor"></path>
                         </svg>
                       </div>
                       <span className="mr-2 font-bold">Play</span>
-                    </button>
+                    </Link>
                     <PreviewPopperTip
                       arrow
                       className="text-white"

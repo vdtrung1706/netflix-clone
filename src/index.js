@@ -6,15 +6,13 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import './index.css';
 import store from './store';
-import WatchPage from './pages/WatchPage';
 
 ReactDOM.render(
   <Provider store={store}>
-    <WatchPage></WatchPage>
-    {/* <BrowserRouter>
+    <BrowserRouter>
       <ScrollToTop />
       <App />
-    </BrowserRouter> */}
+    </BrowserRouter>
   </Provider>,
   document.getElementById('root'),
 );

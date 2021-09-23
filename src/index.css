@@ -14,7 +14,16 @@
   }
 
   body {
-    @apply overflow-x-hidden overflow-y-scroll antialiased text-white bg-black font-main;
+    @apply overflow-x-hidden overflow-y-auto antialiased text-white bg-black font-main;
+  }
+}
+
+@layer components {
+  .svg-hover-scale {
+    @apply transition-transform duration-300 transform hover:scale-130;
+  }
+  .btn-watchpage {
+    @apply p-1 mx-1 w-7 h-7 sm:w-8 sm:h-8 md:mx-2 lg:h-9 lg:w-9;
   }
 }
 

@@ -4,11 +4,14 @@ import { selectUser } from '@store/auth/selectors.auth';
 import { authActions } from '@store/auth/slice.auth';
 import { Suspense, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router';
 import Routes from './routes/Routes';
 
 export default function App() {
   const { currentUser } = useSelector(selectUser);
   const dispatch = useDispatch();
+
+  const { pathname } = useLocation();
 
   useEffect(() => {
     dispatch(authActions.checkUserSession());
@@ -19,7 +22,7 @@ export default function App() {
   return (
     <div className="w-full overflow-x-hidden">
       <Suspense fallback={null}>
-        <header>{currentUser && <Nav />}</header>
+        {currentUser && !pathname.includes('/watch') && <Nav />}
       </Suspense>
       <Routes />
     </div>

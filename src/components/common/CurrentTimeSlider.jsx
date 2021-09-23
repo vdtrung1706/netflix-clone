@@ -1,7 +1,7 @@
 import Slider from '@mui/material/Slider';
 import { styled } from '@mui/material/styles';
 
-const TimeAdjustment = styled(Slider)({
+const CurrentTimeSlider = styled(Slider)({
   color: '#ababab',
   height: 3,
   borderRadius: 0,
@@ -28,4 +28,4 @@ const TimeAdjustment = styled(Slider)({
   },
 });
 
-export default TimeAdjustment;
+export default CurrentTimeSlider;

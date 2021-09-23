@@ -10,6 +10,7 @@ import { IMAGE_BASE } from '@services/axios.service';
 import cx from 'classnames';
 import { motion } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import PreviewPopperTip from './PreviewPopperTip';
 
 export default function PreviewPopper({
@@ -84,7 +85,13 @@ export default function PreviewPopper({
         className="flex flex-col bg-black rounded-md cursor-pointer select-none w-350px box-shadow-full"
       >
         {/* START OF PREVIEW PLAYER */}
-        <div className="relative w-full h-48">
+        <Link
+          to={{
+            pathname: '/watch',
+            state: { movie },
+          }}
+          className="relative w-full h-48"
+        >
           {played || playedTimeRef.current > 0 ? (
             <>
               <video
@@ -112,7 +119,7 @@ export default function PreviewPopper({
               )}
             />
           )}
-        </div>
+        </Link>
         {/* END OF PREVIEW PLAYER */}
 
         {/* START PREVIEW BUTTONS */}

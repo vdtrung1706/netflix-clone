@@ -18,6 +18,7 @@ const MoviesPage = lazy(() => import('../pages/MoviesPage'));
 const MyListPage = lazy(() => import('../pages/MyListPage'));
 const SearchPage = lazy(() => import('../pages/SearchPage'));
 const Homepage = lazy(() => import('../pages/Homepage'));
+const WatchPage = lazy(() => import('../pages/WatchPage'));
 
 const Routes = () => {
   const { currentUser } = useSelector(selectUser);
@@ -121,6 +122,10 @@ const Routes = () => {
             render={() =>
               currentUser ? <Redirect to="/browse" /> : <AuthPage />
             }
+          />
+          <Route
+            path="/watch"
+            render={() => (currentUser ? <WatchPage /> : <AuthPage />)}
           />
           <Route path="*" redner={() => <Redirect to="/welcome" />} />
         </Switch>

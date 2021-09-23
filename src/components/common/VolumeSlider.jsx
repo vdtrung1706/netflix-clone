@@ -1,7 +1,7 @@
 import Slider from '@mui/material/Slider';
 import { styled } from '@mui/material/styles';
 
-const VolumeSlider = styled(Slider)({
+const DefaultVolumeSlider = styled(Slider)({
   color: '#ababab',
   height: 100,
   borderRadius: 0,
@@ -24,7 +24,7 @@ const VolumeSlider = styled(Slider)({
   },
 });
 
-const VolumeAdjustment = () => {
+const VolumeSlider = ({ volume, setVolume }) => {
   function preventHorizontalKeyboardNavigation(event) {
     if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
       event.preventDefault();
@@ -33,19 +33,22 @@ const VolumeAdjustment = () => {
 
   return (
     <div className="py-5 m-auto">
-      <VolumeSlider
+      <DefaultVolumeSlider
         sx={{
           '& input[type="range"]': {
             WebkitAppearance: 'slider-vertical',
           },
         }}
+        min={0}
+        max={100}
+        value={volume}
         orientation="vertical"
         valueLabelDisplay="off"
-        defaultValue={20}
+        onChange={(_, value) => setVolume(value)}
         onKeyDown={preventHorizontalKeyboardNavigation}
       />
     </div>
   );
 };
 
-export default VolumeAdjustment;
+export default VolumeSlider;

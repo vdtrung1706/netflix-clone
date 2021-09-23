@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import useSliderItem from '@hooks/useSliderItem';
 import DetailModal from '@components/common/DetailModal';
 import { defaultFadeInVariants } from '@utils/motion.utils';
+import { Link } from 'react-router-dom';
 
 function Billboard({ data }) {
   const [modalOpen, setModalOpen] = useState(false);
@@ -99,8 +100,11 @@ function Billboard({ data }) {
               )}
             </div>
             <div className="flex gap-2 text-0.7rem sm:text-xs md:text-sm lg:text-base mt-4 h-8 md:h-9 lg:h-10">
-              <a
-                href="/"
+              <Link
+                to={{
+                  pathname: '/watch',
+                  state: { movie: data },
+                }}
                 className="flex items-center justify-center w-24 gap-1 transition duration-300 ease-linear bg-white rounded cursor-pointer hover:bg-white-hover md:w-28 md:py-2 text-black-pure"
               >
                 <div className="w-5 h-5 sm:h-6 sm:w-6" role="presentation">
@@ -109,7 +113,7 @@ function Billboard({ data }) {
                   </svg>
                 </div>
                 <span className="font-bold">Play</span>
-              </a>
+              </Link>
               <button
                 onClick={() => setModalOpen(true)}
                 className="flex items-center justify-center w-32 gap-1 py-2 text-white transition duration-300 ease-linear rounded cursor-pointer hover:bg-grey-darker hover:bg-opacity-60 md:w-36 bg-grey bg-opacity-70"

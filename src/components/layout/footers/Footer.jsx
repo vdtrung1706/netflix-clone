@@ -1,6 +1,7 @@
-import { FB_LOGO } from '@assets/';
-import { INSTA_LOGO } from '@assets/';
-import { TWITTER_LOGO } from '@assets/';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import YouTubeIcon from '@mui/icons-material/YouTube';
 import { defaultFadeInVariants } from '@utils/motion.utils';
 import { motion } from 'framer-motion';
 import { PureComponent } from 'react';
@@ -14,15 +15,18 @@ class Footer extends PureComponent {
         animate="animate"
         className="px-5% pt-10 flex flex-col"
       >
-        <div className="flex items-baseline gap-6">
+        <div className="flex items-baseline gap-6 text-grey-txt">
           <a href="https://www.facebook.com/netflix/">
-            <img src={FB_LOGO} alt="facebook" className="w-7" />
+            <FacebookIcon fontSize="large" />
           </a>
           <a href="https://www.instagram.com/netflixasia/">
-            <img src={INSTA_LOGO} alt="instagram" className="w-7" />
+            <InstagramIcon fontSize="large" />
           </a>
           <a href="https://twitter.com/netflix?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor">
-            <img src={TWITTER_LOGO} alt="twitter" className="w-7" />
+            <TwitterIcon fontSize="large" />
+          </a>
+          <a href="https://twitter.com/netflix?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor">
+            <YouTubeIcon fontSize="large" />
           </a>
         </div>
         <ul className="flex flex-wrap w-full py-4 text-sm font-light text-grey-txt font-roboto">

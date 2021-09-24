@@ -5,8 +5,10 @@ import ToggleDislikedButton from '@components/buttons/ToggleDislikedButton';
 import ToggleLikedButton from '@components/buttons/ToggleLikedButton';
 import ToggleSoundButton from '@components/buttons/ToggleSoundButton';
 import useViewport from '@hooks/useViewport';
-import Modal from '@mui/material/Modal';
+import CloseIcon from '@mui/icons-material/Close';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import Backdrop from '@mui/material/Backdrop';
+import Modal from '@mui/material/Modal';
 import { IMAGE_BASE } from '@services/axios.service';
 import { randomIndex } from '@utils/array.utils';
 import { truncate } from '@utils/convertor.utils';
@@ -14,10 +16,10 @@ import { modalVariants } from '@utils/motion.utils';
 import cx from 'classnames';
 import { motion } from 'framer-motion';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import DetailPlayer from './DetailPlayer';
 import PreviewPopperTip from './PreviewPopperTip';
 import SimilarItems from './SimilarItems';
-import { Link } from 'react-router-dom';
 
 const DetailModal = ({
   data,
@@ -141,14 +143,9 @@ const DetailModal = ({
               <div className="absolute bottom-0 left-0 z-20 w-full h-56 bg-repeat-x bg-gradient-to-t from-black-light"></div>
               <button
                 onClick={handleClose}
-                className="box-border absolute top-0 right-0 z-20 w-8 h-8 p-2 mx-4 mt-6 rounded-full bg-black-pure bg-opacity-80"
+                className="absolute top-0 right-0 z-20 w-8 h-8 mx-4 mt-6 rounded-full bg-black-pure bg-opacity-80"
               >
-                <svg viewBox="0 0 24 24" role="button">
-                  <path
-                    d="M12 10.586l7.293-7.293 1.414 1.414L13.414 12l7.293 7.293-1.414 1.414L12 13.414l-7.293 7.293-1.414-1.414L10.586 12 3.293 4.707l1.414-1.414L12 10.586z"
-                    fill="currentColor"
-                  ></path>
-                </svg>
+                <CloseIcon />
               </button>
               <div className="absolute left-0 z-20 flex flex-col content-center justify-between w-full align-middle transition-opacity duration-500 bottom-10">
                 <div className="w-1/2 my-4 ml-10 text-xl font-bold lg:text-2xl lg:w-3/12">
@@ -169,13 +166,9 @@ const DetailModal = ({
                         pathname: '/watch',
                         state: { movie: data },
                       }}
-                      className="flex items-center justify-center px-3 mr-2 text-black bg-white border border-white border-solid rounded lg:px-6 max-w-max hover:bg-white-hover"
+                      className="flex items-center justify-center h-8 px-3 mr-2 text-black bg-white border border-white border-solid rounded lg:px-6 max-w-max hover:bg-white-hover"
                     >
-                      <div className="box-border relative w-8 h-8 text-black p-7px">
-                        <svg viewBox="0 0 24 24">
-                          <path d="M6 4l15 8-15 8z" fill="currentColor"></path>
-                        </svg>
-                      </div>
+                      <PlayArrowIcon />
                       <span className="mr-2 font-bold">Play</span>
                     </Link>
                     <PreviewPopperTip

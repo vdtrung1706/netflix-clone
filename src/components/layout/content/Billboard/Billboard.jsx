@@ -1,10 +1,12 @@
+import DetailModal from '@components/common/DetailModal';
+import useSliderItem from '@hooks/useSliderItem';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { IMAGE_BASE } from '@services/axios.service';
 import { truncate } from '@utils/convertor.utils';
-import { memo, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import useSliderItem from '@hooks/useSliderItem';
-import DetailModal from '@components/common/DetailModal';
 import { defaultFadeInVariants } from '@utils/motion.utils';
+import { AnimatePresence, motion } from 'framer-motion';
+import { memo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function Billboard({ data }) {
@@ -107,26 +109,15 @@ function Billboard({ data }) {
                 }}
                 className="flex items-center justify-center w-24 gap-1 transition duration-300 ease-linear bg-white rounded cursor-pointer hover:bg-white-hover md:w-28 md:py-2 text-black-pure"
               >
-                <div className="w-5 h-5 sm:h-6 sm:w-6" role="presentation">
-                  <svg viewBox="0 0 24 24">
-                    <path d="M6 4l15 8-15 8z" fill="currentColor"></path>
-                  </svg>
-                </div>
+                <PlayArrowIcon />
                 <span className="font-bold">Play</span>
               </Link>
               <button
                 onClick={() => setModalOpen(true)}
                 className="flex items-center justify-center w-32 gap-1 py-2 text-white transition duration-300 ease-linear rounded cursor-pointer hover:bg-grey-darker hover:bg-opacity-60 md:w-36 bg-grey bg-opacity-70"
               >
-                <div className="w-5 h-5 sm:h-6 sm:w-6" role="presentation">
-                  <svg viewBox="0 0 24 24">
-                    <path
-                      d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10zm-2 0a8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8zm-9 6v-7h2v7h-2zm1-8.75a1.21 1.21 0 0 1-.877-.364A1.188 1.188 0 0 1 10.75 8c0-.348.123-.644.372-.886.247-.242.54-.364.878-.364.337 0 .63.122.877.364.248.242.373.538.373.886s-.124.644-.373.886A1.21 1.21 0 0 1 12 9.25z"
-                      fill="currentColor"
-                    ></path>
-                  </svg>
-                </div>
-                <span className="font-bold">More Info</span>
+                <InfoOutlinedIcon />
+                <span className="font-medium">More Info</span>
               </button>
             </div>
           </div>

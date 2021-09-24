@@ -15,7 +15,9 @@ import VolumeSlider from '@components/common/VolumeSlider';
 import WatchPageTip from '@components/common/WatchPageTip';
 import CircleLoading from '@components/layout/loader/CircleLoading';
 import { convertHMS } from '@utils/convertor.utils';
+import { defaultPageFadeInVariants } from '@utils/motion.utils';
 import cx from 'classnames';
+import { motion } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 
@@ -34,7 +36,7 @@ const WatchPage = () => {
   const [interactive, setInteractive] = useState(false);
   const [visibleCurrentTime, setVisibleCurrent] = useState(true);
   const videoSrc =
-    'https://movietrailers.apple.com/movies/marvel/eternals/eternals-trailer-2_a720p.m4v';
+    'https://movietrailers.apple.com/movies/marvel/shang-chi-and-the-legend-of-the-ten-rings/shang-chi-and-the-legend-of-the-ten-rings-trailer-1_a720p.m4v';
 
   const history = useHistory();
   const {
@@ -240,7 +242,10 @@ const WatchPage = () => {
   );
 
   return (
-    <div
+    <motion.div
+      variants={defaultPageFadeInVariants}
+      initial="initial"
+      animate="animate"
       onMouseMove={onMouseMoveContainer}
       className={cx(
         'absolute top-0 left-0 w-full h-full bg-black-pure onHide overflow-hidden',
@@ -425,7 +430,7 @@ const WatchPage = () => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

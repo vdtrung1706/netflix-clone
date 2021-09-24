@@ -1,5 +1,6 @@
-import { CROSS_SIGN, SEARCH_ICON } from '@assets';
 import useOutside from '@hooks/useOutside';
+import ClearIcon from '@mui/icons-material/Clear';
+import SearchIcon from '@mui/icons-material/Search';
 import cx from 'classnames';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -7,7 +8,6 @@ import { useHistory, useLocation } from 'react-router-dom';
 export default function SearchBox() {
   const ref = useRef(null);
   const inputRef = useRef(null);
-  const preLocation = useRef(null);
   const [toggle, setToggle] = useState(false);
   const [query, setQuery] = useState('');
 
@@ -15,9 +15,9 @@ export default function SearchBox() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    if (location.pathname != '/search') {
-      preLocation.current = pathname;
-    }
+    if (pathname === '/search') return;
+    setQuery('');
+    setToggle(false);
   }, [pathname]);
 
   useEffect(() => {
@@ -38,18 +38,23 @@ export default function SearchBox() {
 
   const handleRemoveSearchContent = useCallback(() => {
     setQuery('');
-    history.replace(preLocation.current);
+    history.goBack();
   }, [history]);
 
   const handleChangeSearchContent = useCallback(
     (e) => {
+      e.preventDefault();
       const value = e.target.value;
-      setQuery(value);
-      if (value) {
-        history.replace(`/search?query=${value}`);
-      } else {
-        history.replace(preLocation.current);
-      }
+      setQuery((pre) => {
+        if (pre.length === 0) {
+          history.push(`/search?query=${value}`);
+        } else if (pre.length === 1 && value.length === 0) {
+          history.goBack();
+        } else {
+          history.replace(`/search?query=${value}`);
+        }
+        return value;
+      });
     },
     [history],
   );
@@ -69,43 +74,38 @@ export default function SearchBox() {
       role="searchbox"
       tabIndex="-1"
       onKeyDown={(event) => handleKeydown(event)}
-      className={cx('flex items-center bg-opacity-90', {
-        'bg-black border-white border border-solid': toggle,
+      className={cx('flex items-center', {
+        'bg-black border-white border border-solid bg-opacity-80': toggle,
       })}
     >
-      <button
-        onClick={handleToggle}
-        className="w-4 h-4 px-1 lg:h-5 lg:w-5 lg:px-2"
-      >
-        <img src={SEARCH_ICON} alt="search" />
+      <button onClick={handleToggle} className="px-1 lg:px-2">
+        <SearchIcon />
       </button>
 
       <input
         ref={inputRef}
         value={query}
-        onChange={(e) => handleChangeSearchContent(e)}
+        placeholder="Title, people, genres"
+        onChange={handleChangeSearchContent}
         className={cx(
           `outline-none w-0 text-xs lg:text-sm bg-transparent transition-all duration-300 ease-linear`,
           { 'w-36 p-1 mr-1 lg:w-48 lg:p-2 lg:mr-2': toggle },
         )}
-        placeholder="Title, people, genres"
       />
 
-      <button
-        onClick={() => handleRemoveSearchContent()}
-        className={cx('h-0 w-0 px-0 lg:h-0 lg:w-0 cursor-default', {
-          'h-3 w-3 px-2 lg:h-4 lg:w-3': toggle,
-        })}
-      >
-        <img
-          className={cx('transition-opacity ease-linear duration-200', {
-            'opacity-100 cursor-pointer': query,
-            'hidden opacity-0': !query,
-          })}
-          src={CROSS_SIGN}
-          alt="clear"
-        />
-      </button>
+      {toggle && (
+        <button
+          onClick={handleRemoveSearchContent}
+          className="px-1 cursor-default"
+        >
+          <ClearIcon
+            className={cx({
+              'opacity-100 cursor-pointer': query,
+              'invisible opacity-0': !query,
+            })}
+          />
+        </button>
+      )}
     </div>
   );
 }

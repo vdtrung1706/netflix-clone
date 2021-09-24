@@ -1,4 +1,5 @@
-import { ARROW_POINT_DOWN, NETFLIX_LOGO } from '@assets';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { NETFLIX_LOGO } from '@assets';
 import useViewport from '@hooks/useViewport';
 import cx from 'classnames';
 import { AnimatePresence } from 'framer-motion';
@@ -27,19 +28,18 @@ function PrimaryNav() {
         <img src={NETFLIX_LOGO} alt="Logo" />
       </Link>
       <Suspense fallback={null}>
-        <ul className="flex items-center gap-5 p-0 m-0 ml-5 text-shadow md:ml-7 md:text-sm lg:ml-12">
+        <ul className="flex items-center gap-5 ml-5 text-shadow md:ml-7 md:text-sm lg:ml-12">
           <li
-            className={cx(
-              'text-xs list-none list-item transition-all ease-linear duration-400',
-              { hidden: !smallScreen },
-            )}
+            className={cx('text-xs list-none list-item', {
+              hidden: !smallScreen,
+            })}
           >
             <button
               onClick={hanldeExpanded}
-              className="relative flex items-center h-full font-bold no-underline"
+              className="relative flex items-center h-full ml-2 font-bold"
             >
               Browse
-              <img src={ARROW_POINT_DOWN} alt="browse" className="h-3 ml-1" />
+              <ArrowDropDownIcon />
             </button>
             <AnimatePresence>
               {open && <NavMenuCollapse setOpen={setOpen} />}

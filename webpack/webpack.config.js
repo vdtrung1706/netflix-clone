@@ -40,6 +40,7 @@ module.exports = {
     new Dotenv({
       path: path.join(root, '.env'),
       safe: false,
+      systemvars: true,
     }),
   ],
   module: {

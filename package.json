@@ -14,8 +14,6 @@
   "author": "vdtrung",
   "license": "ISC",
   "dependencies": {
-    "@fortawesome/free-solid-svg-icons": "^5.15.4",
-    "@fortawesome/react-fontawesome": "^0.1.15",
     "@mui/icons-material": "^5.0.1",
     "@mui/material": "^5.0.0",
     "@reduxjs/toolkit": "^1.6.1",
@@ -27,8 +25,6 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-helmet": "^6.1.0",
-    "react-hook-form": "^7.14.0",
-    "react-icons": "^4.2.0",
     "react-player": "^2.9.0",
     "react-redux": "^7.2.4",
     "react-router-dom": "^5.2.0",

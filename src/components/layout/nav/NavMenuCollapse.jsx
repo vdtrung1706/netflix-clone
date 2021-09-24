@@ -1,4 +1,4 @@
-import { ARROW_POINT_UP } from '@assets';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import useOutside from '@hooks/useOutside';
 import { profileFadeInVariants } from '@utils/motion.utils';
 import { motion } from 'framer-motion';
@@ -21,10 +21,10 @@ const NavMenuCollapse = ({ setOpen }) => {
       initial="initial"
       animate="animate"
       exit="exit"
-      className="absolute -ml-20 bg-black-pure opacity-90 top-16"
+      className="absolute -ml-16 bg-black-pure opacity-90 top-16"
     >
-      <div className="absolute w-4 h-4 left-1/2 -top-3">
-        <img src={ARROW_POINT_UP} alt={'browse'} />
+      <div className="absolute transform -translate-x-1/2 left-1/2 -top-5">
+        <ArrowDropUpIcon fontSize="large" />
       </div>
       <ul className="h-auto p-0 border-t-2 border-white border-solid">
         <NavMenu className="flex items-center justify-around w-64 h-12 leading-6" />

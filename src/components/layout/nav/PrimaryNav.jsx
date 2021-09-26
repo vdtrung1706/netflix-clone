@@ -24,7 +24,7 @@ function PrimaryNav() {
 
   return (
     <div className="flex items-center justify-start">
-      <Link to="/" className="w-20 md:w-24">
+      <Link to="/" className="w-16 sm:w-20 md:w-24">
         <img src={NETFLIX_LOGO} alt="Logo" />
       </Link>
       <Suspense fallback={null}>
@@ -36,7 +36,7 @@ function PrimaryNav() {
           >
             <button
               onClick={hanldeExpanded}
-              className="relative flex items-center h-full ml-2 font-bold"
+              className="relative flex items-center h-full sm:ml-1 lg:ml-2 text-0.7rem font-bold sm:text-xs md:text-sm"
             >
               Browse
               <ArrowDropDownIcon />

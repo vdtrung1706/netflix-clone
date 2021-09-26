@@ -1,0 +1,5 @@
+@layer components {
+  .slider-btn div {
+    font-size: '50px';
+  }
+}

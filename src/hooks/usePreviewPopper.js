@@ -1,3 +1,4 @@
+import { getBoundingClientRect } from '@utils/convertor.utils';
 import { defaultEasing } from '@utils/motion.utils';
 import { useMemo } from 'react';
 import useViewport from './useViewport';
@@ -7,14 +8,14 @@ const usePreviewPopper = (transformOrigin, anchorEl) => {
 
   const translateX = useMemo(() => {
     if (transformOrigin === 'right') {
-      return `-${width * 0.04 - 4}px`;
+      return `-${width * 0.04}px`;
     } else if (transformOrigin === 'left') {
-      return `${width * 0.04 - 4}px`;
+      return `${width * 0.04}px`;
     }
     return 0;
   }, [transformOrigin, width]);
 
-  const anchorRect = anchorEl.getBoundingClientRect();
+  const anchorRect = getBoundingClientRect(anchorEl);
 
   const previewVariants = useMemo(
     () => ({
@@ -47,7 +48,6 @@ const usePreviewPopper = (transformOrigin, anchorEl) => {
 
   return {
     previewVariants,
-    translateX,
   };
 };
 

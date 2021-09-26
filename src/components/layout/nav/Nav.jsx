@@ -31,18 +31,22 @@ export default function Nav() {
       variants={navFadeInVariants}
       initial="initial"
       animate="animate"
-      className={cx(
-        'z-50 fixed h-16 top-0 right-0 left-0 transition-all duration-200',
-        {
-          'bg-gradient-to-b from-black-pure': !inGenrePage,
-          'bg-black': inGenrePage,
-          'bg-black-pure': fixedNav,
-        },
-      )}
+      className="fixed top-0 left-0 right-0 z-50 h-16"
     >
-      <div className="flex items-center h-full justify-between px-4% ml-2px">
-        <PrimaryNav />
-        <SecondaryNav currentUser={currentUser} />
+      <div
+        className={cx(
+          'relative mx-auto max-w-screen-2xl transition-all duration-200',
+          {
+            'bg-gradient-to-b from-black-pure': !inGenrePage,
+            'bg-black': inGenrePage,
+            'bg-black-pure': fixedNav,
+          },
+        )}
+      >
+        <div className="flex items-center h-full justify-between px-4% ml-2px">
+          <PrimaryNav />
+          <SecondaryNav currentUser={currentUser} />
+        </div>
       </div>
     </motion.nav>
   );

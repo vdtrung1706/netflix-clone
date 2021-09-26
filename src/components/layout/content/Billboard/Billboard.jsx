@@ -36,7 +36,7 @@ function Billboard({ data }) {
         animate="animate"
         className="absolute top-0 z-0 w-full"
       >
-        <div className="relative w-full transition-all duration-1000 origin-bottom-left transform-gpu">
+        <div className="relative w-full transition-all duration-1000 origin-bottom-left transform-gpu max-w-screen-2xl">
           <img
             src={`${IMAGE_BASE}/original${data.backdrop_path}`}
             alt="hero"
@@ -44,7 +44,7 @@ function Billboard({ data }) {
           />
           <div className="absolute top-0 left-0 z-0 w-full h-full bg-black bg-opacity-20" />
           <div className="absolute top-0 bottom-0 left-0 right-2/3 opacity-70 bg-gradient-to-r from-black"></div>
-          <div className="absolute bottom-0 left-0 right-0 top-auto z-10 h-10 bg-repeat-x bg-0-top bg-gradient-to-t from-black sm:h-20 md:h-32 lg:h-52"></div>
+          <div className="absolute left-0 right-0 top-auto z-10 h-10 bg-repeat-x -bottom-1 bg-0-top bg-gradient-to-t from-black sm:h-20 md:h-32 lg:h-52"></div>
           <div className="absolute right-0 bottom-1/5 flex justify-end items-center md:bottom-35%">
             <span className="flex items-center text-0.7rem border-l-2 border-solid border-white bg-black-lighter bg-opacity-70 pr-5 pl-2 h-5 sm:text-xs lg:h-9 lg:text-base lg:pr-10 lg:pl-3">
               {data.adult ? '18+' : '13+'}
@@ -85,7 +85,7 @@ function Billboard({ data }) {
                     }}
                     className="w-full"
                   >
-                    <p className="hidden mt-1 overflow-hidden text-xs leading-relaxed sm:block lg:text-base xl:text-lg text-shadow">
+                    <p className="hidden mt-1 overflow-hidden text-xs leading-relaxed sm:block lg:text-base 2xl:text-lg text-shadow">
                       {truncate(data?.overview, 120)}
                     </p>
                   </motion.div>
@@ -107,14 +107,14 @@ function Billboard({ data }) {
                   pathname: '/watch',
                   state: { movie: data },
                 }}
-                className="flex items-center justify-center w-24 gap-1 transition duration-300 ease-linear bg-white rounded cursor-pointer hover:bg-white-hover md:w-28 md:py-2 text-black-pure"
+                className="flex items-center justify-center w-20 gap-1 transition duration-300 ease-linear bg-white rounded cursor-pointer sm:w-24 hover:bg-white-hover md:w-28 md:py-2 text-black-pure"
               >
                 <PlayArrowIcon />
                 <span className="font-bold">Play</span>
               </Link>
               <button
                 onClick={() => setModalOpen(true)}
-                className="flex items-center justify-center w-32 gap-1 py-2 text-white transition duration-300 ease-linear rounded cursor-pointer hover:bg-grey-darker hover:bg-opacity-60 md:w-36 bg-grey bg-opacity-70"
+                className="flex items-center justify-center gap-1 py-2 text-white transition duration-300 ease-linear rounded cursor-pointer w-28 sm:w-32 hover:bg-grey-darker hover:bg-opacity-60 md:w-36 bg-grey bg-opacity-70"
               >
                 <InfoOutlinedIcon />
                 <span className="font-medium">More Info</span>

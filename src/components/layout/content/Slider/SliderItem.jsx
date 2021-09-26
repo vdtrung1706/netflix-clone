@@ -15,17 +15,20 @@ import BoxArt from './BoxArt';
 
 function SliderItem({ movie, large, inSearchPage, url }) {
   const ref = useRef(null);
+  const currentTimeRef = useRef(0);
   const openPreviewTimeout = useRef(null);
-  const playTimeRef = useRef(0);
   const [inViewport, setInViewport] = useState(false);
   const [zIndex, setZIndex] = useState(10);
-  const [largeHover, setLargeHover] = useState(false);
+  const [hover, setHover] = useState(false);
   const [origin, setOrigin] = useState('center');
   const [modalOpen, setModalOpen] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
+
   const { width } = useViewport();
+
   const videoSrc =
     'https://movietrailers.apple.com/movies/fox/free-guy/free-guy-trailer-2_h1080p.mov';
+
   const {
     muted,
     inMyList,
@@ -36,11 +39,6 @@ function SliderItem({ movie, large, inSearchPage, url }) {
     toggleMuted,
     toggleMyList,
   } = useSliderItem(movie);
-
-  const getUrl = (url, movieId, movieType, getMovieFn, getTVShowFn) => {
-    const isTV = url?.includes('tv') || movieType === 'tv';
-    return isTV ? getTVShowFn(movieId) : getMovieFn(movieId);
-  };
 
   const {
     response: { data },
@@ -53,7 +51,7 @@ function SliderItem({ movie, large, inSearchPage, url }) {
   useEffect(() => {
     return () => {
       if (openPreviewTimeout.current) clearTimeout(openPreviewTimeout.current);
-      playTimeRef.current = null;
+      currentTimeRef.current = null;
     };
   }, []);
 
@@ -63,93 +61,72 @@ function SliderItem({ movie, large, inSearchPage, url }) {
     () => setInViewport(false),
   );
 
-  const getOrgin = useCallback(
-    (element) => {
-      // padding 4% --> if left > width*3% ... --> origin left
-      const { left, right, width: itemWidth } = getBoundingClientRect(element);
-      const toLeft = width * 0.02;
-      const toRight = width * 0.93;
-      if (
-        (left >= toLeft && left <= toLeft + itemWidth) ||
-        (right >= toLeft && right <= toLeft + itemWidth)
-      ) {
-        return 'left';
-      }
-      if (right >= toRight || left >= toRight) {
-        return 'right';
-      }
-      return 'center';
-    },
-    [width],
-  );
+  function getUrl(url, movieId, movieType, getMovieFn, getTVShowFn) {
+    const isTV = url?.includes('tv') || movieType === 'tv';
+    return isTV ? getTVShowFn(movieId) : getMovieFn(movieId);
+  }
 
-  const handleMouseEnter = (event) => {
-    event.preventDefault();
-    if (!inViewport) {
-      return;
+  function getOrgin(element) {
+    const { left, right, width: itemWidth } = getBoundingClientRect(element);
+    const toLeft = width * 0.02;
+    const toRight = width * 0.93;
+    if (
+      (left >= toLeft && left <= toLeft + itemWidth) ||
+      (right >= toLeft && right <= toLeft + itemWidth)
+    ) {
+      return 'left';
     }
+    if (right >= toRight || left >= toRight) {
+      return 'right';
+    }
+    return 'center';
+  }
+
+  function handleMouseEnter(event) {
+    if (!inViewport) return;
+    event.preventDefault();
+    setZIndex(50);
     setOrigin(getOrgin(event.currentTarget));
-    if (large) {
-      setZIndex(50);
-      setLargeHover(true);
-    } else {
-      if (openPreviewTimeout.current) {
-        clearTimeout(openPreviewTimeout.current);
-      }
+    if (!large) {
       openPreviewTimeout.current = setTimeout(() => {
-        if (!modalOpen) {
-          setPreviewOpen(true);
-        }
+        if (!modalOpen) setPreviewOpen(true);
       }, 1000);
     }
-  };
+  }
 
-  const handleMouseLeave = () => {
-    if (large) {
-      setLargeHover(false);
-      setZIndex(0);
-    } else {
-      openPreviewTimeout.current && clearTimeout(openPreviewTimeout.current);
-    }
-  };
-
-  const handlePreviewClose = () => {
-    if (large) {
-      setLargeHover(false);
-      setZIndex(0);
-    } else {
+  function handleMouseLeave() {
+    setZIndex(0);
+    setHover(false);
+    if (!large) {
       setPreviewOpen(false);
       openPreviewTimeout.current && clearTimeout(openPreviewTimeout.current);
     }
-  };
+  }
 
-  const handleMoreInfo = () => {
-    if (large) {
-      setLargeHover(false);
-      setZIndex(0);
-    } else {
+  const handlePreviewClose = useCallback(() => {
+    setZIndex(0);
+    setHover(false);
+    if (!large) {
       setPreviewOpen(false);
+      openPreviewTimeout.current && clearTimeout(openPreviewTimeout.current);
     }
+  }, [large]);
+
+  const handleMoreInfo = useCallback(() => {
+    setZIndex(0);
+    setHover(false);
     setModalOpen(true);
-  };
-
-  const defaultGenres = [
-    {
-      id: Math.random(100),
-      name: 'Action',
-    },
-    {
-      id: Math.random(100),
-      name: 'Thriller',
-    },
-  ];
+    if (!large) {
+      setPreviewOpen(false);
+    }
+  }, [large]);
 
   return (
     <div
       ref={ref}
       data-id={movie.id}
       onMouseLeave={handleMouseLeave}
-      onMouseEnter={(event) => handleMouseEnter(event)}
+      onMouseEnter={handleMouseEnter}
       style={{
         zIndex,
       }}
@@ -174,10 +151,10 @@ function SliderItem({ movie, large, inSearchPage, url }) {
           <PreviewPopper
             key={1}
             movie={movie}
-            genres={data?.genres || defaultGenres}
+            genres={data?.genres || []}
             runtime={data?.runtime || 112}
             muted={muted}
-            playedTimeRef={playTimeRef}
+            currentTimeRef={currentTimeRef}
             videoSrc={videoSrc}
             anchorEl={ref.current}
             origin={origin}
@@ -197,7 +174,7 @@ function SliderItem({ movie, large, inSearchPage, url }) {
             data={!error ? data : movie}
             key={2}
             muted={muted}
-            playedTimeRef={playTimeRef}
+            playedTimeRef={currentTimeRef}
             videoSrc={videoSrc}
             inMyList={inMyList}
             liked={liked}
@@ -215,8 +192,8 @@ function SliderItem({ movie, large, inSearchPage, url }) {
       {large && (
         <div
           className={cx('w-full transition-opacity duration-700', {
-            'opacity-0': !largeHover,
-            'opacity-100': largeHover,
+            'opacity-0': !hover,
+            'opacity-100': hover,
           })}
         >
           <div className="absolute top-0 right-0 z-10">

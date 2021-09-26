@@ -5,12 +5,13 @@ import ToggleDislikedButton from '@components/buttons/ToggleDislikedButton';
 import ToggleLikedButton from '@components/buttons/ToggleLikedButton';
 import ToggleSoundButton from '@components/buttons/ToggleSoundButton';
 import usePreviewPopper from '@hooks/usePreviewPopper';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import Popper from '@mui/material/Popper';
 import { IMAGE_BASE } from '@services/axios.service';
 import cx from 'classnames';
 import { motion } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import PreviewPopperTip from './PreviewPopperTip';
 
 export default function PreviewPopper({
@@ -19,7 +20,7 @@ export default function PreviewPopper({
   runtime,
   anchorEl,
   muted,
-  playedTimeRef,
+  currentTimeRef,
   videoSrc,
   origin,
   inMyList,
@@ -36,45 +37,73 @@ export default function PreviewPopper({
   const videoRef = useRef(null);
   const videoTimeout = useRef(null);
   const [played, setPlayed] = useState(false);
-  const { previewVariants, translateX } = usePreviewPopper(origin, anchorEl);
+
+  const history = useHistory();
+
+  const { previewVariants } = usePreviewPopper(origin, anchorEl);
+
   useEffect(() => {
-    if (!videoTimeout.current && playedTimeRef.current === 0) {
+    if (!videoTimeout.current && currentTimeRef.current === 0) {
       videoTimeout.current = setTimeout(() => setPlayed(true), 2500);
     }
     return () => {
       if (videoTimeout.current) clearTimeout(videoTimeout.current);
     };
-  }, [playedTimeRef, translateX]);
+  }, [currentTimeRef]);
 
-  const handlePreviewClose = useCallback(() => {
-    if (videoTimeout.current) clearTimeout(videoTimeout.current);
-    playedTimeRef.current = videoRef?.current?.currentTime + 0.6 || 0;
+  function handlePreviewClose() {
+    currentTimeRef.current = videoRef?.current?.currentTime + 0.6 || 0;
     setPlayed(false);
     handleClose();
-  }, [playedTimeRef, handleClose]);
+  }
 
-  const showMoreInfo = useCallback(() => {
+  function showMoreInfo() {
     handlePreviewClose();
     handleMoreInfo();
-  }, [handlePreviewClose, handleMoreInfo]);
+  }
 
   const handleVideoMounted = useCallback(
     (element) => {
       if (element) {
         videoRef.current = element;
-        element.currentTime = playedTimeRef.current;
+        element.currentTime = currentTimeRef.current;
       }
     },
-    [playedTimeRef],
+    [currentTimeRef],
   );
+
+  function onClickPlay() {
+    history.push({
+      pathname: '/watch',
+      state: { movie },
+    });
+  }
 
   return (
     <Popper
+      popperRef={ref}
       open={true}
       anchorEl={anchorEl}
       placement="bottom"
-      ref={ref}
       className="z-1000"
+      modifiers={[
+        {
+          name: 'flip',
+          enabled: false,
+          options: {
+            altBoundary: false,
+            rootBoundary: 'document',
+          },
+        },
+        {
+          name: 'preventOverflow',
+          enabled: true,
+          options: {
+            altAxis: false,
+            rootBoundary: 'document',
+          },
+        },
+      ]}
     >
       <motion.div
         variants={previewVariants}
@@ -85,23 +114,18 @@ export default function PreviewPopper({
         className="flex flex-col bg-black rounded-md cursor-pointer select-none w-350px box-shadow-full"
       >
         {/* START OF PREVIEW PLAYER */}
-        <Link
-          to={{
-            pathname: '/watch',
-            state: { movie },
-          }}
-          className="relative w-full h-48"
-        >
-          {played || playedTimeRef.current > 0 ? (
+        <div className="relative w-full h-48">
+          {played || currentTimeRef.current > 0 ? (
             <>
               <video
                 ref={handleVideoMounted}
                 muted={muted}
                 autoPlay
                 disableRemotePlayback
+                src={videoSrc}
+                onClick={onClickPlay}
                 onEnded={() => setPlayed(false)}
                 onError={() => setPlayed(false)}
-                src={videoSrc}
                 className="absolute top-0 bottom-0 left-0 right-0 object-cover object-center w-full h-full rounded-t-md"
               />
               <ToggleSoundButton
@@ -112,25 +136,28 @@ export default function PreviewPopper({
             </>
           ) : (
             <img
+              role="none"
               src={`${IMAGE_BASE}/w400${movie.backdrop_path}`}
               alt="small-preview-player"
+              onClick={onClickPlay}
               className={cx(
                 'absolute top-0 bottom-0 left-0 right-0 object-cover object-center rounded-t-md w-full h-full',
               )}
             />
           )}
-        </Link>
+        </div>
         {/* END OF PREVIEW PLAYER */}
 
         {/* START PREVIEW BUTTONS */}
         <div className="p-4 cursor-pointer">
           <div className="flex items-center content-center justify-between align-middle">
             <div className="flex items-center content-center align-middle">
-              <div className="box-border relative mr-2 text-black bg-white border border-white border-solid rounded-full w-9 h-9 p-7px hover:bg-white-hover">
-                <svg viewBox="0 0 24 24">
-                  <path d="M6 4l15 8-15 8z" fill="currentColor"></path>
-                </svg>
-              </div>
+              <button
+                onClick={onClickPlay}
+                className="box-border relative mr-2 text-black bg-white border border-white border-solid rounded-full w-9 h-9 hover:bg-white-hover"
+              >
+                <PlayArrowIcon />
+              </button>
               <PreviewPopperTip
                 arrow
                 placement="top"
@@ -167,7 +194,7 @@ export default function PreviewPopper({
             </div>
             <PreviewPopperTip arrow title="More info" placement="top">
               <MoreInfoButton
-                onClick={() => showMoreInfo()}
+                onClick={showMoreInfo}
                 className="box-border relative p-2 transition-all duration-200 bg-white border border-solid rounded-full w-9 h-9 bg-opacity-5 border-grey hover:border-white"
               />
             </PreviewPopperTip>

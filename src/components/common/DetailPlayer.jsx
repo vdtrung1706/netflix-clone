@@ -8,6 +8,7 @@ const DetailPlayer = ({
   played,
   backgroundSrc,
   onEnded,
+  onClickPlay,
 }) => {
   const handleVideoMouted = useCallback(
     (element) => {
@@ -24,17 +25,20 @@ const DetailPlayer = ({
         <video
           ref={handleVideoMouted}
           muted={muted}
-          onEnded={onEnded}
           autoPlay
+          src={videoSrc}
           disablePictureInPicture
           disableRemotePlayback
+          onClick={onClickPlay}
+          onEnded={onEnded}
           onError={onEnded}
-          src={videoSrc}
           className="absolute top-0 bottom-0 left-0 right-0 z-10 object-cover object-center w-full h-full rounded-t-md"
         />
       )}
 
       <img
+        role="none"
+        onClick={onClickPlay}
         src={backgroundSrc}
         alt="detail_bg"
         className={`absolute top-0 bottom-0 left-0 right-0 object-cover object-center w-full h-full z-1 rounded-t-md ${

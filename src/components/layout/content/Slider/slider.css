@@ -1,18 +1,16 @@
-@layer components {
-  .slider:hover .slider-page,
-  .slider:hover .slider-btn {
-    opacity: 1;
-  }
-  .slider-container:hover .explore-arrow {
-    opacity: 1;
-  }
-  .slider-btn:hover strong {
-    font-size: 26px;
-  }
+.slider:hover .slider-page,
+.slider:hover .slider-btn {
+  opacity: 1;
+}
+.slider-container:hover .explore-arrow {
+  opacity: 1;
+}
 
-  @media screen and (min-width: 640px) {
-    .slider-btn:hover strong {
-      font-size: 22px;
-    }
-  }
+.slider-btn svg {
+  stroke: white;
+  stroke-width: 0.5;
+}
+.slider-btn svg:hover {
+  transform: scale(1.3);
+  transition: all linear 100ms;
 }

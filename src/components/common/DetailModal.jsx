@@ -15,8 +15,8 @@ import { truncate } from '@utils/convertor.utils';
 import { modalVariants } from '@utils/motion.utils';
 import cx from 'classnames';
 import { motion } from 'framer-motion';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import DetailPlayer from './DetailPlayer';
 import PreviewPopperTip from './PreviewPopperTip';
 import SimilarItems from './SimilarItems';
@@ -40,15 +40,12 @@ const DetailModal = ({
   const [toggleMore, setToggleMore] = useState(false);
   const [onTransition, setOnTransition] = useState(true);
   const [played, setPlayed] = useState(false);
+
+  const history = useHistory();
   const { width: windowWidth } = useViewport();
 
-  const getModalSize = (windowWidth) => {
-    if (windowWidth < 570) return { height: '95%', width: '96%' };
-    if (windowWidth < 855) return { height: '95%', width: 560 };
-    return { height: '95%', width: 850 };
-  };
-
   const { width, height } = getModalSize(windowWidth);
+
   const mainModalStyle = useMemo(
     () => ({
       width,
@@ -61,26 +58,6 @@ const DetailModal = ({
     }),
     [height, width, windowWidth],
   );
-
-  useEffect(() => {
-    if (playedTimeRef.current > 0) {
-      setPlayed(true);
-    } else {
-      playedTimeout.current = setTimeout(() => setPlayed(true), 2500);
-    }
-
-    onTransitionTimeout.current = setTimeout(() => setOnTransition(false), 700);
-    return () => {
-      if (playedTimeout.current) clearTimeout(playedTimeout.current);
-      if (onTransitionTimeout.current)
-        clearTimeout(onTransitionTimeout.current);
-    };
-  }, [playedTimeRef]);
-
-  const handleClose = () => {
-    setOnTransition(true);
-    closeModal();
-  };
 
   const logoSrc = useMemo(() => {
     if (!data) return null;
@@ -100,6 +77,43 @@ const DetailModal = ({
     }
     return `${IMAGE_BASE}/w1280${data.backdrop_path}`;
   }, [data]);
+
+  useEffect(() => {
+    if (playedTimeRef.current > 0) {
+      setPlayed(true);
+    } else {
+      playedTimeout.current = setTimeout(() => setPlayed(true), 2500);
+    }
+
+    onTransitionTimeout.current = setTimeout(() => setOnTransition(false), 700);
+
+    return () => {
+      if (playedTimeout.current) {
+        clearTimeout(playedTimeout.current);
+      }
+      if (onTransitionTimeout.current) {
+        clearTimeout(onTransitionTimeout.current);
+      }
+    };
+  }, [playedTimeRef]);
+
+  function getModalSize(windowWidth) {
+    if (windowWidth < 570) return { height: '95%', width: '96%' };
+    if (windowWidth < 855) return { height: '95%', width: 560 };
+    return { height: '95%', width: 850 };
+  }
+
+  function handleClose() {
+    setOnTransition(true);
+    closeModal();
+  }
+
+  const onClickPlay = useCallback(() => {
+    history.push({
+      pathname: '/watch',
+      state: { movie: data },
+    });
+  }, [data, history]);
 
   return (
     <Modal
@@ -139,6 +153,7 @@ const DetailModal = ({
                 backgroundSrc={backgroundSrc}
                 played={played}
                 onEnded={() => setPlayed(false)}
+                onClickPlay={onClickPlay}
               />
               <div className="absolute bottom-0 left-0 z-20 w-full h-56 bg-repeat-x bg-gradient-to-t from-black-light"></div>
               <button
@@ -161,16 +176,13 @@ const DetailModal = ({
                 </div>
                 <div className="flex items-center content-center justify-between mx-10">
                   <div className="flex items-center content-center align-middle h-9">
-                    <Link
-                      to={{
-                        pathname: '/watch',
-                        state: { movie: data },
-                      }}
+                    <button
+                      onClick={onClickPlay}
                       className="flex items-center justify-center h-8 px-3 mr-2 text-black bg-white border border-white border-solid rounded lg:px-6 max-w-max hover:bg-white-hover"
                     >
                       <PlayArrowIcon />
                       <span className="mr-2 font-bold">Play</span>
-                    </Link>
+                    </button>
                     <PreviewPopperTip
                       arrow
                       className="text-white"

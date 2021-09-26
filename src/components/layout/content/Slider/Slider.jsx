@@ -68,7 +68,7 @@ export default function Slider({
                     transform: `translate3d(${distance}px, 0, 0)`,
                   }}
                   className={cx(
-                    'flex flex-shrink-0 overflow-x-visible duration-700 delay-100 transform-gpu whitespace-nowrap',
+                    'flex flex-shrink-0 overflow-x-auto sm:overflow-x-visible transition-all duration-1000 delay-75 transform-gpu whitespace-nowrap',
                     { 'h-96 md:h-116 lg:h-96': large },
                   )}
                 >

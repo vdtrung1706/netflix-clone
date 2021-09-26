@@ -4,7 +4,7 @@
 
 @layer base {
   html {
-    @apply text-base max-w-screen-2xl;
+    @apply mx-auto max-w-screen-2xl;
   }
 
   *,
@@ -15,6 +15,13 @@
 
   body {
     @apply overflow-x-hidden overflow-y-auto antialiased text-white bg-black font-main;
+  }
+
+  @media only screen and (max-width: 640px) {
+    ::-webkit-scrollbar {
+      width: 0px;
+      background: transparent;
+    }
   }
 }
 

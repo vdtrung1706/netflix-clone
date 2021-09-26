@@ -74,7 +74,7 @@ export default function SearchBox() {
       role="searchbox"
       tabIndex="-1"
       onKeyDown={(event) => handleKeydown(event)}
-      className={cx('flex items-center', {
+      className={cx('items-center hidden sm:flex', {
         'bg-black border-white border border-solid bg-opacity-80': toggle,
       })}
     >

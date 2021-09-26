@@ -27,7 +27,7 @@ function SliderItem({ movie, large, inSearchPage, url }) {
   const { width } = useViewport();
 
   const videoSrc =
-    'https://movietrailers.apple.com/movies/fox/free-guy/free-guy-trailer-2_h1080p.mov';
+    'https://drive.google.com/uc?export=download&id=1DJQIf16qX8P_8-GIAbOHO2b6p7NI5MHh';
 
   const {
     muted,

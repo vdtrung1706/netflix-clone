@@ -7,6 +7,7 @@ function Layout({
   title = false,
   description = false,
   path = false,
+  footer = true,
 }) {
   return (
     <div className="overflow-hidden">
@@ -16,7 +17,7 @@ function Layout({
         <main className="min-h-screen">{children}</main>
       </AnimatePresence>
 
-      <Footer />
+      {footer && <Footer />}
     </div>
   );
 }

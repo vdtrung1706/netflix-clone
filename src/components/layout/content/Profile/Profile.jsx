@@ -1,40 +1,30 @@
 import { PROFILE_DEFAULT } from '@assets';
 import { selectCurrentUser } from '@store/auth/selectors.auth';
-import { Suspense, useState, lazy } from 'react';
 import { useSelector } from 'react-redux';
-import { AnimatePresence } from 'framer-motion';
-
-const ProfileMenu = lazy(() => import('./ProfileMenu'));
+import ProfileTip from './ProfileTip';
+import ArrowDropDownSharpIcon from '@mui/icons-material/ArrowDropDownSharp';
+import ProfileMenu from './ProfileMenu';
 
 export default function Profile() {
   const currentUser = useSelector(selectCurrentUser);
-  const [open, setOpen] = useState(false);
 
   return (
-    <div className="relative flex flex-col">
+    <div className="relative flex flex-col cursor-pointer">
       <div className="flex items-center w-full">
-        <button
-          onClick={() => setOpen((pre) => !pre)}
-          className="flex items-center"
+        <ProfileTip
+          describeChild
+          arrow
+          placement="bottom"
+          title={<ProfileMenu currentUser={currentUser} />}
         >
           <img
             src={currentUser?.photoURL ? currentUser.photoURL : PROFILE_DEFAULT}
             alt="profile"
             className="w-8 rounded"
           />
-        </button>
-        <span
-          className="w-0 h-0 ml-1 border-t-4 border-l-4 border-r-4 border-solid"
-          style={{
-            borderColor: '#fff transparent transparent transparent',
-          }}
-        ></span>
+        </ProfileTip>
+        <ArrowDropDownSharpIcon />
       </div>
-      <Suspense fallback={null}>
-        <AnimatePresence>
-          {open && <ProfileMenu currentUser={currentUser} setOpen={setOpen} />}
-        </AnimatePresence>
-      </Suspense>
     </div>
   );
 }

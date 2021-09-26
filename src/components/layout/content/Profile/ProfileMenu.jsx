@@ -1,11 +1,9 @@
 import { KIDS, PROFILE_DEFAULT } from '@assets';
 import { authActions } from '@store/auth/slice.auth';
-import { profileFadeInVariants } from '@utils/motion.utils';
-import { motion } from 'framer-motion';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-export default function ProfileMenu({ currentUser, setOpen }) {
+export default function ProfileMenu({ currentUser }) {
   const dispatch = useDispatch();
 
   const handleSignOut = () => {
@@ -13,15 +11,7 @@ export default function ProfileMenu({ currentUser, setOpen }) {
   };
 
   return (
-    <motion.div
-      key={5}
-      onMouseLeave={() => setOpen(false)}
-      variants={profileFadeInVariants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      className="absolute -ml-32 text-xs border-2 border-solid bg-black-pure bg-opacity-90 w-36 top-10 sm:top-14 sm:-ml-36 sm:w-48 lg:text-sm border-black-lighter border-opacity-30"
-    >
+    <div className="text-xs font-normal border-2 border-opacity-50 border-solid bg-black-pure bg-opacity-70 w-36 sm:w-48 lg:text-sm border-black-lighter">
       <ul className="flex flex-col gap-2 px-2 py-3">
         <li className="hover:underline">
           <Link
@@ -62,6 +52,6 @@ export default function ProfileMenu({ currentUser, setOpen }) {
           </button>
         </li>
       </ul>
-    </motion.div>
+    </div>
   );
 }

@@ -1,9 +1,13 @@
 import { HERO, HERO_1000, HERO_1500, HERO_1800, NETFLIX_LOGO } from '@assets';
+import FOR_KIDS from '@assets/images/for_kids.png';
+import TV from '@assets/images/tv.png';
+import MOBILE from '@assets/images/mobile.jpg';
 import Layout from '@components/common/Layout';
 import { defaultPageFadeInVariants } from '@utils/motion.utils';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { PureComponent, useState } from 'react';
 import { Link } from 'react-router-dom';
+import QuestionCards from '@components/common/QuestionCards';
 
 export default function WelcomePage() {
   return (
@@ -15,15 +19,135 @@ export default function WelcomePage() {
         exit="exit"
         className="bg-black-pure"
       >
-        <GreetingHeader />
+        <WelcomeHeader />
         <StoryCard />
-        <div>This is second card</div>
+        <SecondCard />
+        <ThirdCard />
+        <FourthCard />
+        <FifthCard />
+
+        <div className="flex flex-col items-center content-center max-w-screen-xl p-12 mx-auto">
+          <div className="mb-8 text-4xl font-bold xl:text-5xl text">
+            Frequently Asked Questions
+          </div>
+          <div className="flex flex-col w-10/12 lg:w-8/12">
+            <QuestionCards />
+          </div>
+        </div>
       </motion.div>
     </Layout>
   );
 }
 
-const GreetingHeader = () => {
+class SecondCard extends PureComponent {
+  render() {
+    return (
+      <div className="p-12 border-b-8 border-black">
+        <div className="flex flex-col items-center content-center w-full max-w-screen-lg mx-auto lg:flex-row">
+          <div className="flex flex-col items-center w-full gap-5 text-center lg:text-left lg:w-1/2 lg:items-start">
+            <div className="text-4xl font-bold xl:text-5xl">
+              Enjoy on your TV.
+            </div>
+            <div className="text-xl xl:text-2xl">
+              Watch on Smart TVs, Playstation, Xbox, Chromecast, Apple TV,
+              Blu-ray players, and more.
+            </div>
+          </div>
+          <div className="w-full lg:w-1/2">
+            <div className="relative w-full">
+              <img className="relative w-full z-2" src={TV} alt="tv" />
+              <div
+                style={{
+                  maxWidth: '73%',
+                  maxHeight: '53%',
+                  top: '47%',
+                  left: '49.5%',
+                }}
+                className="absolute top-0 left-0 w-full h-full transform -translate-x-1/2 -translate-y-1/2 z-1"
+              >
+                <video
+                  autoPlay
+                  playsInline
+                  muted
+                  loop
+                  className="object-cover object-center w-full h-full"
+                  type="video/mp4"
+                  src="https://assets.nflxext.com/ffe/siteui/acquisition/ourStory/fuji/desktop/video-tv-0819.m4v"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+class ThirdCard extends PureComponent {
+  render() {
+    return (
+      <div className="p-12 border-b-8 border-black">
+        <div className="flex flex-col-reverse items-center justify-between w-full max-w-screen-xl mx-auto lg:flex-row">
+          <img className="relative w-full lg:w-1/2" src={MOBILE} alt="mobile" />
+          <div className="flex flex-col items-center w-full gap-5 text-center lg:text-left">
+            <div className="text-4xl font-bold xl:text-5xl">
+              Download your shows to watch offline.
+            </div>
+            <div className="text-xl xl:text-2xl">
+              Save your favorites easily and always have something to watch.
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+class FourthCard extends PureComponent {
+  render() {
+    return (
+      <div className="p-12 border-b-8 border-black">
+        <div className="flex items-center justify-start max-w-screen-lg mx-auto ">
+          <div className="flex flex-col items-center w-full gap-5 text-center lg:text-left lg:items-start lg:w-1/2">
+            <div className="text-4xl font-bold xl:text-5xl">
+              Watch everywhere.
+            </div>
+            <div className="text-xl xl:text-2xl">
+              Stream unlimited movies and TV shows on your phone, tablet,
+              laptop, and TV.
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+class FifthCard extends PureComponent {
+  render() {
+    return (
+      <div className="p-12 border-b-8 border-black">
+        <div className="flex flex-col-reverse items-center justify-between w-full max-w-screen-xl mx-auto lg:flex-row">
+          <img
+            className="relative w-full lg:w-1/2"
+            src={FOR_KIDS}
+            alt="for_kids"
+          />
+          <div className="flex flex-col items-center w-full gap-5 text-center lg:text-left lg:w-1/2 lg:items-start">
+            <div className="text-4xl font-bold xl:text-5xl">
+              Create profiles for kids.
+            </div>
+            <div className="text-xl xl:text-2xl">
+              Send kids on adventures with their favorite characters in a space
+              made just for them—free with your membership.
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+const WelcomeHeader = () => {
   return (
     <div className="relative z-10 pt-5 text-base">
       <div className="flex flex-row flex-nowrap items-center mx-4% pt-2 relative justify-between">

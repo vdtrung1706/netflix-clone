@@ -1,13 +1,13 @@
 import { HERO, HERO_1000, HERO_1500, HERO_1800, NETFLIX_LOGO } from '@assets';
 import FOR_KIDS from '@assets/images/for_kids.png';
-import TV from '@assets/images/tv.png';
 import MOBILE from '@assets/images/mobile.jpg';
+import TV from '@assets/images/tv.png';
 import Layout from '@components/common/Layout';
+import QuestionCards from '@components/common/QuestionCards';
 import { defaultPageFadeInVariants } from '@utils/motion.utils';
 import { motion } from 'framer-motion';
 import { PureComponent, useState } from 'react';
 import { Link } from 'react-router-dom';
-import QuestionCards from '@components/common/QuestionCards';
 
 export default function WelcomePage() {
   return (
@@ -198,7 +198,7 @@ const StoryCard = () => {
         <h2 className="text-lg my-4 mx-auto sm:text-1.625rem font-medium">
           Watch anywhere. Cancel anytime.
         </h2>
-        <form className="flex flex-col font-medium" method="GET">
+        <div className="flex flex-col font-medium">
           <h3 className="text-lg leading-tight m-auto pb-5 sm:px-12 font-normal md:px-4% md:mx-4% xl:mx-28 md:text-xl lg:text-xl">
             Ready to watch? Enter your email to create or restart your
             membership.
@@ -220,11 +220,13 @@ const StoryCard = () => {
               </div>
             </div>
 
-            <button
-              className="flex items-center justify-center h-10 gap-2 px-3 border-b-2 border-opacity-0 border-solid border-red bg-red md:h-12 lg:h-14 lg:rounded-tl-none lg:rounded-bl-none hover:bg-red-hover"
-              type="submit"
+            <Link
+              to={{
+                pathname: `/login`,
+                state: { email, isSignUp: true },
+              }}
               autoComplete="off"
-              role="link"
+              className="flex items-center justify-center h-10 gap-2 px-3 border-b-2 border-opacity-0 border-solid border-red bg-red md:h-12 lg:h-14 lg:rounded-tl-none lg:rounded-bl-none hover:bg-red-hover"
             >
               <span className="text-base whitespace-nowrap lg:text-1.625rem">
                 Get Started
@@ -238,9 +240,9 @@ const StoryCard = () => {
                   ></path>
                 </svg>
               </div>
-            </button>
+            </Link>
           </div>
-        </form>
+        </div>
       </div>
       <div className="absolute center-pixel top-1/2 left-1/2"></div>
     </div>

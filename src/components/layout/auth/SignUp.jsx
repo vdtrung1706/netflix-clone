@@ -6,8 +6,10 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import isEmail from 'validator/lib/isEmail';
 
-export default function SignUp({ setIsSignIn }) {
-  const [email, setEmail] = useState('');
+export default function SignUp({ setIsSignIn, defaultEmail }) {
+  const [email, setEmail] = useState(
+    defaultEmail === undefined ? '' : defaultEmail,
+  );
   const [displayName, setdisplayName] = useState('');
   const [password, setPassword] = useState('');
   const [comfirm, setComfirm] = useState('');

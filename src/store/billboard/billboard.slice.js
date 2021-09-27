@@ -14,6 +14,17 @@ const fetchBillboardMovie = createAsyncThunk(
   },
 );
 
+const fetchBillboardHomepage = createAsyncThunk(
+  'billboard/fetch_billboardHomepage',
+  async (url) => {
+    var res = await axios.get(url);
+    var results = await res.data.results;
+    var movie = results[randomIndex(results.length)];
+    res = await axios.get(getMovieInfoUrl(movie.id));
+    return res.data;
+  },
+);
+
 const fetchBillboardTVShow = createAsyncThunk(
   'billboard/fetch_billboardTVShow',
   async (url) => {
@@ -37,6 +48,11 @@ const fetchBillboardLatest = createAsyncThunk(
 );
 
 const initialState = {
+  homepage: {
+    loading: false,
+    error: '',
+    data: null,
+  },
   movie: {
     loading: false,
     error: '',
@@ -68,6 +84,7 @@ const billboardSlice = createSlice({
     builder.addCase(fetchBillboardMovie.rejected, (state) => {
       state.movie.error = 'Error fetching billboard movie';
     });
+
     builder.addCase(fetchBillboardTVShow.fulfilled, (state, action) => {
       state.tvshow.data = action.payload;
       state.tvshow.loading = false;
@@ -78,6 +95,7 @@ const billboardSlice = createSlice({
     builder.addCase(fetchBillboardTVShow.rejected, (state) => {
       state.tvshow.error = 'Error fetching billboard tvshow';
     });
+
     builder.addCase(fetchBillboardLatest.fulfilled, (state, action) => {
       state.latest.data = action.payload;
       state.latest.loading = false;
@@ -88,9 +106,25 @@ const billboardSlice = createSlice({
     builder.addCase(fetchBillboardLatest.rejected, (state) => {
       state.latest.error = 'Error fetching billboard latest';
     });
+
+    builder.addCase(fetchBillboardHomepage.fulfilled, (state, action) => {
+      state.homepage.data = action.payload;
+      state.homepage.loading = false;
+    });
+    builder.addCase(fetchBillboardHomepage.pending, (state) => {
+      state.homepage.loading = true;
+    });
+    builder.addCase(fetchBillboardHomepage.rejected, (state) => {
+      state.homepage.error = 'Error fetching billboard hompage';
+    });
   },
 });
 
-export { fetchBillboardMovie, fetchBillboardTVShow, fetchBillboardLatest };
+export {
+  fetchBillboardMovie,
+  fetchBillboardTVShow,
+  fetchBillboardLatest,
+  fetchBillboardHomepage,
+};
 export const { actions: billboardActions, reducer: billboardReducer } =
   billboardSlice;

@@ -1,7 +1,5 @@
 import FallbackLoading from '@components/layout/loader/FallbackLoading';
-import { selectUser } from '@store/auth/selectors.auth';
 import { lazy, Suspense } from 'react';
-import { useSelector } from 'react-redux';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 
 const ExtendedPage = lazy(() => import('../pages/ExtendedPage'));
@@ -19,8 +17,7 @@ const SearchPage = lazy(() => import('../pages/SearchPage'));
 const Homepage = lazy(() => import('../pages/Homepage'));
 const WatchPage = lazy(() => import('../pages/WatchPage'));
 
-const Routes = () => {
-  const { currentUser } = useSelector(selectUser);
+const Routes = ({ currentUser }) => {
   const location = useLocation();
 
   return (
@@ -29,7 +26,9 @@ const Routes = () => {
         <Route
           exact
           path="/browse"
-          render={() => (currentUser ? <Homepage /> : <Redirect to="/login" />)}
+          render={() =>
+            currentUser ? <Homepage /> : <Redirect to="/welcome" />
+          }
         />
 
         <Route exact path="/browse/genre/:id" component={ExtendedPage} />
@@ -54,7 +53,7 @@ const Routes = () => {
           exact
           path="/browse/my-list"
           render={() =>
-            currentUser ? <MyListPage /> : <Redirect to="/welcome" />
+            currentUser ? <MyListPage /> : <Redirect to="/login" />
           }
         />
 
@@ -93,7 +92,7 @@ const Routes = () => {
         <Route
           path="/search"
           render={() =>
-            currentUser ? <SearchPage /> : <Redirect to="/login" />
+            currentUser ? <SearchPage /> : <Redirect to="/welcome" />
           }
         />
 
@@ -105,13 +104,7 @@ const Routes = () => {
           }
         />
 
-        <Route
-          exact
-          path="/help-center"
-          render={() =>
-            currentUser ? <HelpCenterPage /> : <Redirect to="/login" />
-          }
-        />
+        <Route exact path="/help-center" render={() => <HelpCenterPage />} />
 
         <Route
           exact
@@ -131,8 +124,11 @@ const Routes = () => {
 
         <Route
           path="/watch"
-          render={() => (currentUser ? <WatchPage /> : <AuthPage />)}
+          render={() =>
+            currentUser ? <WatchPage /> : <Redirect to="/welcome" />
+          }
         />
+
         <Route path="*" redner={() => <Redirect to="/welcome" />} />
       </Switch>
     </Suspense>

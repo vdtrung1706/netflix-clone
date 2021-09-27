@@ -22,7 +22,7 @@ export default function App() {
   return (
     <div className="relative w-full overflow-x-hidden">
       {currentUser && !pathname.includes('/watch') && <Nav />}
-      <Routes />
+      <Routes currentUser={currentUser} />
     </div>
   );
 }

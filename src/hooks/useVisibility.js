@@ -16,12 +16,12 @@ const useVisibility = (ref, callbackOn = () => {}, callbackOff = () => {}) => {
         threshold: [0, 0.5],
       },
     );
-
     if (ref.current) {
       observer.observe(ref.current);
-    } else {
-      observer.disconnect();
     }
+    return () => {
+      observer.disconnect();
+    };
   }, [callbackOff, callbackOn, ref]);
 };
 

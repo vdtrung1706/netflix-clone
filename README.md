@@ -3,6 +3,7 @@
 ## Live Demo
 
 - [Netlify](https://netflix-clone-pyon-a0a415.netlify.app)
+- [Youtube (4mins)](https://www.youtube.com/watch?v=ZF2_Z1vPavg)
 
 Credentials (just in case if you don't wanna create one)
 
@@ -32,6 +33,7 @@ Credentials (just in case if you don't wanna create one)
 - Infinite scroll
 - Rating movie
 - Skeleton loading
+- Code splitting
 - Responsive layout, etc
 
 ## About
@@ -56,7 +58,7 @@ Hopefully, you're gonna like it. It'd be wonderful if you gave it a star ⭐.
 
 You need to have Nodejs v16 installed
 
-- Clone & go to the project
+- Clone then go to the project
 
 ```bash
   git clone https://github.com/vdtrung1706/netflix-clone.git

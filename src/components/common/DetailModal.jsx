@@ -189,7 +189,6 @@ const DetailModal = ({
                       title={
                         inMyList ? 'Remove from My List' : 'Add to My List'
                       }
-                      placement="top"
                     >
                       <AddToMyListButton
                         inMyList={inMyList}
@@ -201,7 +200,6 @@ const DetailModal = ({
                       arrow
                       className="text-white"
                       title={liked ? 'Rated' : 'I like this'}
-                      placement="top"
                     >
                       <ToggleLikedButton
                         liked={liked}
@@ -213,7 +211,6 @@ const DetailModal = ({
                       arrow
                       className="text-white"
                       title={disliked ? 'Rated' : 'Not for me'}
-                      placement="top"
                     >
                       <ToggleDislikedButton
                         disliked={disliked}

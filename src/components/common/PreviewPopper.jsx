@@ -81,7 +81,7 @@ export default function PreviewPopper({
 
   return (
     <Popper
-      popperRef={ref}
+      ref={ref}
       open={true}
       anchorEl={anchorEl}
       placement="bottom"
@@ -111,7 +111,7 @@ export default function PreviewPopper({
         initial="initial"
         animate="animate"
         onMouseLeave={handlePreviewClose}
-        className="flex flex-col bg-black rounded-md cursor-pointer select-none w-350px box-shadow-full"
+        className="flex flex-col overflow-visible bg-black rounded-md cursor-pointer select-none w-350px box-shadow-full"
       >
         {/* START OF PREVIEW PLAYER */}
         <div className="relative w-full h-48">
@@ -151,7 +151,7 @@ export default function PreviewPopper({
         {/* START PREVIEW BUTTONS */}
         <div className="p-4 cursor-pointer">
           <div className="flex items-center content-center justify-between align-middle">
-            <div className="flex items-center content-center align-middle">
+            <div className="flex items-center content-center overflow-visible align-middle">
               <button
                 onClick={onClickPlay}
                 className="box-border relative mr-2 text-black bg-white border border-white border-solid rounded-full w-9 h-9 hover:bg-white-hover"
@@ -160,7 +160,6 @@ export default function PreviewPopper({
               </button>
               <PreviewPopperTip
                 arrow
-                placement="top"
                 title={inMyList ? 'Remove from My List' : 'Add to My List'}
               >
                 <AddToMyListButton
@@ -169,22 +168,14 @@ export default function PreviewPopper({
                   className="box-border p-2 mr-2 transition-all duration-200 bg-white border border-solid rounded-full w-9 h-9 bg-opacity-5 border-grey hover:border-white"
                 />
               </PreviewPopperTip>
-              <PreviewPopperTip
-                arrow
-                placement="top"
-                title={liked ? 'Rated' : 'I like this'}
-              >
+              <PreviewPopperTip arrow title={liked ? 'Rated' : 'I like this'}>
                 <ToggleLikedButton
                   liked={liked}
                   onClick={() => toggleLiked(movie)}
                   className="box-border relative p-2 mr-2 text-white transition-all duration-200 bg-white border border-solid rounded-full w-9 h-9 bg-opacity-5 border-grey hover:border-white"
                 />
               </PreviewPopperTip>
-              <PreviewPopperTip
-                arrow
-                placement="top"
-                title={disliked ? 'Rated' : 'Not for me'}
-              >
+              <PreviewPopperTip arrow title={disliked ? 'Rated' : 'Not for me'}>
                 <ToggleDislikedButton
                   disliked={disliked}
                   onClick={() => toggleDisliked(movie)}
@@ -192,7 +183,7 @@ export default function PreviewPopper({
                 />
               </PreviewPopperTip>
             </div>
-            <PreviewPopperTip arrow title="More info" placement="top">
+            <PreviewPopperTip arrow title="More info">
               <MoreInfoButton
                 onClick={showMoreInfo}
                 className="box-border relative p-2 transition-all duration-200 bg-white border border-solid rounded-full w-9 h-9 bg-opacity-5 border-grey hover:border-white"

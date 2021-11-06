@@ -11,7 +11,6 @@ const focusedSiblingPlugin = plugin(function ({ addVariant }) {
 });
 
 module.exports = {
-  mode: 'jit',
   purge: ['./src/**/*.html', './src/**/*.jsx', './src/**/*.js'],
   darkMode: false,
   theme: {

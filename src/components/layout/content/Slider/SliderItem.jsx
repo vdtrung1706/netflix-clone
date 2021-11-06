@@ -89,6 +89,10 @@ function SliderItem({ movie, large, inSearchPage, url }) {
 
     setZIndex(50);
     setOrigin(getOrgin(targetEl));
+
+    console.log(`origin`, origin);
+    console.log(`getOrgin(targetEl)`, getOrgin(targetEl));
+
     setHover(true);
 
     if (!large) {
@@ -141,10 +145,10 @@ function SliderItem({ movie, large, inSearchPage, url }) {
         'relative cursor-pointer inline-block box-border align-top overflow-hidden',
         'px-2px h-full min-w-1/2 sm:min-w-1/3 lg:min-w-1/4 xl:min-w-1/6',
         'transition-all ease-in-out duration-700',
-        `hover:origin-${origin}`,
+        `transform origin-${origin}`,
         {
           'my-6': inSearchPage,
-          'hover:transform hover:scale-125 md:hover:scale-117 lg:hover:scale-120 xl:hover:scale-125':
+          'hover:scale-125 md:hover:scale-117 lg:hover:scale-120 xl:hover:scale-125':
             large && inViewport,
         },
       )}

@@ -36,11 +36,11 @@ function Billboard({ data }) {
         animate="animate"
         className="absolute top-0 z-0 w-full"
       >
-        <div className="relative w-full transition-all duration-1000 origin-bottom-left transform-gpu max-w-screen-2xl">
+        <div className="relative w-full min-h-[calc(100vh-64px)] transition-all duration-1000 origin-bottom-left bg-red transform-gpu">
           <img
             src={`${IMAGE_BASE}/original${data.backdrop_path}`}
             alt="hero"
-            className="w-full bg-repeat-x bg-cover bg-top-center"
+            className="absolute top-0 bottom-0 left-0 right-0 object-cover w-full h-full max-w-full bg-cover bg-top-center"
           />
           <div className="absolute top-0 left-0 z-0 w-full h-full bg-black bg-opacity-20" />
           <div className="absolute top-0 bottom-0 left-0 right-2/3 opacity-70 bg-gradient-to-r from-black"></div>

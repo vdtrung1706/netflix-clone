@@ -7,9 +7,10 @@ import { motion } from 'framer-motion';
 import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import isEmail from 'validator/lib/isEmail';
+
 export default function SignIn({ setIsSignIn }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('test@test.com');
+  const [password, setPassword] = useState('test1234@!');
   const [rememberMe, setRememberMe] = useState(true);
 
   const dispatch = useDispatch();

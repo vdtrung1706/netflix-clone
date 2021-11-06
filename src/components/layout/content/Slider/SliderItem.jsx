@@ -85,8 +85,12 @@ function SliderItem({ movie, large, inSearchPage, url }) {
   function handleMouseEnter(event) {
     if (!inViewport) return;
     event.preventDefault();
+    const targetEl = event.currentTarget;
+
     setZIndex(50);
-    setOrigin(getOrgin(event.currentTarget));
+    setOrigin(getOrgin(targetEl));
+    setHover(true);
+
     if (!large) {
       openPreviewTimeout.current = setTimeout(() => {
         if (!modalOpen) setPreviewOpen(true);
@@ -97,6 +101,7 @@ function SliderItem({ movie, large, inSearchPage, url }) {
   function handleMouseLeave() {
     setZIndex(0);
     setHover(false);
+
     if (!large) {
       setPreviewOpen(false);
       openPreviewTimeout.current && clearTimeout(openPreviewTimeout.current);
@@ -106,6 +111,7 @@ function SliderItem({ movie, large, inSearchPage, url }) {
   const handlePreviewClose = useCallback(() => {
     setZIndex(0);
     setHover(false);
+
     if (!large) {
       setPreviewOpen(false);
       openPreviewTimeout.current && clearTimeout(openPreviewTimeout.current);
@@ -116,6 +122,7 @@ function SliderItem({ movie, large, inSearchPage, url }) {
     setZIndex(0);
     setHover(false);
     setModalOpen(true);
+
     if (!large) {
       setPreviewOpen(false);
     }

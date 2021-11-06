@@ -69,7 +69,7 @@ export default function Slider({
                   }}
                   className={cx(
                     'flex flex-shrink-0 overflow-x-auto sm:overflow-x-visible transition-all duration-1000 delay-75 transform-gpu whitespace-nowrap',
-                    { 'h-96 md:h-116 lg:h-96': large },
+                    { 'h-96 md:h-116 lg:h-96 2xl:h-[30rem]': large },
                   )}
                 >
                   {movies.map((movie) => {

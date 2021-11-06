@@ -3,10 +3,6 @@
 @tailwind utilities;
 
 @layer base {
-  html {
-    @apply mx-auto max-w-screen-2xl;
-  }
-
   *,
   *:before,
   *:after {

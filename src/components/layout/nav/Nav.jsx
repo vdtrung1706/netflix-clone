@@ -34,14 +34,11 @@ export default function Nav() {
       className="fixed top-0 left-0 right-0 z-50 h-16"
     >
       <div
-        className={cx(
-          'relative mx-auto max-w-screen-2xl transition-all duration-200',
-          {
-            'bg-gradient-to-b from-black-pure': !inGenrePage,
-            'bg-black': inGenrePage,
-            'bg-black-pure': fixedNav,
-          },
-        )}
+        className={cx('relative transition-all duration-200', {
+          'bg-gradient-to-b from-black-pure': !inGenrePage,
+          'bg-black': inGenrePage,
+          'bg-black-pure': fixedNav,
+        })}
       >
         <div className="flex items-center h-full justify-between px-4% ml-2px">
           <PrimaryNav />

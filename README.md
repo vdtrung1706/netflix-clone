@@ -5,11 +5,6 @@
 - [Netlify](https://netflix-clone-pyon-a0a415.netlify.app)
 - [Youtube (4mins)](https://www.youtube.com/watch?v=ZF2_Z1vPavg)
 
-Credentials (just in case if you don't wanna create one)
-
-> Email: test@test.com<br/>
-> Password: test1234@!
-
 ## Tech Stack
 
 - [TMDb API's](https://www.themoviedb.org/)
@@ -42,21 +37,24 @@ This repo was inspired by [Fakeflix](https://github.com/Th3Wall/Fakeflix) of [Da
 
 I've done it like the Netflix original as much as I can. The aim is that I can put what I've learned about React into practice.
 
-Hopefully, you're gonna like it. It'd be wonderful if you gave it a star ⭐.
+Hopefully, you're gonna like it.
 
 ## Quick Start
 
 ### Netlify deploy
 
-1. Fork the repo
-2. Connect your Github to Netlify
-3. Build command: `npm run build:prod`
-4. Publish directory: `dist/`
-5. Add your environment variables such as `API_BASE, API_KEY, IMAGE_BASE`
+1. Create your firebase projects & config ur firebase (auth, rules...)
+2. Replace the `firebaseConfig` in `src/firebase/index.js` with your `firebaseConfig`
+3. Fork the repo
+4. Connect your Github to Netlify
+5. Build command: `npm run build:prod`
+6. Publish directory: `dist/`
+7. Add your environment variables such as `API_BASE, API_KEY, IMAGE_BASE`...
+8. Add the netlify domain that you've just deployed to your firebase project in `Authentication/sign-in method`
 
 ### Run locally
 
-You need to have Nodejs v16 installed
+- Nodejs v16 installed
 
 - Clone then go to the project
 

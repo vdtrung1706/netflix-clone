@@ -5,7 +5,7 @@
 - [Netlify](https://netflix-clone-pyon-a0a415.netlify.app)
 - [Youtube (4mins)](https://www.youtube.com/watch?v=ZF2_Z1vPavg)
 
-### If you catch something like this on browser. Don't worry, it's safe. You can visit the site by click on "Detail"
+### If you catch something like this on the browser. Don't worry, it's safe. You can visit the site by click on "Details"
 ![Screen Shot 2022-12-03 at 9 17 51 PM](https://user-images.githubusercontent.com/96437142/205445607-dbe96ca1-cb1a-43e6-9846-c7c58b6c9e03.png)
 
 

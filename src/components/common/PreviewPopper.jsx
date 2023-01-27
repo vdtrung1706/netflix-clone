@@ -40,7 +40,7 @@ export default function PreviewPopper({
 
   const history = useHistory();
 
-  const { previewVariants } = usePreviewPopper(origin, anchorEl);
+  const { previewVariants, popperOffset } = usePreviewPopper(origin, anchorEl);
 
   useEffect(() => {
     if (!videoTimeout.current && currentTimeRef.current === 0) {
@@ -101,6 +101,13 @@ export default function PreviewPopper({
           options: {
             altAxis: false,
             rootBoundary: 'document',
+          },
+        },
+        {
+          name: 'offset',
+          enabled: true,
+          options: {
+            offset: popperOffset,
           },
         },
       ]}

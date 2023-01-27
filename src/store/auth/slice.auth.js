@@ -1,9 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { LOCAL_STORAGE_KEY } from '../../constants/local-storage-constant';
 
 const initialState = {
   loading: false,
   error: null,
-  currentUser: null,
+  currentUser: JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.CURRENT_USER)),
 };
 
 const handleStart = (state) => ({ ...state, loading: true });

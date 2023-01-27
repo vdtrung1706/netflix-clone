@@ -1,4 +1,5 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects';
+import { LOCAL_STORAGE_KEY } from '../../constants/local-storage-constant';
 import { auth, signInWithGoogle, signOut } from '../../firebase';
 import {
   createUserProfileDocument,
@@ -14,8 +15,10 @@ export function* signInUserAuthSync(userAuth, additionalInfo) {
       userAuth,
       additionalInfo,
     );
+    localStorage.setItem(LOCAL_STORAGE_KEY.CURRENT_USER, JSON.stringify(user));
     yield put(authActions.signInSuccess(user));
   } catch (error) {
+    localStorage.setItem(LOCAL_STORAGE_KEY.CURRENT_USER, JSON.stringify(null));
     yield put(authActions.signInFailure(error.message));
   }
 }
@@ -42,6 +45,7 @@ export function* signInEmailSync(action) {
 export function* signOutSync() {
   try {
     yield signOut();
+    localStorage.setItem(LOCAL_STORAGE_KEY.CURRENT_USER, JSON.stringify(null));
     yield put(authActions.signOutSuccess());
   } catch (error) {
     yield put(authActions.signOutFailure(error.message));
@@ -94,9 +98,14 @@ export function* checkUserSessionSync() {
     if (userAuth) {
       yield signInUserAuthSync(userAuth);
     } else {
+      localStorage.setItem(
+        LOCAL_STORAGE_KEY.CURRENT_USER,
+        JSON.stringify(null),
+      );
       yield put(authActions.signInFailure('check_session_failure'));
     }
   } catch (error) {
+    localStorage.setItem(LOCAL_STORAGE_KEY.CURRENT_USER, JSON.stringify(null));
     yield put(authActions.signInFailure(error.message));
   }
 }

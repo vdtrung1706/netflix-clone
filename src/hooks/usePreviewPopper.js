@@ -6,13 +6,19 @@ import useViewport from './useViewport';
 const usePreviewPopper = (transformOrigin, anchorEl) => {
   const { width } = useViewport();
 
-  const translateX = useMemo(() => {
+  const { translateX, popperOffset } = useMemo(() => {
+    let transX = 0;
+    let offset = [0, 0];
+
     if (transformOrigin === 'right') {
-      return `-${width * 0.04}px`;
+      transX = `-${width * 0.04}px`;
+      offset = [Number.MAX_SAFE_INTEGER, 0];
     } else if (transformOrigin === 'left') {
-      return `${width * 0.04}px`;
+      transX = `${width * 0.04}px`;
+      offset = [Number.MIN_SAFE_INTEGER, 0];
     }
-    return 0;
+
+    return { translateX: transX, popperOffset: offset };
   }, [transformOrigin, width]);
 
   const anchorRect = getBoundingClientRect(anchorEl);
@@ -48,6 +54,7 @@ const usePreviewPopper = (transformOrigin, anchorEl) => {
 
   return {
     previewVariants,
+    popperOffset,
   };
 };
 
